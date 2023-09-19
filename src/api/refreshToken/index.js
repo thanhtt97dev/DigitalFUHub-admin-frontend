@@ -24,7 +24,7 @@ const refreshToken = createRefresh({
                 };
             })
             .catch((err) => {
-                console.log(err.message);
+                window.location.replace("/login");
                 return {
                     isSuccess: false,
                 };
