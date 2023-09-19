@@ -1,24 +1,26 @@
 import { createRefresh } from 'react-auth-kit';
 
 import { apiPostAuth } from '~/api/defaultApi';
-import { getRefreshTokenInCookies, getTokenInCookies, saveDataAuthToCookies } from '~/utils';
+import { getRefreshTokenInCookies, getTokenInCookies, saveRefreshTokenInCookies, saveTokenInCookies } from '~/utils';
+import { TOKEN_EXPIRES_TIME } from '~/constants'
 
 const refreshToken = createRefresh({
-    interval: 10, // Refreshs the token in every 10 minutes
+    interval: TOKEN_EXPIRES_TIME, // Refreshs the token in every 10 minutes
     refreshApiCallback: async (param) => {
         const data = {
-            refreshToken: getRefreshTokenInCookies(),
+            RefreshToken: getRefreshTokenInCookies(),
             AccessToken: getTokenInCookies(),
         };
 
         apiPostAuth('api/users/refreshToken', data)
             .then((res) => {
-                saveDataAuthToCookies(res.data.accessToken, res.data.refreshToken, res.data.jwtId);
+                saveRefreshTokenInCookies(res.data.refreshToken)
+                saveTokenInCookies(res.data.accessToken)
                 return {
                     isSuccess: true,
                     newAuthToken: res.data.accessToken,
-                    newAuthTokenExpireIn: 10,
-                    newRefreshTokenExpiresIn: 10,
+                    newAuthTokenExpireIn: TOKEN_EXPIRES_TIME,
+                    newRefreshTokenExpiresIn: TOKEN_EXPIRES_TIME,
                 };
             })
             .catch((err) => {

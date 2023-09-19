@@ -14,17 +14,17 @@ const navigationItems = [
     {
         icon: VideoCameraOutlined,
         label: 'Dash board',
-        link: 'admin/dashboard',
+        link: '/admin/dashboard',
     },
     {
         icon: UserOutlined,
         label: 'Users',
-        link: 'admin/users',
+        link: '/admin/users',
     },
     {
         icon: NotificationOutlined,
         label: 'Notification',
-        link: 'admin/notificaions',
+        link: '/admin/notificaions',
     },
 ];
 

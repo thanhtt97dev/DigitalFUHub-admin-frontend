@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { getTokenInCookies } from '~/utils';
 
+
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+
 
 const headerWithToken = () => {
     return {

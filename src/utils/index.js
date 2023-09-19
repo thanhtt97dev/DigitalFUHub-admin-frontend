@@ -11,12 +11,22 @@ export const getTokenInCookies = () => {
     return token;
 };
 
+export const saveTokenInCookies = (token) => {
+    Cookies.remove('_token');
+    Cookies.set('_token', token);
+};
+
 export const getRefreshTokenInCookies = () => {
     let token;
     if (typeof window !== 'undefined') {
-        token = Cookies.get('_auth_refresh');
+        token = Cookies.get('_refresh_token');
     }
     return token;
+};
+
+export const saveRefreshTokenInCookies = (refreshToken) => {
+    Cookies.remove('_refresh_token');
+    Cookies.set('_refresh_token', refreshToken);
 };
 
 export const getJwtId = () => {
