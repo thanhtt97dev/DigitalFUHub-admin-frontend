@@ -4,8 +4,7 @@ import { Outlet, Route, Routes } from 'react-router-dom';
 
 import routesConfig from './index';
 import NotFound from '~/pages/NotFound';
-import Home from '~/pages/Home';
-import NormalLayout from '~/components/NormalLayout';
+import Login from '~/pages/Login';
 
 function Routing() {
     const auth = useAuthUser();
@@ -35,25 +34,18 @@ function Routing() {
     return (
         <>
             <Routes>
-                <Route path="/" exact element={<NormalLayout><Home /></NormalLayout>} />
+                <Route path="" element={<Login />} />
                 {routesCanVistit.map((route, index) => {
                     return (
-                        <Route key={index} element={route.layout === undefined ? <Outlet /> : route.layout}>
-                            <Route key={route.path} path={route.path} element={route.component}>
-                                {route.routes !== undefined
-                                    ? route.routes.map((child) => {
-                                        return (
-                                            <Route key={child.path} path={child.path} element={child.component} />
-                                        );
-                                    })
-                                    : ''}
-                            </Route>
+                        <Route key={index} path={route.path} element={route.layout ? route.layout : <Outlet />}>
+                            <Route key={route.path} path="" element={route.component} />
                         </Route>
-                    );
+                    )
                 })}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </>
+
     );
 }
 

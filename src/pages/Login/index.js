@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Input, Spin, Modal } from 'antd';
 import { LoadingOutlined, WarningOutlined } from '@ant-design/icons';
-import { useSignIn } from 'react-auth-kit';
+import { useSignIn, useAuthUser, useAuthHeader } from 'react-auth-kit';
 
 import { login } from '~/api/user';
-import { saveDataAuthToCookies, removeDataAuthInCookies, getUser } from '~/utils';
-import { NOT_HAVE_MEANING_FOR_TOKEN, NOT_HAVE_MEANING_FOR_TOKEN_EXPRIES } from '~/constants';
+import { TOKEN_EXPRIES_TIME } from '~/constants';
 //import { ADMIN_ROLE, User_ROLE } from "~/constants"
 
 function Login() {
+
     const signIn = useSignIn();
     const navigate = useNavigate();
     let [message, setMessage] = useState('');
@@ -19,7 +19,9 @@ function Login() {
         <LoadingOutlined style={{ fontSize: 24, marginRight: 10 }} spin />
     )
 
-    const user = getUser();
+    const auth = useAuthUser()
+    const user = auth();
+
     const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
@@ -31,50 +33,42 @@ function Login() {
 
     // handle remove auth data in cookie
     const onModalOk = () => {
-        removeDataAuthInCookies();
         setModalOpen(false)
     }
 
     // redirect to home page
     const onModalCancel = () => {
         setModalOpen(false)
-        return navigate('/home');
+        return navigate('/accessDenied');
     }
 
     const onFinish = (values) => {
         setLoading(true)
         setMessage('');
         const data = {
-            email: values.username,
+            username: values.username,
             password: values.password,
         };
 
         login(data)
             .then((res) => {
                 signIn({
-                    token: NOT_HAVE_MEANING_FOR_TOKEN,
-                    expiresIn: NOT_HAVE_MEANING_FOR_TOKEN_EXPRIES,
+                    token: res.data.accessToken,
+                    expiresIn: TOKEN_EXPRIES_TIME,
                     authState: {
                         id: res.data.userId,
+                        username: res.data.username,
                         email: res.data.email,
-                        firstName: res.data.email,
+                        fullname: res.data.fullname,
+                        avatar: res.data.avatar,
                         roleName: res.data.roleName,
+                        twoFactorAuthentication: res.data.twoFactorAuthentication,
+                        signInGoogle: res.data.signInGoogle,
                     },
-                    //refreshToken: res.data.refreshToken,
-                    //refreshTokenExpireIn: 15,
+                    refreshToken: res.data.refreshToken,
+                    refreshTokenExpireIn: 15,
                 });
-                saveDataAuthToCookies(res.data.userId, res.data.accessToken, res.data.refreshToken, res.data.jwtId);
-                /*
-                switch (res.data.roleName) {
-                    case ADMIN_ROLE:
-                        return navigate('/admin');
-                    case USER_ROLE:
-                        return navigate('/home');
-                    default:
-                        throw new Error();
-                }
-                */
-                return navigate('/home');
+                return navigate('/accessDenied');
             })
             .catch((err) => {
                 setMessage(err.response.data);

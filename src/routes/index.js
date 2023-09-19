@@ -1,17 +1,13 @@
 import Login from '~/pages/Login';
-import Register from '~/pages/Register';
 import AccessDenied from '~/pages/AccessDenied';
 
-import Home from '~/pages/Home';
-
-import { ADMIN_ROLE, USER_ROLE } from '~/constants';
-import AdminLayout from '~/components/AdminLayout';
+import { ADMIN_ROLE } from '~/constants';
+import AdminLayout from '~/layouts/AdminLayout';
 import DashBoard from '~/pages/Admin/DashBoard';
 import Users from '~/pages/Admin/Users';
 import Detail from '~/pages/Admin/Users/Detail';
 import Notificaion from '~/pages/Admin/Notificaion';
-import NormalLayout from '~/components/NormalLayout';
-import UploadFile from '~/pages/UploadFile';
+
 import Verification2FA from '~/pages/Verification2FA';
 
 const routesConfig = [
@@ -23,49 +19,43 @@ const routesConfig = [
     {
         title: 'accessDenied',
         path: '/accessDenied',
-        layout: <NormalLayout />,
         component: <AccessDenied />,
-    },
-    {
-        title: 'home',
-        path: '/home',
-        layout: <NormalLayout />,
-        component: <Home />,
     },
     {
         title: 'admin',
         path: '/admin',
         layout: <AdminLayout />,
-        role: [ADMIN_ROLE, USER_ROLE],
-        routes: [
-            {
-                path: 'dashboard',
-                component: <DashBoard />,
-            },
-            {
-                path: 'users',
-                component: <Users />,
-            },
-            {
-                path: 'users/:id',
-                component: <Detail />,
-            },
-            {
-                path: 'notificaions',
-                component: <Notificaion />,
-            },
-        ],
+        role: [ADMIN_ROLE],
+        component: <DashBoard />,
     },
     {
-        title: 'register',
-        path: '/register',
-        component: <Register />,
+        title: 'admin',
+        path: '/admin/dashboard',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <DashBoard />,
     },
     {
-        title: 'upload',
-        path: '/upload',
-        layout: <NormalLayout />,
-        component: <UploadFile />,
+        title: 'admin',
+        path: '/admin/users',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <Users />,
+
+    },
+    {
+        title: 'admin',
+        path: '/admin/users/:id',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <Detail />
+    },
+    {
+        title: 'admin',
+        path: '/admin/notificaions',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <Notificaion />,
     },
     {
         title: 'verification2FA',
