@@ -1,171 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import { UserOutlined, VideoCameraOutlined, BellOutlined, NotificationOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme, Badge, Space, Avatar, notification, Drawer, Empty, Alert } from 'antd';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { useAuthUser } from 'react-auth-kit';
+import React, { useState } from 'react';
+import {
 
-import connectionHub from '~/api/signalr/connectionHub';
+    UserOutlined,
+    AreaChartOutlined,
+    StockOutlined
 
-import { formatTimeAgoVN } from '~/utils';
+} from '@ant-design/icons';
+import { Layout, Menu, Space, theme, Avatar } from 'antd';
+import styles from './AdminLayout.module.scss'
+import classNames from 'classnames/bind';
+import { Link, Outlet } from 'react-router-dom';
+import logo from '~/assets/images/fpt-logo.jpg'
 
-const { Header, Content, Footer, Sider } = Layout;
+const cx = classNames.bind(styles);
+const { Header, Content, Sider } = Layout;
 
-const navigationItems = [
+const items = [
     {
-        icon: VideoCameraOutlined,
-        label: 'Dash board',
-        link: '/admin/dashboard',
+        label: <Link to=''>Thống kê</Link>,
+        key: 'dashboard',
+        icon: <AreaChartOutlined />,
     },
     {
-        icon: UserOutlined,
-        label: 'Users',
-        link: '/admin/users',
-    },
-    {
-        icon: NotificationOutlined,
-        label: 'Notification',
-        link: '/admin/notificaions',
+        label: 'Quản lý tài chính',
+        key: 'seller/product',
+        icon: <StockOutlined />,
+        children: [
+            {
+                key: '/admin/finance/deposit',
+                label: <Link to={"/admin/finance/deposit"}>Danh sách nạp tiền</Link>,
+            },
+            {
+                key: '/admin/finance/withdraw',
+                label: <Link to={"/admin/finance/withdraw"}>Danh sách rút tiền</Link>,
+            },
+            {
+                key: '/admin/finance/transaction',
+                label: <Link to={"/admin/finance/transaction"}>Lịch sử giao dịch nội bộ</Link>,
+            },
+        ],
     },
 ];
-
-function AdminLayout() {
-    const navigate = useNavigate();
-
-    const [api, contextHolder] = notification.useNotification();
-
-    const [notifications, setNotifications] = useState([]);
-
-    const auth = useAuthUser();
-    const user = auth();
-
-    const [open, setOpen] = useState(false);
-    const showDrawer = () => {
-        setOpen(true);
-    };
-    const onClose = () => {
-        setOpen(false);
-    };
-
-    useEffect(() => {
-        // Create a new SignalR connection with the token
-        const connection = connectionHub(`notificationHub?userId=${user.id}`);
-        console.log(connection);
-        // Start the connection
-        connection.start().catch((err) => console.error(err));
-
-        // Receive all notification from the server
-        connection.on('ReceiveAllNotification', (res) => {
-            const notifi = JSON.parse(res);
-            setNotifications((prev) => [...notifi, ...prev]);
-        });
-
-        // Receive notifications from the server
-        connection.on('ReceiveNotification', (res) => {
-            const notifi = JSON.parse(res);
-            openNotificationWithIcon('info', notifi);
-            setNotifications((prev) => [notifi, ...prev]);
-        });
-
-        return () => {
-            // Clean up the connection when the component unmounts
-            connection.stop();
-        };
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const openNotificationWithIcon = (type, notifi) => {
-        api[type]({
-            message: notifi.Title,
-            description: notifi.Message,
-        });
-    };
+const AdminLayout = () => {
+    const [collapsed, setCollapsed] = useState(false);
 
     const {
         token: { colorBgContainer },
     } = theme.useToken();
     return (
-        <>
-            {contextHolder}
-            <Layout style={{ height: '100vh' }}>
-                <Sider
-                    breakpoint="lg"
-                    collapsedWidth="0"
-                    onBreakpoint={(broken) => {
-                        console.log(broken);
-                    }}
-                    onCollapse={(collapsed, type) => {
-                        console.log(collapsed, type);
-                    }}
-                >
-                    <div className="demo-logo-vertical">
-                        <img
-                            src="https://scontent.fsgn2-8.fna.fbcdn.net/v/t1.6435-9/68804899_385443322167641_2798430459044823040_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=174925&_nc_ohc=8pRShptFVFoAX_tZBDP&_nc_ht=scontent.fsgn2-8.fna&oh=00_AfA_ZGbGImC59fphMxImb8OZkW25r2usRyzvfsCP1SaPhg&oe=6509820E"
-                            alt="he"
-                            style={{ width: '100%', height: 200 }}
-                            onClick={() => navigate('/home')}
-                        />
-                    </div>
-                    <Menu
-                        theme="dark"
-                        mode="inline"
-                        defaultSelectedKeys={['1']}
-                        items={navigationItems.map((item, index) => ({
-                            key: String(index + 1),
-                            icon: React.createElement(item.icon),
-                            label: <Link to={item.link}>{item.label}</Link>,
-                        }))}
-                    />
-                </Sider>
-                <Layout>
-                    <Header style={{ padding: 0, background: colorBgContainer, justifyContent: 'end' }}>
-                        <Space size={30}>
-                            <Badge size="small" count={5} onClick={showDrawer}>
-                                <BellOutlined style={{ fontSize: 30 }} />
-                            </Badge>
-                            <Avatar size={38} icon={<UserOutlined />} />
-                        </Space>
-                    </Header>
-                    <Content style={{ margin: '12px 12px 0' }}>
-                        <div style={{ padding: 12, height: '600px', background: colorBgContainer }}>
-                            <Outlet />
-                        </div>
-                    </Content>
-                    <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
-                </Layout>
-            </Layout>
-
-            <Drawer
-                style={{ overflowY: 'scroll' }}
-                title="Notification"
-                placement="right"
-                onClose={onClose}
-                open={open}
+        <Layout className={cx('container')}
+        >
+            <Sider className={cx('sidebar')}
+                collapsible
+                collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
+                style={{ background: "#f1f1f1" }}
             >
-                {notifications.length !== 0 ? (
-                    notifications.map((notifi, index) => {
-                        return (
-                            <Alert
-                                key={index}
-                                style={{ marginBottom: 20 }}
-                                message={<span style={{ fontWeight: 'bold' }}>{notifi.Title}</span>}
-                                description={
-                                    <>
-                                        <p>{notifi.Content}</p>
-                                        <p style={{ fontSize: 10 }}>{formatTimeAgoVN(notifi.DateCreated)}</p>
-                                    </>
-                                }
-                                type="info"
-                                showIcon
-                            />
-                        );
-                    })
-                ) : (
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                )}
-            </Drawer>
-        </>
+                <div className={cx('header-logo')}>
+                    <Space>
+                        <Avatar src={logo} size="large" />
+                        <Link to={'/admin'} className={cx("link")}>
+                            <h3>DigitalFUHub</h3>
+                        </Link>
+                    </Space>
+                </div>
+                <Menu
+                    className={cx("menu")}
+                    defaultSelectedKeys={['dashboard']}
+                    mode="inline" items={items} />
+            </Sider>
+            <Layout>
+                <Header
+                    className={cx('header')}
+                >
+                    <Space size={16} style={{ display: 'flex', margin: '0 16px', alignItems: 'center', justifyContent: 'flex-end' }}>
+                        <Avatar size='large' icon={<UserOutlined />} />
+                    </Space>
+                </Header>
+                <Content className={cx("content")}>
+                    <div
+                        style={{
+                            padding: 12,
+                            minHeight: 650,
+                            background: colorBgContainer,
+                        }}
+                    >
+                        <Outlet />
+                    </div>
+                </Content>
+            </Layout>
+        </Layout >
     );
-}
-
+};
 export default AdminLayout;

@@ -2,13 +2,16 @@ import Login from '~/pages/Login';
 import AccessDenied from '~/pages/AccessDenied';
 
 import { ADMIN_ROLE } from '~/constants';
-import AdminLayout from '~/layouts/AdminLayout';
-import DashBoard from '~/pages/Admin/DashBoard';
-import Users from '~/pages/Admin/Users';
-import Detail from '~/pages/Admin/Users/Detail';
-import Notificaion from '~/pages/Admin/Notificaion';
+import AdminLayoutDemo from '~/layouts/AdminLayoutDemo';
+import DashBoard from '~/pages/AdminDemo/DashBoard';
+import Users from '~/pages/AdminDemo/Users';
+import Detail from '~/pages/AdminDemo/Users/Detail';
+import Notificaion from '~/pages/AdminDemo/Notificaion';
 
 import Verification2FA from '~/pages/Verification2FA';
+import AdminLayout from '~/layouts/AdminLayout';
+import HistoryDeposit from '~/pages/Admin/ManageFinance/HistoryDeposit';
+import HistoryWithdraw from '~/pages/Admin/ManageFinance/HistoryWithdraw';
 
 const routesConfig = [
     {
@@ -22,40 +25,53 @@ const routesConfig = [
         component: <AccessDenied />,
     },
     {
-        title: 'admin',
-        path: '/admin',
-        layout: <AdminLayout />,
+        path: '/admin-demo',
+        layout: <AdminLayoutDemo />,
         role: [ADMIN_ROLE],
         component: <DashBoard />,
     },
     {
-        title: 'admin',
-        path: '/admin/dashboard',
-        layout: <AdminLayout />,
+        path: '/admin-demo/dashboard',
+        layout: <AdminLayoutDemo />,
         role: [ADMIN_ROLE],
         component: <DashBoard />,
     },
     {
-        title: 'admin',
-        path: '/admin/users',
-        layout: <AdminLayout />,
+        path: '/admin-demo/users',
+        layout: <AdminLayoutDemo />,
         role: [ADMIN_ROLE],
         component: <Users />,
 
     },
     {
-        title: 'admin',
-        path: '/admin/users/:id',
-        layout: <AdminLayout />,
+        path: '/admin-demo/users/:id',
+        layout: <AdminLayoutDemo />,
         role: [ADMIN_ROLE],
         component: <Detail />
     },
     {
-        title: 'admin',
-        path: '/admin/notificaions',
-        layout: <AdminLayout />,
+        path: '/admin-demo/notificaions',
+        layout: <AdminLayoutDemo />,
         role: [ADMIN_ROLE],
         component: <Notificaion />,
+    },
+    {
+        path: '/admin',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <></>,
+    },
+    {
+        path: '/admin/finance/deposit',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <HistoryDeposit />
+    },
+    {
+        path: '/admin/finance/withdraw',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <HistoryWithdraw />
     },
     {
         title: 'verification2FA',
