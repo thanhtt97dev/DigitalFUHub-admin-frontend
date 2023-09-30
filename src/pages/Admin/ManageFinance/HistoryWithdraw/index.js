@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification, Select, Modal, Divider } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import dayjs from 'dayjs';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getWithdrawTransaction, confirmTransferWithdrawSuccess } from '~/api/bank'
 import Spinning from "~/components/Spinning";
@@ -16,8 +16,6 @@ import styles from './HistoryWithdraw.module.scss';
 const cx = classNames.bind(styles);
 const { RangePicker } = DatePicker;
 
-
-
 function HistoryWithdraw() {
 
     const columns = [
@@ -29,7 +27,7 @@ function HistoryWithdraw() {
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '12%',
+            width: '15%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -59,7 +57,7 @@ function HistoryWithdraw() {
         {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
-            width: '10%',
+            width: '13%',
         },
         {
             title: 'Ngân hàng đối tác',
@@ -82,19 +80,20 @@ function HistoryWithdraw() {
         {
             title: '',
             dataIndex: 'isPay',
-            width: '7%',
+            width: '9%',
             render: (isPay, record) => {
                 return (
                     isPay ?
-                        <DrawerWithdrawTransactionBill withdrawTransactionId={record.withdrawTransactionId} />
+                        <DrawerWithdrawTransactionBill userId={record.userId} withdrawTransactionId={record.withdrawTransactionId} />
                         :
-                        <Button onClick={() => handleOpenModal(record)} size="small">Chuyển khoản</Button>
+                        <Button onClick={() => handleOpenModal(record)} size="middle">Chuyển khoản</Button>
                 )
             }
         },
 
     ];
 
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
     const [api, contextHolder] = notification.useNotification();
     const openNotification = (type, message) => {
@@ -214,6 +213,10 @@ function HistoryWithdraw() {
 
     }
 
+    const handleNavigateToWithdrawByList = () => {
+        let dataTableRecordsUnPay = dataTable.filter(x => x.isPay === false);
+        return navigate("tranfer-bylist", { state: { dataTable: dataTableRecordsUnPay } })
+    }
 
     return (
         <>
@@ -222,7 +225,7 @@ function HistoryWithdraw() {
                 <Card
                     style={{
                         width: '100%',
-                        height: "650px"
+                        minHeight: "690px"
                     }}
                     title="Danh sách rút tiền"
                     hoverable
@@ -243,7 +246,6 @@ function HistoryWithdraw() {
                         form={form}
                         onFinish={onFinish}
                         fields={initFormValues}
-                        size="small"
                     >
                         <Form.Item label="Mã giao dịch" labelAlign="left" name="withdrawTransactionId">
                             <Input />
@@ -275,6 +277,11 @@ function HistoryWithdraw() {
                             </Space>
                         </Form.Item>
                     </Form>
+
+                    <Button type="primary" onClick={handleNavigateToWithdrawByList}>
+                        Chuyển khoản theo lô
+                    </Button>
+
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTable} size='small'

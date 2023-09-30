@@ -19,6 +19,7 @@ export const SELLER_ROLE = 'Seller';
 export const NOT_HAVE_MEANING_FOR_TOKEN = 'not have meaning';
 export const NOT_HAVE_MEANING_FOR_TOKEN_EXPRIES = 100;
 export const TOKEN_EXPIRES_TIME = 10
+export const REFRESH_TOKEN_TIME = 9
 export const BANK_ACCOUNT_IMAGE_SRC = "https://img.vietqr.io/image/MB-0336687454-compact.png?accountName=LE%20DUC%20HIEU"
 export const VIET_QR_SRC = "https://img.vietqr.io/image/"
 
@@ -111,7 +112,118 @@ export const SIGNAL_R_CHAT_HUB_RECEIVE_MESSAGE = "ReceiveMessage";
 export const SIGNAL_R_NOTIFICATION_HUB_RECEIVE_NOTIFICATION = "ReceiveNotification";
 export const SIGNAL_R_NOTIFICATION_HUB_RECEIVE_ALL_NOTIFICATION = "ReceiveAllNotification";
 
+export const HEADER_WITHDRAW_BY_LIST_EXCEL_FILE = [
+    [
+        {
+            value: "",
+            span: 1,
+            align: "center",
+            backgroundColor: "#FFFF"
+        },
+        {
+            value: "DANH SÁCH GIAO DỊCH",
+            span: 5,
+            align: "center",
+            backgroundColor: "#FFFF"
+        },
+    ],
+    [
+        {
+            value: "STT",
+            span: 1,
+            align: "center",
+            backgroundColor: "#D9D9D9",
+            height: 44,
+            fontWeight: "bold",
+        },
+        {
+            value: "Số tài khoản",
+            span: 1,
+            align: "center",
+            backgroundColor: "#D9D9D9",
+            height: 44,
+            fontWeight: "bold",
+        },
+        {
+            value: "Tên người thụ hưởng",
+            span: 1,
+            align: "center",
+            backgroundColor: "#D9D9D9",
+            height: 44,
+            fontWeight: "bold",
+        },
+        {
+            value: "Ngân hàng thụ hưởng/Chi nhánh",
+            span: 1,
+            align: "center",
+            backgroundColor: "#D9D9D9",
+            height: 44,
+            fontWeight: "bold",
+        },
+        {
+            value: "Số tiền",
+            span: 1,
+            align: "center",
+            backgroundColor: "#D9D9D9",
+            height: 44,
+            with: 24,
+            fontWeight: "bold",
+        },
+        {
+            value: "Nội dung chuyển khoản",
+            span: 1,
+            align: "center",
+            backgroundColor: "#D9D9D9",
+            height: 44,
+            with: 44,
+            fontWeight: "bold",
+        },
+    ]
+]
 
+export const SCHEMA_WITHDRAW_BY_LIST_EXCEL_FILE = [
+    {
+        column: 'STT',
+        type: String,
+        value: data => data.key
+    },
+    {
+        column: 'Số tài khoản',
+        type: Number,
+        value: data => data.creditAccount
+    },
+    {
+        column: 'Tên người thụ hưởng',
+        type: String,
+        value: data => data.creditAccountName
+    },
+    {
+        column: 'Ngân hàng thụ hưởng/Chi nhánh',
+        type: Boolean,
+        value: data => data.bankName
+    },
+    {
+        column: 'Số tiền',
+        type: Number,
+        value: data => data.amount
+    },
+    {
+        column: 'Nội dung chuyển khoản',
+        type: String,
+        value: data => data.code
+    }
+]
+
+
+export const COLUMNS_WITHDRAW_BY_LIST_EXCEL_FILEcolumns = [
+    { with: 15 },
+    { with: 27 },
+    { with: 32 },
+    { width: 36 },
+    { width: 44 },
+    { width: 24 },
+    { width: 44 },
+]
 
 
 

@@ -161,8 +161,7 @@ function HistoryDeposit() {
                 <Card
                     style={{
                         width: '100%',
-                        marginBottom: 15,
-                        minHeight: "600px"
+                        minHeight: "690px"
                     }}
                     hoverable
                     title="Danh sách nạp tiền"
@@ -198,7 +197,7 @@ function HistoryDeposit() {
                                 placement={"bottomLeft"} />
                         </Form.Item>
 
-                        <Form.Item style={{ position: 'absolute', top: 110, left: 550 }}>
+                        <Form.Item style={{ position: 'absolute', top: 200, left: 550 }}>
                             <Space>
                                 <Button type="primary" htmlType="submit">
                                     Tìm kiếm

@@ -12,6 +12,7 @@ import Verification2FA from '~/pages/Verification2FA';
 import AdminLayout from '~/layouts/AdminLayout';
 import HistoryDeposit from '~/pages/Admin/ManageFinance/HistoryDeposit';
 import HistoryWithdraw from '~/pages/Admin/ManageFinance/HistoryWithdraw';
+import WithdrawByList from '~/pages/Admin/ManageFinance/WithdrawByList';
 
 const routesConfig = [
     {
@@ -72,6 +73,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <HistoryWithdraw />
+    },
+    {
+        path: '/admin/finance/withdraw/tranfer-bylist',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <WithdrawByList />
     },
     {
         title: 'verification2FA',

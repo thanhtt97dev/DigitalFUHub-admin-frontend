@@ -310,3 +310,8 @@ export const getVietQrImgSrc = (bankCode, creditAccount, creditAccountName, amou
     result += VIET_QR_SRC + `${bankCode}-${creditAccount}--compact.png?accountName=${creditAccountName}&amount=${amount}&addInfo=${description}`
     return result;
 }
+
+
+export const setUpDataToExportWithdrawExcelFile = (data) => {
+
+}

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
 
-    UserOutlined,
     AreaChartOutlined,
     StockOutlined
 
@@ -13,7 +12,7 @@ import { Link, Outlet } from 'react-router-dom';
 import logo from '~/assets/images/fpt-logo.jpg'
 
 const cx = classNames.bind(styles);
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const items = [
     {
@@ -69,18 +68,12 @@ const AdminLayout = () => {
                     mode="inline" items={items} />
             </Sider>
             <Layout>
-                <Header
-                    className={cx('header')}
-                >
-                    <Space size={16} style={{ display: 'flex', margin: '0 16px', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <Avatar size='large' icon={<UserOutlined />} />
-                    </Space>
-                </Header>
+
                 <Content className={cx("content")}>
                     <div
                         style={{
-                            padding: 12,
-                            minHeight: 660,
+                            padding: 5,
+                            minHeight: 650,
                             background: colorBgContainer,
                         }}
                     >

@@ -37,8 +37,8 @@ export const getWithdrawTransaction = (data) => {
     return apiPostAuth(`api/banks/HistoryWithdrawAll`, data);
 };
 
-export const getWithdrawTransactionBill = (id) => {
-    return apiGetAuth(`api/banks/WithdrawTransactionBill/${id}`);
+export const getWithdrawTransactionBill = (data) => {
+    return apiPostAuth(`api/banks/WithdrawTransactionBillAdmin`, data);
 };
 
 export const confirmTransferWithdrawSuccess = (data) => {
