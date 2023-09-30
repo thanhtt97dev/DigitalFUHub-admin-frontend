@@ -41,3 +41,8 @@ export const getWithdrawTransactionBill = (id) => {
     return apiGetAuth(`api/banks/WithdrawTransactionBill/${id}`);
 };
 
+export const confirmTransferWithdrawSuccess = (data) => {
+    return apiPostAuth(`api/banks/ConfirmTransfer`, data);
+};
+
+

@@ -20,6 +20,7 @@ export const NOT_HAVE_MEANING_FOR_TOKEN = 'not have meaning';
 export const NOT_HAVE_MEANING_FOR_TOKEN_EXPRIES = 100;
 export const TOKEN_EXPIRES_TIME = 10
 export const BANK_ACCOUNT_IMAGE_SRC = "https://img.vietqr.io/image/MB-0336687454-compact.png?accountName=LE%20DUC%20HIEU"
+export const VIET_QR_SRC = "https://img.vietqr.io/image/"
 
 export const BANKS_INFO = [
     {
@@ -99,6 +100,8 @@ export const RESPONSE_CODE_SUCCESS = "00"
 export const RESPONSE_CODE_NOT_ACCEPT = "01"
 export const RESPONSE_CODE_DATA_NOT_FOUND = "02"
 export const RESPONSE_CODE_FAILD = "03"
+
+export const RESPONSE_CODE_BANK_WITHDRAW_PAID = "BANK_01";
 
 //signal r
 

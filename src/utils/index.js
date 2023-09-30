@@ -3,6 +3,7 @@ import { format, register } from 'timeago.js';
 import jwtDecode from 'jwt-decode'
 import CryptoJS from 'crypto-js';
 import { Workbook } from 'exceljs'
+import { VIET_QR_SRC } from "~/constants"
 
 //API
 
@@ -304,3 +305,8 @@ export const stringGuid = () => {
     return result
 }
 
+export const getVietQrImgSrc = (bankCode, creditAccount, creditAccountName, amount, description) => {
+    let result = ""
+    result += VIET_QR_SRC + `${bankCode}-${creditAccount}--compact.png?accountName=${creditAccountName}&amount=${amount}&addInfo=${description}`
+    return result;
+}

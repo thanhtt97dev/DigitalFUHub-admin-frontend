@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
+import { Link } from "react-router-dom";
 
 import { getDepositTransaction } from '~/api/bank'
 import Spinning from "~/components/Spinning";
 import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
 import dayjs from 'dayjs';
 import { RESPONSE_CODE_SUCCESS } from "~/constants";
+
 
 
 const { RangePicker } = DatePicker;
@@ -16,7 +18,17 @@ const columns = [
     {
         title: 'Mã giao dịch',
         dataIndex: 'depositTransactionId',
-        width: '10%',
+        width: '9%',
+    },
+    {
+        title: 'Email người tạo yêu cầu',
+        dataIndex: 'email',
+        width: '20%',
+        render: (email, record) => {
+            return (
+                <Link to={`/admin/user/${record.userId}`}>{email}</Link>
+            )
+        }
     },
     {
         title: 'Số tiền',
@@ -85,6 +97,7 @@ function HistoryDeposit() {
     const [dataTable, setDataTable] = useState([]);
     const [searchData, setSearchData] = useState({
         depositTransactionId: '',
+        email: '',
         fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
         toDate: dayjs().format('M/D/YYYY'),
     });
@@ -114,6 +127,10 @@ function HistoryDeposit() {
             value: searchData.depositTransactionId,
         },
         {
+            name: 'email',
+            value: searchData.email,
+        },
+        {
             name: 'date',
             value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
         },
@@ -129,6 +146,7 @@ function HistoryDeposit() {
 
         setSearchData({
             depositTransactionId: values.depositTransactionId,
+            email: values.email,
             fromDate: values.date[0].$d.toLocaleDateString(),
             toDate: values.date[1].$d.toLocaleDateString(),
         });
@@ -170,13 +188,17 @@ function HistoryDeposit() {
                             <Input />
                         </Form.Item>
 
+                        <Form.Item label="Email" labelAlign="left" name="email">
+                            <Input />
+                        </Form.Item>
+
                         <Form.Item label="Thời gian tạo yêu cầu" labelAlign="left" name="date">
                             <RangePicker locale={locale}
                                 format={"M/D/YYYY"}
                                 placement={"bottomLeft"} />
                         </Form.Item>
 
-                        <Form.Item style={{ position: 'absolute', top: 60, left: 550 }}>
+                        <Form.Item style={{ position: 'absolute', top: 110, left: 550 }}>
                             <Space>
                                 <Button type="primary" htmlType="submit">
                                     Tìm kiếm
