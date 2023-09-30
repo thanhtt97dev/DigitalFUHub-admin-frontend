@@ -16,12 +16,12 @@ const columns = [
     {
         title: 'Mã giao dịch',
         dataIndex: 'withdrawTransactionId',
-        width: '11%',
+        width: '6%',
     },
     {
         title: 'Số tiền',
         dataIndex: 'amount',
-        width: '20%',
+        width: '10%',
         render: (amount) => {
             return (
                 <p>{formatStringToCurrencyVND(amount)} VND</p>
@@ -31,7 +31,7 @@ const columns = [
     {
         title: 'Thời gian tạo yêu cầu',
         dataIndex: 'requestDate',
-        width: '15%',
+        width: '10%',
         render: (requestDate) => {
             return (
                 <p>{ParseDateTime(requestDate)}</p>
@@ -41,17 +41,17 @@ const columns = [
     {
         title: 'Đơn vị thụ hưởng',
         dataIndex: 'creditAccountName',
-        width: '20%',
+        width: '12%',
     },
     {
         title: 'Số tài khoản',
         dataIndex: 'creditAccount',
-        width: '15%',
+        width: '10%',
     },
     {
         title: 'Ngân hàng đối tác',
         dataIndex: 'bankName',
-        width: '15%',
+        width: '14%',
     },
     {
         title: 'Trạng thái',
@@ -62,7 +62,7 @@ const columns = [
                 record.isPay ?
                     <Tag color="#52c41a">Thành công</Tag>
                     :
-                    <Tag color="#ecc30b">Đang xử lý yêu cầu</Tag>
+                    <Tag color="#ecc30b">Chưa xử lý</Tag>
             )
         }
     },
@@ -160,9 +160,9 @@ function HistoryWithdraw() {
                 <Card
                     style={{
                         width: '100%',
-                        marginBottom: 15,
-                        minHeight: "600px"
+                        height: "650px"
                     }}
+                    title="Danh sách rút tiền"
                     hoverable
                 >
                     <Form
@@ -196,7 +196,7 @@ function HistoryWithdraw() {
                             <Select >
                                 <Select.Option value={0}>Tất cả</Select.Option>
                                 <Select.Option value={1}>Thành công</Select.Option>
-                                <Select.Option value={2}>Đang xử lý yêu cầu</Select.Option>
+                                <Select.Option value={2}>Chưa xử lý	</Select.Option>
                             </Select>
                         </Form.Item>
 
@@ -208,7 +208,7 @@ function HistoryWithdraw() {
                             </Space>
                         </Form.Item>
                     </Form>
-                    <Table columns={columns} pagination={{ pageSize: 5 }} dataSource={dataTable} />
+                    <Table columns={columns} pagination={{ pageSize: 10 }} dataSource={dataTable} size='small' scroll={{ y: 290 }} />
                 </Card>
             </Spinning>
         </>

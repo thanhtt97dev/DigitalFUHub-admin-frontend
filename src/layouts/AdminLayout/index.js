@@ -80,7 +80,7 @@ const AdminLayout = () => {
                     <div
                         style={{
                             padding: 12,
-                            minHeight: 650,
+                            minHeight: 660,
                             background: colorBgContainer,
                         }}
                     >

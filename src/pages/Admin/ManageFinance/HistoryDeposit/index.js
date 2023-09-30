@@ -184,7 +184,9 @@ function HistoryDeposit() {
                             </Space>
                         </Form.Item>
                     </Form>
-                    <Table columns={columns} pagination={{ pageSize: 5 }} dataSource={dataTable} />
+                    <Table columns={columns} pagination={{ pageSize: 10 }}
+                        dataSource={dataTable} size='small' scroll={{ y: 290 }}
+                    />
                 </Card>
             </Spinning>
         </>
