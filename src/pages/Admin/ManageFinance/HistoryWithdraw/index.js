@@ -29,7 +29,7 @@ function HistoryWithdraw() {
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '14%',
+            width: '12%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -112,7 +112,7 @@ function HistoryWithdraw() {
 
     const [dataTable, setDataTable] = useState([]);
     const [searchData, setSearchData] = useState({
-        depositTransactionId: '',
+        withdrawTransactionId: '',
         email: '',
         fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
         toDate: dayjs().format('M/D/YYYY'),
@@ -123,7 +123,10 @@ function HistoryWithdraw() {
         getWithdrawTransaction(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.data.result)
+                    res.data.result.forEach((x, index) => {
+                        setDataTable((prev) => [...prev, { key: index, ...x }])
+                    })
+                    //setDataTable(res.data.result)
                 } else {
                     openNotification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
@@ -140,8 +143,8 @@ function HistoryWithdraw() {
 
     const initFormValues = [
         {
-            name: 'depositTransactionId',
-            value: searchData.depositTransactionId,
+            name: 'withdrawTransactionId',
+            value: searchData.withdrawTransactionId,
         },
         {
             name: 'email',
@@ -166,7 +169,7 @@ function HistoryWithdraw() {
         }
 
         setSearchData({
-            depositTransactionId: values.depositTransactionId,
+            withdrawTransactionId: values.withdrawTransactionId,
             email: values.email,
             fromDate: values.date[0].$d.toLocaleDateString(),
             toDate: values.date[1].$d.toLocaleDateString(),
@@ -242,7 +245,7 @@ function HistoryWithdraw() {
                         fields={initFormValues}
                         size="small"
                     >
-                        <Form.Item label="Mã giao dịch" labelAlign="left" name="depositTransactionId">
+                        <Form.Item label="Mã giao dịch" labelAlign="left" name="withdrawTransactionId">
                             <Input />
                         </Form.Item>
 
@@ -272,7 +275,11 @@ function HistoryWithdraw() {
                             </Space>
                         </Form.Item>
                     </Form>
-                    <Table columns={columns} pagination={{ pageSize: 10 }} dataSource={dataTable} size='small' scroll={{ y: 290 }} />
+                    <Table columns={columns}
+                        pagination={{ pageSize: 10 }}
+                        dataSource={dataTable} size='small'
+                        scroll={{ y: 290 }}
+                    />
                 </Card>
             </Spinning>
 
@@ -299,6 +306,7 @@ function HistoryWithdraw() {
                         <p><b>Người thụ hưởng: </b>{dataModal.creditAccountName}</p>
                         <p><b>Số tài khoản: </b>{dataModal.creditAccount}</p>
                         <p><b>Ngân hàng: </b>{dataModal.bankName}</p>
+                        <p><b>Số tiền: </b>{dataModal.amount}</p>
                     </div>
                     <div className={cx("warning")}>
                         <h3>Lưu ý:</h3>
