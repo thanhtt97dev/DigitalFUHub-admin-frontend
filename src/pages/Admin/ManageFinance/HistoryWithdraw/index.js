@@ -203,7 +203,7 @@ function HistoryWithdraw() {
                     setDataTable(newDataTable)
                     openNotification("success", "Xác nhận chuyển khoản thành công!")
                 } else if (res.data.status.responseCode === RESPONSE_CODE_BANK_WITHDRAW_PAID) {
-                    openNotification("error", `Mã hóa đơn này đã được xác nhận trước đó! Vui lòng vào "Lịch sử giao dịch nội bộ" để kiểm tra!`)
+                    openNotification("error", `Mã hóa đơn này đã được xác nhận trước đó!`)
                 }
 
             })
@@ -273,7 +273,7 @@ function HistoryWithdraw() {
                             </Select>
                         </Form.Item>
 
-                        <Form.Item style={{ position: 'absolute', top: 145, left: 550 }}>
+                        <Form.Item style={{ position: 'absolute', top: 165, left: 550 }}>
                             <Space>
                                 <Button type="primary" htmlType="submit">
                                     Tìm kiếm
