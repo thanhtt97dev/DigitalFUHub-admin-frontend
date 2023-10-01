@@ -39,8 +39,7 @@
         "timeago.js": "^4.0.2",
         "validator": "^13.11.0",
         "web-vitals": "^2.1.4",
-        "weekday": "^3.0.1",
-        "write-excel-file": "^1.4.27"
+        "weekday": "^3.0.1"
     },
     "scripts": {
         "start": "react-app-rewired start",

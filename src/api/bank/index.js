@@ -45,4 +45,8 @@ export const confirmTransferWithdrawSuccess = (data) => {
     return apiPostAuth(`api/banks/ConfirmTransfer`, data);
 };
 
+export const confirmListTransferWithdrawSuccess = (data) => {
+    return apiPostAuth(`api/banks/ConfirmListTransfer`, data);
+};
+
 

@@ -3,6 +3,9 @@ import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification,
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from "react-router-dom";
+import {
+    SwapOutlined
+} from '@ant-design/icons';
 
 import { getWithdrawTransaction, confirmTransferWithdrawSuccess } from '~/api/bank'
 import Spinning from "~/components/Spinning";
@@ -122,10 +125,11 @@ function HistoryWithdraw() {
         getWithdrawTransaction(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    let data = []
                     res.data.result.forEach((x, index) => {
-                        setDataTable((prev) => [...prev, { key: index, ...x }])
+                        data = [...data, { key: index, ...x }]
                     })
-                    //setDataTable(res.data.result)
+                    setDataTable(data)
                 } else {
                     openNotification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
@@ -279,7 +283,7 @@ function HistoryWithdraw() {
                     </Form>
 
                     <Button type="primary" onClick={handleNavigateToWithdrawByList}>
-                        Chuyển khoản theo lô
+                        <SwapOutlined /> Chuyển khoản theo lô
                     </Button>
 
                     <Table columns={columns}

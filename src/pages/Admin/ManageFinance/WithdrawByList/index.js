@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification, Select, Modal, Divider } from "antd";
-import locale from 'antd/es/date-picker/locale/vi_VN';
-import dayjs from 'dayjs';
+import { Card, Table, Tag, Button, Form, Input, Space, notification, Modal, Divider } from "antd";
+
 import { Link } from "react-router-dom";
 import {
     DeleteOutlined,
-    DownloadOutlined
+    DownloadOutlined,
+    CheckCircleOutlined
 } from '@ant-design/icons';
-import writeXlsxFile from "write-excel-file";
 
 import Spinning from "~/components/Spinning";
 import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
 import BackPreviousPage from "~/components/BackPreviousPage";
-import { HEADER_WITHDRAW_BY_LIST_EXCEL_FILE, SCHEMA_WITHDRAW_BY_LIST_EXCEL_FILE } from "~/constants";
-
-const { RangePicker } = DatePicker;
-
+import * as ExcelJS from "exceljs"
+import saveAs from "file-saver";
+import { dowloadFile } from '~/api/storage'
+import {
+    MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME,
+    RESPONSE_CODE_SUCCESS, RESPONSE_CODE_BANK_WITHDRAW_PAID,
+    RESPONSE_CODE_FAILD,
+    RESPONSE_CODE_DATA_NOT_FOUND
+} from '~/constants'
+import { confirmListTransferWithdrawSuccess } from '~/api/bank'
 
 
 function WithdrawByList() {
@@ -119,7 +124,6 @@ function WithdrawByList() {
     const [dataTableView, setDataTableView] = useState([]);
 
 
-
     useEffect(() => {
         if (location.state === null) {
             alert("Xảy ra sự cố! Hãy thử lại sau!");
@@ -160,7 +164,7 @@ function WithdrawByList() {
         setTimeout(() => {
             setLoading(false)
             setOpenModal(true)
-        }, 1000)
+        }, 300)
     }
 
     const handleOpenModalRemoveRecord = (key) => {
@@ -177,15 +181,67 @@ function WithdrawByList() {
     }
 
     const handleDownLoadFile = () => {
-        writeXlsxFile(HEADER_WITHDRAW_BY_LIST_EXCEL_FILE, {
-            schema: SCHEMA_WITHDRAW_BY_LIST_EXCEL_FILE,
-            fileName: "sample.xlsx"
-        });
-    }
+        setLoading(true)
+        dowloadFile(MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME)
+            .then(res => {
+                const workbook = new ExcelJS.Workbook();
+                workbook.xlsx
+                    .load(res.data)
+                    .then(async () => {
+                        const worksheet = workbook.getWorksheet(1);
+                        dataTable.forEach((data) => {
+                            worksheet.addRow([data.key, data.creditAccount, data.creditAccountName, data.bankName, data.amount, data.code]);
+                        })
+                        const bufferhe = await workbook.xlsx.writeBuffer();
+                        saveAs(
+                            new Blob([bufferhe], { type: "application/octet-stream" }),
+                            MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME
+                        );
+                    })
+                    .catch((error) => {
+                        console.error(error.message);
+                    });
+            })
+            .catch(() => {
+                openNotification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+            })
+            .finally(() => {
+                setTimeout(() => setLoading(false), 500)
+            })
+    };
 
-    const handleConfirmTransfer = (withdrawTransactionId) => {
+
+    const handleConfirmTransfer = () => {
         setLoadingBtnConfirmModal(true)
-
+        let data = []
+        dataTable.forEach((x) => {
+            data = [...data, x.withdrawTransactionId]
+        })
+        confirmListTransferWithdrawSuccess({ ids: data })
+            .then(res => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    //update UI
+                    data = dataTable.filter((x) => !data.includes(x.withdrawTransactionId))
+                    setDataTable(data)
+                    setDataTableView(data)
+                    openNotification("success", "Xác nhận chuyển khoản thành công!")
+                } else if (res.data.status.responseCode === RESPONSE_CODE_BANK_WITHDRAW_PAID) {
+                    openNotification("error", `Mã hóa đơn này đã được xác nhận trước đó! Vui lòng vào "Lịch sử giao dịch nội bộ" để kiểm tra!`)
+                } else if (res.data.status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
+                    openNotification("error", `Mã hóa đơn không tồn tại!`)
+                } else if (res.data.status.responseCode === RESPONSE_CODE_FAILD) {
+                    openNotification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+                }
+            })
+            .catch(() => {
+                openNotification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setLoadingBtnConfirmModal(false)
+                    setOpenModal(false)
+                }, 500)
+            })
     }
 
 
@@ -242,6 +298,7 @@ function WithdrawByList() {
                     />
 
                     <Space direction="horizontal" style={{ width: '100%', justifyContent: 'end' }}>
+                        <Button type="primary" size="large" onClick={handleOpenModal}><CheckCircleOutlined /> Xác nhận đã chuyển khoản</Button>
                         <Button size="large" onClick={handleDownLoadFile}><DownloadOutlined /> Tải file</Button>
                         <BackPreviousPage url={-1} />
                     </Space>
@@ -262,8 +319,7 @@ function WithdrawByList() {
             </Modal>
 
             <Modal
-                title="Chuyển khoản"
-                centered
+                title="Chú ý"
                 open={openModal}
                 onCancel={() => setOpenModal(false)}
                 width={500}
@@ -276,8 +332,7 @@ function WithdrawByList() {
                     </Button>,
                 ]}
             >
-                <Divider />
-
+                Bạn đã có chắn rằng đã chuyển khoản thành công?
             </Modal>
         </>
     )
