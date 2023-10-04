@@ -6,6 +6,11 @@ import {
 
 } from '@ant-design/icons';
 import { Layout, Menu, Space, theme, Avatar } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    faCartShopping
+} from '@fortawesome/free-solid-svg-icons'
+
 import styles from './AdminLayout.module.scss'
 import classNames from 'classnames/bind';
 import { Link, Outlet } from 'react-router-dom';
@@ -22,7 +27,7 @@ const items = [
     },
     {
         label: 'Quản lý tài chính',
-        key: 'seller/product',
+        key: 'admin/finance',
         icon: <StockOutlined />,
         children: [
             {
@@ -38,6 +43,11 @@ const items = [
                 label: <Link to={"/admin/finance/transaction"}>Lịch sử giao dịch nội bộ</Link>,
             },
         ],
+    },
+    {
+        label: <Link to='/admin/order'>Quản lý đơn hàng</Link>,
+        key: 'admin/order',
+        icon: <FontAwesomeIcon icon={faCartShopping} />,
     },
 ];
 const AdminLayout = () => {
