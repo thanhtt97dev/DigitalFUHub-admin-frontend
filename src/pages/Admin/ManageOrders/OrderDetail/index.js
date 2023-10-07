@@ -2,7 +2,7 @@
 import React, { useContext, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import { Card, Col, Divider, Row, Tag, Rate } from 'antd';
+import { Card, Col, Divider, Row, Tag, Rate, Space, Button } from 'antd';
 
 import Spinning from '~/components/Spinning';
 import NotificationContext from '~/context/NotificationContext';
@@ -14,6 +14,7 @@ import {
     ORDER_WAIT_CONFIRMATION,
     ORDER_CONFIRMED,
     ORDER_COMPLAINT,
+    ORDER_SELLER_REFUNDED,
     ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
     ORDER_SELLER_VIOLATES
@@ -22,6 +23,7 @@ import { ParseDateTime, formatStringToCurrencyVND } from '~/utils/index'
 
 import classNames from 'classnames/bind';
 import styles from './OrderDetail.module.scss';
+import ModalChangeOrderStatus from '~/components/Modals/ModalChangeOrderStatus';
 const cx = classNames.bind(styles);
 
 function OrderDetail() {
@@ -56,6 +58,26 @@ function OrderDetail() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const getOrderDetail = () => {
+        setLoading(true)
+        getOrder(id)
+            .then((res) => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    setOrder(res.data.result)
+                    setProductMedias(res.data.result.productMedias)
+                    setOrderCoupons(res.data.result.orderCoupons)
+                } else {
+                    notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
+                }
+            })
+            .catch(() => {
+                //notification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
+            })
+            .finally(() => {
+                setTimeout(() => { setLoading(false) }, 500)
+            })
+    }
+
 
     return (
         <>
@@ -79,7 +101,7 @@ function OrderDetail() {
                                 title="Thông tin đơn hàng"
                             >
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Mã hóa đơn:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -87,7 +109,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Khách hàng:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -95,7 +117,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Cửa hàng:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -103,7 +125,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Thời gian
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -111,7 +133,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Sản phẩm:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -119,7 +141,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Loại:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -127,7 +149,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Giá:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -135,7 +157,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Giảm giá:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -143,7 +165,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Số lượng:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -151,7 +173,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Phí dịch vụ
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -159,7 +181,7 @@ function OrderDetail() {
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Đánh giá:
                                     </Col>
                                     {(() => {
@@ -182,7 +204,7 @@ function OrderDetail() {
                                     })()}
                                 </Row>
                                 <Row>
-                                    <Col offset={1} span={8}>
+                                    <Col offset={1} span={6}>
                                         Voucher từ Shop:
                                     </Col>
                                     <Col offset={1} span={14}>
@@ -302,22 +324,53 @@ function OrderDetail() {
                                 <Divider />
                                 <Row>
                                     <Col offset={1} span={8}>
-                                        <h3>Trạng thái đơn hàng:</h3>
+                                        <b>Trạng thái đơn hàng:</b>
                                     </Col>
-                                    <Col offset={1} span={14}>
+                                    <Col offset={0} span={14}>
                                         {(() => {
                                             if (order.orderStatusId === ORDER_WAIT_CONFIRMATION) {
-                                                return <Tag className={cx("order-status-tag")} color="#108ee9">Chờ xác nhận</Tag>
+                                                return <Tag color="#108ee9" className={cx('tag')}>Chờ xác nhận</Tag>
                                             } else if (order.orderStatusId === ORDER_CONFIRMED) {
-                                                return <Tag className={cx("order-status-tag")} color="#87d068">Đã xác nhận</Tag>
+                                                return <Tag color="#87d068" className={cx('tag')}>Đã xác nhận</Tag>
                                             } else if (order.orderStatusId === ORDER_COMPLAINT) {
-                                                return <Tag className={cx("order-status-tag")} color="#c6e329">Khiếu nại</Tag>
+                                                return <Tag color="#c6e329" className={cx('tag')}>Khiếu nại</Tag>
+                                            } else if (order.orderStatusId === ORDER_SELLER_REFUNDED) {
+                                                return <Tag color="#eab0b0e0" className={cx('tag')}>Người bán hoàn tiền</Tag>
                                             } else if (order.orderStatusId === ORDER_DISPUTE) {
-                                                return <Tag className={cx("order-status-tag")} color="#ffaa01">Tranh chấp</Tag>
-                                            } else if (order.orderStatusId === ORDER_REJECT_COMPLAINT) {
-                                                return <Tag className={cx("order-status-tag")} color="#ca01ff">Từ chối khiếu nại</Tag>
-                                            } else if (order.orderStatusId === ORDER_SELLER_VIOLATES) {
-                                                return <Tag className={cx("order-status-tag")} color="#f50">Người bán vi phạm</Tag>
+                                                return (
+                                                    <Space direction='vertical'>
+                                                        <Space>
+                                                            <Tag color="#ffaa01" className={cx('tag')}>Tranh chấp</Tag>
+                                                            <Button >Nhắn tin</Button>
+                                                        </Space>
+                                                        <Space>
+                                                            <ModalChangeOrderStatus orderId={order.orderId} callBack={getOrderDetail} />
+
+                                                        </Space>
+                                                    </Space>
+                                                )
+                                            } else {
+                                                return (
+                                                    <Space direction='vertical'>
+                                                        <Space>
+                                                            {(() => {
+                                                                if (order.orderStatusId === ORDER_REJECT_COMPLAINT) {
+                                                                    return <Tag color="#ca01ff" className={cx('tag')}>Từ chối khiếu nại</Tag>
+                                                                } else if (order.orderStatusId === ORDER_SELLER_VIOLATES) {
+                                                                    return <Tag color="#f50" className={cx('tag')}>Người bán vi phạm</Tag>
+                                                                }
+                                                            })()}
+                                                            <Button >Nhắn tin</Button>
+                                                        </Space>
+
+                                                        <Row>
+                                                            <Col >Nguyên nhân:</Col>
+                                                            <Col offset={1} >
+                                                                <span style={{ wordWrap: "break-word" }}>{order.note}</span>
+                                                            </Col>
+                                                        </Row>
+                                                    </Space>
+                                                )
                                             }
                                         })()}
                                     </Col>

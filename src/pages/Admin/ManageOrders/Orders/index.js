@@ -86,7 +86,7 @@ const columns = [
             } else if (orderStatusId === ORDER_COMPLAINT) {
                 return <Tag color="#c6e329">Khiếu nại</Tag>
             } else if (orderStatusId === ORDER_SELLER_REFUNDED) {
-                return <Tag color="#c6e329">Người bán hoàn tiền</Tag>
+                return <Tag color="#eab0b0e0">Người bán hoàn tiền</Tag>
             } else if (orderStatusId === ORDER_DISPUTE) {
                 return <Tag color="#ffaa01">Tranh chấp</Tag>
             } else if (orderStatusId === ORDER_REJECT_COMPLAINT) {

@@ -10,3 +10,10 @@ export const getOrder = (id) => {
 };
 
 
+export const updateOrderStatus = (data) => {
+    return apiPostAuth(`api/admins/UpdateOrderStatus`, data);
+};
+
+
+
+
