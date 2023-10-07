@@ -183,7 +183,7 @@ function OrderDetail() {
                                 </Row>
                                 <Row>
                                     <Col offset={1} span={8}>
-                                        Mã giảm giá đã sử dụng:
+                                        Voucher từ Shop:
                                     </Col>
                                     <Col offset={1} span={14}>
 
@@ -202,7 +202,7 @@ function OrderDetail() {
                         </Col>
                     </Row>
 
-                    <Row>
+                    <Row style={{ marginTop: '10px' }}>
                         <Col offset={2} span={20}>
                             <Card
                                 hoverable

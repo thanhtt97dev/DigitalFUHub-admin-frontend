@@ -12,6 +12,7 @@ import {
     ORDER_WAIT_CONFIRMATION,
     ORDER_CONFIRMED,
     ORDER_COMPLAINT,
+    ORDER_SELLER_REFUNDED,
     ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
     ORDER_SELLER_VIOLATES
@@ -84,6 +85,8 @@ const columns = [
                 return <Tag color="#87d068">Đã xác nhận</Tag>
             } else if (orderStatusId === ORDER_COMPLAINT) {
                 return <Tag color="#c6e329">Khiếu nại</Tag>
+            } else if (orderStatusId === ORDER_SELLER_REFUNDED) {
+                return <Tag color="#c6e329">Người bán hoàn tiền</Tag>
             } else if (orderStatusId === ORDER_DISPUTE) {
                 return <Tag color="#ffaa01">Tranh chấp</Tag>
             } else if (orderStatusId === ORDER_REJECT_COMPLAINT) {
@@ -248,9 +251,10 @@ function Orders() {
                                         <Select.Option value={1}>Chờ xác nhận</Select.Option>
                                         <Select.Option value={2}>Đã xác nhận</Select.Option>
                                         <Select.Option value={3}>Khiếu nại</Select.Option>
-                                        <Select.Option value={4}>Tranh chấp</Select.Option>
-                                        <Select.Option value={5}>Từ chối khiếu nại</Select.Option>
-                                        <Select.Option value={6}>Người bán vi phạm</Select.Option>
+                                        <Select.Option value={4}>Người bán hoàn tiền</Select.Option>
+                                        <Select.Option value={5}>Tranh chấp</Select.Option>
+                                        <Select.Option value={6}>Từ chối khiếu nại</Select.Option>
+                                        <Select.Option value={7}>Người bán vi phạm</Select.Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
