@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import { useAuthUser } from 'react-auth-kit';
 import { Outlet, Route, Routes } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ function Routing() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         getRoutesCanVisit();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);

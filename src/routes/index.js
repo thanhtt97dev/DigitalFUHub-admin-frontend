@@ -15,6 +15,7 @@ import HistoryWithdraw from '~/pages/Admin/ManageFinance/HistoryWithdraw';
 import WithdrawByList from '~/pages/Admin/ManageFinance/WithdrawByList';
 import HistoryTransactionInternal from '~/pages/Admin/ManageFinance/HistoryTransactionInternal';
 import Orders from '~/pages/Admin/ManageOrders/Orders';
+import OrderDetail from '~/pages/Admin/ManageOrders/OrderDetail';
 
 const routesConfig = [
     {
@@ -93,6 +94,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <Orders />
+    },
+    {
+        path: '/admin/order/:id',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <OrderDetail />
     },
     {
         title: 'verification2FA',

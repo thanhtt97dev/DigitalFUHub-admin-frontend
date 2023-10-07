@@ -35,7 +35,7 @@ function Login() {
                     signIn({
                         token: res.data.accessToken,
                         tokenType: "Bearer",
-                        expiresIn: TOKEN_EXPIRES_TIME,
+                        expiresIn: 100,
                         authState: {
                             id: res.data.userId,
                             username: res.data.username,
