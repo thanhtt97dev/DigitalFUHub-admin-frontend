@@ -2,7 +2,7 @@
 import React, { useContext, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import { Card, Col, Divider, Row, Tag, Rate, Space, Button } from 'antd';
+import { Card, Col, Divider, Row, Tag, Rate, Space, Button, Descriptions } from 'antd';
 
 import Spinning from '~/components/Spinning';
 import NotificationContext from '~/context/NotificationContext';
@@ -35,6 +35,8 @@ function OrderDetail() {
     const [order, setOrder] = useState({})
     const [productMedias, setProductMedias] = useState([])
     const [orderCoupons, setOrderCoupons] = useState([])
+    const [itemDescriptionOrderInfo, settemDescriptionOrderInfo] = useState({})
+    const [itemDescriptionOrderPayment, settemDescriptionOrderPayment] = useState({})
 
 
     useLayoutEffect(() => {
@@ -45,6 +47,227 @@ function OrderDetail() {
                     setOrder(res.data.result)
                     setProductMedias(res.data.result.productMedias)
                     setOrderCoupons(res.data.result.orderCoupons)
+                    const data = res.data.result;
+                    settemDescriptionOrderInfo([
+                        {
+                            label: 'Mã đơn hàng',
+                            children: data.orderId
+                        },
+                        {
+                            label: 'Khách hàng',
+                            children: <Link to={`/admin/user/$${data.customerId}`}>{data.customerEmail}</Link>
+                        },
+                        {
+                            label: 'Cửa hàng',
+                            children: <Link to={`/admin/shop/$${data.shopId}`}>{data.shopName}</Link>
+                        },
+                        {
+                            label: 'Thời gian',
+                            children: ParseDateTime(data.orderDate)
+                        },
+                        {
+                            label: 'Sản phẩm',
+                            children: <Link to={`/admin/product/$${data.productId}`}>{data.productName}</Link>
+                        },
+                        {
+                            label: 'Loại',
+                            children: data.productVariantName
+                        },
+                        {
+                            label: 'Giá',
+                            children: <span>{formatStringToCurrencyVND(data.price)} VND</span>
+                        },
+                        {
+                            label: 'Giảm giá',
+                            children: <span>{data.discount} %</span>
+                        },
+                        {
+                            label: 'Số lượng',
+                            children: data.quantity
+                        },
+                        {
+                            label: 'Phí dịch vụ',
+                            children: <span>{data.businessFeeValue} %</span>
+                        },
+                        {
+                            label: 'Đánh giá',
+                            children:
+                                <>
+                                    {(() => {
+                                        if (data.feedbackId !== null) {
+                                            return (
+                                                <>
+                                                    <span style={{ marginRight: "10px" }}>
+                                                        <Rate disabled value={data.feedbackRate} />
+                                                    </span>
+                                                    <Link> Chi tiết</Link>
+                                                </>
+                                            )
+                                        } else {
+                                            return <span>Chưa có đánh giá</span>
+                                        }
+                                    })()}
+                                </>
+                        },
+                        {
+                            label: 'Voucher từ Shop',
+                            children:
+                                <>
+                                    {orderCoupons.length === 0 ?
+                                        <span>0 VND</span>
+                                        :
+                                        <>
+                                            {orderCoupons.reduce((total, currentValue) => total + currentValue.priceDiscount, 0)} VND
+                                            <Link style={{ marginLeft: "10px" }} >Xem chi tiết</Link>
+                                        </>
+                                    }
+                                </>
+                        },
+
+                    ])
+
+                    settemDescriptionOrderPayment([
+
+                        {
+                            label: <b>Tổng tiền</b>,
+                            children:
+                                <>
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Tổng tiền hàng
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            {formatStringToCurrencyVND(data.price * data.quantity)} VND
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Giảm giá
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            - {formatStringToCurrencyVND(data.discount * data.price * data.quantity / 100)} VND
+                                        </Col>
+                                    </Row>
+
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Voucher từ Shop
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            {orderCoupons.length === 0 ?
+                                                <span>0 VND</span>
+                                                :
+                                                <>
+                                                    - {formatStringToCurrencyVND(data.totalCouponDiscount)} VND
+                                                </>
+                                            }
+
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={14}>
+                                            <hr />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Thành tiền
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            <span style={{ color: 'red', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalAmount)} VND</span>
+                                        </Col>
+                                    </Row>
+                                </>
+                        },
+                        {
+                            label: <b>Lợi nhuận</b>,
+                            children:
+                                <>
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Tổng tiền
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            {formatStringToCurrencyVND(data.totalAmount)} VND
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Phí dịch vụ
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            - {formatStringToCurrencyVND(data.totalAmount * data.businessFeeValue / 100)} VND
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col span={14}>
+                                            <hr />
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col offset={1} span={5}>
+                                            Thành tiền
+                                        </Col>
+                                        <Col offset={1} span={14}>
+                                            <span style={{ color: 'green', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalAmount * (100 - data.businessFeeValue) / 100)} VND</span>
+                                        </Col>
+                                    </Row>
+                                </>
+                        },
+                        {
+                            label: <b>Trạng thái đơn hàng</b>,
+                            children:
+                                <>
+                                    {(() => {
+                                        if (data.orderStatusId === ORDER_WAIT_CONFIRMATION) {
+                                            return <Tag color="#108ee9" className={cx('tag')}>Chờ xác nhận</Tag>
+                                        } else if (data.orderStatusId === ORDER_CONFIRMED) {
+                                            return <Tag color="#87d068" className={cx('tag')}>Đã xác nhận</Tag>
+                                        } else if (data.orderStatusId === ORDER_COMPLAINT) {
+                                            return <Tag color="#c6e329" className={cx('tag')}>Khiếu nại</Tag>
+                                        } else if (data.orderStatusId === ORDER_SELLER_REFUNDED) {
+                                            return <Tag color="#eab0b0e0" className={cx('tag')}>Người bán hoàn tiền</Tag>
+                                        } else if (data.orderStatusId === ORDER_DISPUTE) {
+                                            return (
+                                                <Space direction='vertical'>
+                                                    <Space>
+                                                        <Tag color="#ffaa01" className={cx('tag')}>Tranh chấp</Tag>
+                                                        <Button >Nhắn tin</Button>
+                                                    </Space>
+                                                    <Space>
+                                                        <ModalChangeOrderStatus orderId={data.orderId} callBack={getOrderDetail} />
+
+                                                    </Space>
+                                                </Space>
+                                            )
+                                        } else {
+                                            return (
+                                                <Space direction='vertical'>
+                                                    <Space>
+                                                        {(() => {
+                                                            if (data.orderStatusId === ORDER_REJECT_COMPLAINT) {
+                                                                return <Tag color="#ca01ff" className={cx('tag')}>Từ chối khiếu nại</Tag>
+                                                            } else if (data.orderStatusId === ORDER_SELLER_VIOLATES) {
+                                                                return <Tag color="#f50" className={cx('tag')}>Người bán vi phạm</Tag>
+                                                            }
+                                                        })()}
+                                                        <Button >Nhắn tin</Button>
+                                                    </Space>
+
+                                                    <Row>
+                                                        <Col >Nguyên nhân:</Col>
+                                                        <Col offset={1} >
+                                                            <span style={{ wordWrap: "break-word" }}>{data.note}</span>
+                                                        </Col>
+                                                    </Row>
+                                                </Space>
+                                            )
+                                        }
+                                    })()}
+                                </>
+                        },
+                    ])
                 } else {
                     notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
@@ -81,13 +304,14 @@ function OrderDetail() {
 
     return (
         <>
+
+
             <Spinning spinning={loading}>
                 <Card
                     title="Chi tiết đơn hàng"
                     hoverable
                     style={{ backgroundColor: "#f4f7fe" }}
                 >
-
                     <Row>
                         <Col offset={2} span={6}>
                             <CarouselProduct data={productMedias} />
@@ -100,126 +324,19 @@ function OrderDetail() {
                                 hoverable
                                 title="Thông tin đơn hàng"
                             >
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Mã hóa đơn:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {order.orderId}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Khách hàng:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        <Link to={`/admin/user/$${order.customerId}`}>{order.customerEmail}</Link>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Cửa hàng:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        <Link to={`/admin/shop/$${order.shopId}`}>{order.shopName}</Link>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Thời gian
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {ParseDateTime(order.orderDate)}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Sản phẩm:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        <Link to={`/admin/product/$${order.productId}`}>{order.productName}</Link>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Loại:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {order.productVariantName}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Giá:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {formatStringToCurrencyVND(order.price)} VND
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Giảm giá:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {order.discount} %
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Số lượng:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {order.quantity}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Phí dịch vụ
-                                    </Col>
-                                    <Col offset={1} span={14}>
-                                        {order.businessFeeValue} %
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Đánh giá:
-                                    </Col>
-                                    {(() => {
-                                        if (order.feedbackId !== null) {
-                                            return (
-                                                <Col offset={1} span={14}>
-                                                    <span style={{ marginRight: "10px" }}>
-                                                        <Rate disabled value={order.feedbackRate} />
-                                                    </span>
-                                                    <Link> Chi tiết</Link>
-                                                </Col>
-                                            )
-                                        } else {
-                                            return (
-                                                <Col offset={1} span={14}>
-                                                    Chưa có đánh giá
-                                                </Col>
-                                            )
-                                        }
-                                    })()}
-                                </Row>
-                                <Row>
-                                    <Col offset={1} span={6}>
-                                        Voucher từ Shop:
-                                    </Col>
-                                    <Col offset={1} span={14}>
-
-                                        {orderCoupons.length === 0 ?
-                                            <span>0 VND</span>
-                                            :
-                                            <>
-                                                {orderCoupons.reduce((total, currentValue) => total + currentValue.priceDiscount, 0)} VND
-                                                <Link style={{ marginLeft: "10px" }} >Xem chi tiết</Link>
-                                            </>
-                                        }
-                                    </Col>
-                                </Row>
-
+                                <Descriptions
+                                    bordered
+                                    column={{
+                                        xs: 1,
+                                        sm: 1,
+                                        md: 1,
+                                        lg: 1,
+                                        xl: 1,
+                                        xxl: 1,
+                                    }}
+                                    items={itemDescriptionOrderInfo}
+                                    size='small'
+                                />
                             </Card>
                         </Col>
                     </Row>
@@ -229,152 +346,19 @@ function OrderDetail() {
                             <Card
                                 hoverable
                             >
-                                <Divider />
-                                <Row>
-                                    <Col offset={1} span={8}>
-                                        <b>Tổng tiền:</b>
-                                    </Col>
-                                    <Col offset={0} span={14}>
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Tổng tiền hàng
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                {formatStringToCurrencyVND(order.price * order.quantity)} VND
-                                            </Col>
-                                        </Row>
-
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Giảm giá
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                - {formatStringToCurrencyVND(order.discount * order.price * order.quantity / 100)} VND
-                                            </Col>
-                                        </Row>
-
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Voucher từ Shop
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                {orderCoupons.length === 0 ?
-                                                    <span>0 VND</span>
-                                                    :
-                                                    <>
-                                                        - {formatStringToCurrencyVND(orderCoupons.reduce((total, currentValue) => total + currentValue.priceDiscount, 0))} VND
-                                                    </>
-                                                }
-
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col span={14}>
-                                                <hr />
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Thành tiền
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                <span style={{ color: 'red', fontSize: "20px" }}>{formatStringToCurrencyVND(order.totalAmount)} VND</span>
-                                            </Col>
-                                        </Row>
-
-                                    </Col>
-                                </Row>
-                                <Divider />
-                                <Row>
-                                    <Col offset={1} span={8}>
-                                        <h3>Lợi nhuận:</h3>
-                                    </Col>
-                                    <Col offset={0} span={14}>
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Tổng tiền
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                {formatStringToCurrencyVND(order.totalAmount)} VND
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Phí dịch vụ
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                - {formatStringToCurrencyVND(order.totalAmount * order.businessFeeValue / 100)} VND
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col span={14}>
-                                                <hr />
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col offset={1} span={5}>
-                                                Thành tiền
-                                            </Col>
-                                            <Col offset={1} span={14}>
-                                                <span style={{ color: 'green', fontSize: "20px" }}>{formatStringToCurrencyVND(order.totalAmount * (100 - order.businessFeeValue) / 100)} VND</span>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <Divider />
-                                <Row>
-                                    <Col offset={1} span={8}>
-                                        <b>Trạng thái đơn hàng:</b>
-                                    </Col>
-                                    <Col offset={0} span={14}>
-                                        {(() => {
-                                            if (order.orderStatusId === ORDER_WAIT_CONFIRMATION) {
-                                                return <Tag color="#108ee9" className={cx('tag')}>Chờ xác nhận</Tag>
-                                            } else if (order.orderStatusId === ORDER_CONFIRMED) {
-                                                return <Tag color="#87d068" className={cx('tag')}>Đã xác nhận</Tag>
-                                            } else if (order.orderStatusId === ORDER_COMPLAINT) {
-                                                return <Tag color="#c6e329" className={cx('tag')}>Khiếu nại</Tag>
-                                            } else if (order.orderStatusId === ORDER_SELLER_REFUNDED) {
-                                                return <Tag color="#eab0b0e0" className={cx('tag')}>Người bán hoàn tiền</Tag>
-                                            } else if (order.orderStatusId === ORDER_DISPUTE) {
-                                                return (
-                                                    <Space direction='vertical'>
-                                                        <Space>
-                                                            <Tag color="#ffaa01" className={cx('tag')}>Tranh chấp</Tag>
-                                                            <Button >Nhắn tin</Button>
-                                                        </Space>
-                                                        <Space>
-                                                            <ModalChangeOrderStatus orderId={order.orderId} callBack={getOrderDetail} />
-
-                                                        </Space>
-                                                    </Space>
-                                                )
-                                            } else {
-                                                return (
-                                                    <Space direction='vertical'>
-                                                        <Space>
-                                                            {(() => {
-                                                                if (order.orderStatusId === ORDER_REJECT_COMPLAINT) {
-                                                                    return <Tag color="#ca01ff" className={cx('tag')}>Từ chối khiếu nại</Tag>
-                                                                } else if (order.orderStatusId === ORDER_SELLER_VIOLATES) {
-                                                                    return <Tag color="#f50" className={cx('tag')}>Người bán vi phạm</Tag>
-                                                                }
-                                                            })()}
-                                                            <Button >Nhắn tin</Button>
-                                                        </Space>
-
-                                                        <Row>
-                                                            <Col >Nguyên nhân:</Col>
-                                                            <Col offset={1} >
-                                                                <span style={{ wordWrap: "break-word" }}>{order.note}</span>
-                                                            </Col>
-                                                        </Row>
-                                                    </Space>
-                                                )
-                                            }
-                                        })()}
-                                    </Col>
-                                </Row>
+                                <Descriptions
+                                    bordered
+                                    column={{
+                                        xs: 1,
+                                        sm: 1,
+                                        md: 1,
+                                        lg: 1,
+                                        xl: 1,
+                                        xxl: 1,
+                                    }}
+                                    items={itemDescriptionOrderPayment}
+                                    size='small'
+                                />
 
                             </Card>
                         </Col>
