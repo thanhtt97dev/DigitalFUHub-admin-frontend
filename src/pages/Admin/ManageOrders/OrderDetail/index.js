@@ -2,7 +2,7 @@
 import React, { useContext, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
-import { Card, Col, Divider, Row, Tag, Rate, Space, Button, Descriptions } from 'antd';
+import { Card, Col, Row, Tag, Rate, Space, Button, Descriptions } from 'antd';
 
 import Spinning from '~/components/Spinning';
 import NotificationContext from '~/context/NotificationContext';
@@ -24,6 +24,7 @@ import { ParseDateTime, formatStringToCurrencyVND } from '~/utils/index'
 import classNames from 'classnames/bind';
 import styles from './OrderDetail.module.scss';
 import ModalChangeOrderStatus from '~/components/Modals/ModalChangeOrderStatus';
+import BackPreviousPage from '~/components/BackPreviousPage';
 const cx = classNames.bind(styles);
 
 function OrderDetail() {
@@ -32,21 +33,22 @@ function OrderDetail() {
 
     const [loading, setLoading] = useState(false)
 
-    const [order, setOrder] = useState({})
     const [productMedias, setProductMedias] = useState([])
-    const [orderCoupons, setOrderCoupons] = useState([])
     const [itemDescriptionOrderInfo, settemDescriptionOrderInfo] = useState({})
     const [itemDescriptionOrderPayment, settemDescriptionOrderPayment] = useState({})
 
 
     useLayoutEffect(() => {
+        getOrderDetail();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const getOrderDetail = () => {
         setLoading(true)
         getOrder(id)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setOrder(res.data.result)
                     setProductMedias(res.data.result.productMedias)
-                    setOrderCoupons(res.data.result.orderCoupons)
                     const data = res.data.result;
                     settemDescriptionOrderInfo([
                         {
@@ -113,11 +115,11 @@ function OrderDetail() {
                             label: 'Voucher từ Shop',
                             children:
                                 <>
-                                    {orderCoupons.length === 0 ?
+                                    {data.totalCouponDiscount === 0 ?
                                         <span>0 VND</span>
                                         :
                                         <>
-                                            {orderCoupons.reduce((total, currentValue) => total + currentValue.priceDiscount, 0)} VND
+                                            {data.totalCouponDiscount} VND
                                             <Link style={{ marginLeft: "10px" }} >Xem chi tiết</Link>
                                         </>
                                     }
@@ -155,7 +157,7 @@ function OrderDetail() {
                                             Voucher từ Shop
                                         </Col>
                                         <Col offset={1} span={14}>
-                                            {orderCoupons.length === 0 ?
+                                            {data.totalCouponDiscount === 0 ?
                                                 <span>0 VND</span>
                                                 :
                                                 <>
@@ -278,27 +280,6 @@ function OrderDetail() {
             .finally(() => {
                 setTimeout(() => { setLoading(false) }, 500)
             })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const getOrderDetail = () => {
-        setLoading(true)
-        getOrder(id)
-            .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setOrder(res.data.result)
-                    setProductMedias(res.data.result.productMedias)
-                    setOrderCoupons(res.data.result.orderCoupons)
-                } else {
-                    notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
-                }
-            })
-            .catch(() => {
-                //notification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
-            })
-            .finally(() => {
-                setTimeout(() => { setLoading(false) }, 500)
-            })
     }
 
 
@@ -363,8 +344,17 @@ function OrderDetail() {
                             </Card>
                         </Col>
                     </Row>
+                    <Row style={{ marginTop: '10px' }}>
+                        <Col offset={2} span={20}>
+                            <Space direction="horizontal" style={{ width: '100%', justifyContent: 'end' }}>
+                                <BackPreviousPage url={-1} />
+                            </Space>
+                        </Col>
+                    </Row>
+
 
                 </Card>
+
 
             </Spinning>
         </>
