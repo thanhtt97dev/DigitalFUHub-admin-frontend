@@ -42,7 +42,7 @@ function DrawerWithdrawTransactionBill({ userId, withdrawTransactionId }) {
                     setItems([
                         {
                             key: '1',
-                            children: <b style={{ color: "red" }}>Yêu cầu rút tiền của bạn đã bị từ chối<br /></b>,
+                            children: <b style={{ color: "red" }}>Yêu cầu rút tiền đã bị từ chối<br /></b>,
                             span: 3
                         },
                         {

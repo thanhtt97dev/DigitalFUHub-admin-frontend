@@ -44,12 +44,12 @@ function HistoryWithdraw() {
         {
             title: 'Mã giao dịch',
             dataIndex: 'withdrawTransactionId',
-            width: '7%',
+            width: '5%',
         },
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '15%',
+            width: '12%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -235,10 +235,11 @@ function HistoryWithdraw() {
         confirmTransferWithdrawSuccess({ id: withdrawTransactionId })
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    console.log()
                     //render UI
                     let newDataTable = dataTable;
                     var index = dataTable.findIndex((x) => x.withdrawTransactionId === withdrawTransactionId)
-                    newDataTable[index].isPay = true
+                    newDataTable[index].withdrawTransactionStatusId = WITHDRAW_TRANSACTION_PAID
                     setDataTable(newDataTable)
                     notification("success", "Xác nhận chuyển khoản thành công!")
                 } else if (res.data.status.responseCode === RESPONSE_CODE_BANK_WITHDRAW_PAID) {
