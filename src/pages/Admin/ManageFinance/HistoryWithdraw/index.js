@@ -44,12 +44,12 @@ function HistoryWithdraw() {
         {
             title: 'Mã giao dịch',
             dataIndex: 'withdrawTransactionId',
-            width: '5%',
+            width: '4%',
         },
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '12%',
+            width: '15%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -69,7 +69,7 @@ function HistoryWithdraw() {
         {
             title: 'Thời gian tạo yêu cầu',
             dataIndex: 'requestDate',
-            width: '10%',
+            width: '12%',
             render: (requestDate) => {
                 return (
                     <p>{ParseDateTime(requestDate)}</p>
@@ -79,20 +79,20 @@ function HistoryWithdraw() {
         {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
-            width: '10%',
+            width: '12%',
         },
         {
             title: 'Ngân hàng đối tác',
             dataIndex: 'bankName',
-            width: '10%',
+            width: '14%',
         },
         {
             title: 'Trạng thái',
             dataIndex: 'withdrawTransactionStatusId',
-            width: '8%',
+            width: '6%',
             render: (withdrawTransactionStatusId, record) => {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_IN_PROCESSING) {
-                    return <Tag color="#ecc30b">Đang xử lý yêu cầu</Tag>
+                    return <Tag color="#ecc30b">Chưa xử lý</Tag>
                 } else if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_PAID) {
                     return <Tag color="#52c41a">Thành công</Tag>
                 } else if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_REJECT) {
@@ -103,7 +103,7 @@ function HistoryWithdraw() {
         {
             title: '',
             dataIndex: 'withdrawTransactionStatusId',
-            width: '14%',
+            width: '16%',
             render: (withdrawTransactionStatusId, record) => {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_PAID ||
                     withdrawTransactionStatusId === WITHDRAW_TRANSACTION_REJECT) {
@@ -235,7 +235,6 @@ function HistoryWithdraw() {
         confirmTransferWithdrawSuccess({ id: withdrawTransactionId })
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    console.log()
                     //render UI
                     let newDataTable = dataTable;
                     var index = dataTable.findIndex((x) => x.withdrawTransactionId === withdrawTransactionId)
@@ -258,7 +257,7 @@ function HistoryWithdraw() {
     }
 
     const handleNavigateToWithdrawByList = () => {
-        let dataTableRecordsUnPay = dataTable.filter(x => x.isPay === false);
+        let dataTableRecordsUnPay = dataTable.filter(x => x.withdrawTransactionStatusId === WITHDRAW_TRANSACTION_IN_PROCESSING);
         return navigate("tranfer-bylist", { state: { dataTable: dataTableRecordsUnPay } })
     }
 
@@ -333,8 +332,8 @@ function HistoryWithdraw() {
                                 <Form.Item name="status" >
                                     <Select >
                                         <Select.Option value={0}>Tất cả</Select.Option>
-                                        <Select.Option value={1}>Thành công</Select.Option>
-                                        <Select.Option value={2}>Chưa xử lý	</Select.Option>
+                                        <Select.Option value={1}>Chưa xử lý	</Select.Option>
+                                        <Select.Option value={2}>Thành công</Select.Option>
                                         <Select.Option value={3}>Từ chối</Select.Option>
                                     </Select>
                                 </Form.Item>

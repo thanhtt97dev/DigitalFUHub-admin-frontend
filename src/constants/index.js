@@ -16,6 +16,9 @@ import LPB from '~/assets/images/bank/LPB.png'
 export const ADMIN_ROLE = 'Admin';
 export const CUSTOMER_ROLE = 'Customer';
 export const SELLER_ROLE = 'Seller';
+export const ADMIN_ROLE_ID = 1;
+export const CUSTOMER_ROLE_ID = 2;
+export const SELLER_ROLE_ID = 3;
 export const NOT_HAVE_MEANING_FOR_TOKEN = 'not have meaning';
 export const NOT_HAVE_MEANING_FOR_TOKEN_EXPRIES = 100;
 export const TOKEN_EXPIRES_TIME = 10
