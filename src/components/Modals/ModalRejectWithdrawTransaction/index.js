@@ -1,9 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useContext } from "react";
 import { Divider, Modal, Button, Form, Row, Col, Input } from "antd";
 
 import { ExclamationCircleFilled } from "@ant-design/icons";
+import { NotificationContext } from '~/context/NotificationContext';
 
 import {
+    RESPONSE_CODE_NOT_ACCEPT,
     RESPONSE_CODE_SUCCESS,
 } from "~/constants";
 
@@ -15,6 +17,7 @@ const { TextArea } = Input;
 function ModalRejectWithdrawTransaction({ withdrawTransactionId, style, callBack }) {
 
     const [form] = Form.useForm();
+    const notification = useContext(NotificationContext);
     const [openModal, setOpenModal] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [btnLoading, setBtnLoading] = useState(false)
@@ -33,10 +36,13 @@ function ModalRejectWithdrawTransaction({ withdrawTransactionId, style, callBack
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
                     setConfirmLoading(false)
-                    callBack()
+                    callBack();
                     setTimeout(() => {
                         setOpenModal(false)
                     }, 200)
+                    notification('success', 'Từ chối yêu cầu rút tiền thành công!')
+                } else if (res.data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
+                    notification('error', 'Xảy ra một vài vấn đề, hãy thử lại!')
                 }
             })
             .catch(() => {

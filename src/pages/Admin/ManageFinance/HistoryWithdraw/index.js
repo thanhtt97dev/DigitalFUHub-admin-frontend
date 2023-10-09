@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Tag, Button, Form, Input, DatePicker, notification, Select, Modal, Divider, Row, Col, Space } from "antd";
+import React, { useEffect, useState, useContext } from "react";
+import { Card, Table, Tag, Button, Form, Input, DatePicker, Select, Modal, Divider, Row, Col, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from "react-router-dom";
@@ -19,6 +19,7 @@ import {
     BANKS_INFO
 } from "~/constants";
 import DrawerWithdrawTransactionBill from "~/components/Drawers/DrawerWithdrawTransactionBill";
+import { NotificationContext } from '~/context/NotificationContext';
 
 import classNames from 'classnames/bind';
 import styles from './HistoryWithdraw.module.scss';
@@ -120,15 +121,10 @@ function HistoryWithdraw() {
 
     ];
 
+    const notification = useContext(NotificationContext);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
-    const [api, contextHolder] = notification.useNotification();
-    const openNotification = (type, message) => {
-        api[type]({
-            message: `Thông báo`,
-            description: `${message}`
-        });
-    };
+
     const [form] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
     const [qrCode, setQrCode] = useState("");
@@ -167,11 +163,11 @@ function HistoryWithdraw() {
                     })
                     setDataTable(data)
                 } else {
-                    openNotification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
+                    notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
             })
             .catch((err) => {
-                openNotification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
+                notification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
             })
             .finally(() => {
                 setTimeout(() => { setLoading(false) }, 500)
@@ -208,7 +204,7 @@ function HistoryWithdraw() {
     const onFinish = (values) => {
         setLoading(true);
         if (values.date === null) {
-            openNotification("error", "Thời gian tạo yêu cầu không được trống!")
+            notification("error", "Thời gian tạo yêu cầu không được trống!")
             setLoading(false);
             return;
         }
@@ -244,14 +240,14 @@ function HistoryWithdraw() {
                     var index = dataTable.findIndex((x) => x.withdrawTransactionId === withdrawTransactionId)
                     newDataTable[index].isPay = true
                     setDataTable(newDataTable)
-                    openNotification("success", "Xác nhận chuyển khoản thành công!")
+                    notification("success", "Xác nhận chuyển khoản thành công!")
                 } else if (res.data.status.responseCode === RESPONSE_CODE_BANK_WITHDRAW_PAID) {
-                    openNotification("error", `Mã hóa đơn này đã được xác nhận trước đó!`)
+                    notification("error", `Mã hóa đơn này đã được xác nhận trước đó!`)
                 }
 
             })
             .catch(() => {
-                openNotification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+                notification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
             })
             .finally(() => {
                 setLoadingBtnConfirmModal(false)
@@ -267,7 +263,6 @@ function HistoryWithdraw() {
 
     return (
         <>
-            {contextHolder}
             <Spinning spinning={loading}>
                 <Card
                     style={{
