@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Tag, Button, Form, Input, DatePicker, notification, Select, Modal, Divider, Row, Col } from "antd";
+import { Card, Table, Tag, Button, Form, Input, DatePicker, notification, Select, Modal, Divider, Row, Col, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from "react-router-dom";
@@ -22,11 +22,12 @@ import DrawerWithdrawTransactionBill from "~/components/Drawers/DrawerWithdrawTr
 
 import classNames from 'classnames/bind';
 import styles from './HistoryWithdraw.module.scss';
+import ModalRejectWithdrawTransaction from "~/components/Modals/ModalRejectWithdrawTransaction";
 
 const cx = classNames.bind(styles);
 const { RangePicker } = DatePicker;
 
-const bankOptions = [{ value: 0, name: "Tất cả" }]
+const bankOptions = [{ value: 0, name: "All", label: <>Tất cả</> }]
 BANKS_INFO.forEach((bank) => {
     let bankOption = {
         value: bank.id,
@@ -77,17 +78,17 @@ function HistoryWithdraw() {
         {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
-            width: '13%',
+            width: '10%',
         },
         {
             title: 'Ngân hàng đối tác',
             dataIndex: 'bankName',
-            width: '12%',
+            width: '10%',
         },
         {
             title: 'Trạng thái',
             dataIndex: 'withdrawTransactionStatusId',
-            width: '7%',
+            width: '8%',
             render: (withdrawTransactionStatusId, record) => {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_IN_PROCESSING) {
                     return <Tag color="#ecc30b">Đang xử lý yêu cầu</Tag>
@@ -101,13 +102,18 @@ function HistoryWithdraw() {
         {
             title: '',
             dataIndex: 'withdrawTransactionStatusId',
-            width: '9%',
+            width: '14%',
             render: (withdrawTransactionStatusId, record) => {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_PAID ||
                     withdrawTransactionStatusId === WITHDRAW_TRANSACTION_REJECT) {
                     return <DrawerWithdrawTransactionBill userId={record.userId} withdrawTransactionId={record.withdrawTransactionId} />
                 } else {
-                    return <Button onClick={() => handleOpenModal(record)} size="middle">Chuyển khoản</Button>
+                    return (
+                        <Space>
+                            <Button onClick={() => handleOpenModal(record)} size="middle">Chuyển khoản</Button>
+                            <ModalRejectWithdrawTransaction withdrawTransactionId={record.withdrawTransactionId} callBack={GetWithdrawTransactions} />
+                        </Space>
+                    )
                 }
             }
         },
@@ -146,6 +152,12 @@ function HistoryWithdraw() {
     }
 
     useEffect(() => {
+
+        GetWithdrawTransactions();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchData])
+
+    const GetWithdrawTransactions = () => {
         getWithdrawTransaction(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
@@ -164,9 +176,7 @@ function HistoryWithdraw() {
             .finally(() => {
                 setTimeout(() => { setLoading(false) }, 500)
             })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchData])
+    }
 
     const initFormValues = [
         {
@@ -232,7 +242,6 @@ function HistoryWithdraw() {
                     //render UI
                     let newDataTable = dataTable;
                     var index = dataTable.findIndex((x) => x.withdrawTransactionId === withdrawTransactionId)
-                    console.log(dataTable)
                     newDataTable[index].isPay = true
                     setDataTable(newDataTable)
                     openNotification("success", "Xác nhận chuyển khoản thành công!")

@@ -14,6 +14,11 @@ export const updateOrderStatus = (data) => {
     return apiPostAuth(`api/admins/UpdateOrderStatus`, data);
 };
 
+export const rejectWithdrawTransaction = (data) => {
+    return apiPostAuth(`api/admins/RejectWithdrawTransaction`, data);
+};
+
+
 
 
 
