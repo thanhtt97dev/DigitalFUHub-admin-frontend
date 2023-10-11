@@ -40,6 +40,10 @@ const items = [
                 label: <Link to={"/admin/finance/withdraw"}>Danh sách rút tiền</Link>,
             },
             {
+                key: '/admin/finance/businessFee',
+                label: <Link to={"/admin/finance/businessFee"}>Phí kinh doanh</Link>,
+            },
+            {
                 key: '/admin/finance/transaction',
                 label: <Link to={"/admin/finance/transaction"}>Lịch sử giao dịch nội bộ</Link>,
             },

@@ -3,6 +3,8 @@ import React, { useContext, useLayoutEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import { Card, Col, Row, Tag, Rate, Space, Button, Descriptions } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComments } from '@fortawesome/free-regular-svg-icons'
 
 import Spinning from '~/components/Spinning';
 import NotificationContext from '~/context/NotificationContext';
@@ -249,7 +251,10 @@ function OrderDetail() {
                                                                 return <Tag color="#f50" className={cx('tag')}>Người bán vi phạm</Tag>
                                                             }
                                                         })()}
-                                                        <Button >Nhắn tin</Button>
+                                                        <Button type='primary'>
+                                                            <FontAwesomeIcon icon={faComments} />
+                                                            <span style={{ marginLeft: "10px" }}>Liên hệ với người mua và người bán</span>
+                                                        </Button>
                                                     </Space>
 
                                                     <Row>

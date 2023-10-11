@@ -19,6 +19,15 @@ export const rejectWithdrawTransaction = (data) => {
     return apiPostAuth(`api/admins/RejectWithdrawTransaction`, data);
 };
 
+//Business Fee
+export const getBusinessFee = (data) => {
+    return apiPostAuth(`api/admins/GetBusinessFee`, data);
+};
+
+export const addNewBusinessFee = (data) => {
+    return apiPostAuth(`api/admins/AddNewBusinessFee`, data);
+};
+
 //user
 export const getUsers = (data) => {
     return apiPostAuth(`api/admins/GetUsers`, data);

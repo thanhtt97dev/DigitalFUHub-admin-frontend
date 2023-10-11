@@ -7,11 +7,12 @@ import Verification2FA from '~/pages/Verification2FA';
 import AdminLayout from '~/layouts/AdminLayout';
 import HistoryDeposit from '~/pages/Admin/ManageFinance/HistoryDeposit';
 import HistoryWithdraw from '~/pages/Admin/ManageFinance/HistoryWithdraw';
-import WithdrawByList from '~/pages/Admin/ManageFinance/WithdrawByList';
+import WithdrawByList from '~/pages/Admin/ManageFinance/HistoryWithdraw/WithdrawByList';
 import HistoryTransactionInternal from '~/pages/Admin/ManageFinance/HistoryTransactionInternal';
 import Orders from '~/pages/Admin/ManageOrders/Orders';
 import OrderDetail from '~/pages/Admin/ManageOrders/OrderDetail';
 import UserInfo from '~/pages/Admin/ManageUsers/UserInfo';
+import BusinessFee from '~/pages/Admin/ManageFinance/BusinessFee';
 
 const routesConfig = [
     {
@@ -47,6 +48,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <WithdrawByList />
+    },
+    {
+        path: '/admin/finance/businessFee',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <BusinessFee />
     },
     {
         path: '/admin/finance/transaction',
