@@ -37,7 +37,7 @@ const columns = [
         dataIndex: 'email',
         width: '20%',
         render: (email, record) => {
-            if (record.transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
+            if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                 return <><FontAwesomeIcon icon={faUserShield} /> <b>Administrator</b></>
             }
             return (
@@ -50,13 +50,13 @@ const columns = [
         dataIndex: 'paymentAmount',
         width: '15%',
         render: (paymentAmount, record) => {
-            if (record.transactionTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
+            if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
                 return <p style={{ color: "#108ee9" }}>+ {formatStringToCurrencyVND(paymentAmount)} VND</p>
-            } else if (record.transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
+            } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
                 return <p style={{ color: "red" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
-            } else if (record.transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
+            } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
                 return <p style={{ color: "red" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
-            } else if (record.transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
+            } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                 return <p style={{ color: "#87d068" }}> <FontAwesomeIcon icon={faWallet} /> {formatStringToCurrencyVND(paymentAmount)} VND</p>
             }
         }
@@ -73,16 +73,16 @@ const columns = [
     },
     {
         title: 'Trạng thái',
-        dataIndex: 'transactionTypeId',
+        dataIndex: 'transactionInternalTypeId',
         width: '15%',
-        render: (transactionTypeId) => {
-            if (transactionTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
+        render: (transactionInternalTypeId) => {
+            if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
                 return <Tag color="#108ee9">Thanh toán</Tag>
-            } else if (transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
+            } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
                 return <Tag color="red">Nhận tiền hàng</Tag>
-            } else if (transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
+            } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
                 return <Tag color="volcano">Nhận tiền hoàn khiếu nại</Tag>
-            } else if (transactionTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
+            } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                 return <Tag color="#87d068">Lợi nhuận</Tag>
             }
         }
@@ -106,7 +106,7 @@ function HistoryTransactionInternal() {
         email: '',
         fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
         toDate: dayjs().format('M/D/YYYY'),
-        transactionTypeId: 0
+        transactionInternalTypeId: 0
     });
 
     useEffect(() => {
@@ -142,8 +142,8 @@ function HistoryTransactionInternal() {
             value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
         },
         {
-            name: 'transactionTypeId',
-            value: searchData.transactionTypeId,
+            name: 'transactionInternalTypeId',
+            value: searchData.transactionInternalTypeId,
         },
     ];
 
@@ -160,7 +160,7 @@ function HistoryTransactionInternal() {
             email: values.email,
             fromDate: values.date[0].$d.toLocaleDateString(),
             toDate: values.date[1].$d.toLocaleDateString(),
-            transactionTypeId: values.transactionTypeId
+            transactionInternalTypeId: values.transactionInternalTypeId
         });
     };
 
@@ -209,7 +209,7 @@ function HistoryTransactionInternal() {
                                 placement={"bottomLeft"} />
                         </Form.Item>
 
-                        <Form.Item label="Trạng thái" labelAlign="left" name="transactionTypeId">
+                        <Form.Item label="Trạng thái" labelAlign="left" name="transactionInternalTypeId">
                             <Select >
                                 <Select.Option value={0}>Tất cả</Select.Option>
                                 <Select.Option value={1}>Thanh toán</Select.Option>
