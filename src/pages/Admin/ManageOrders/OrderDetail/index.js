@@ -115,6 +115,19 @@ function OrderDetail() {
                                 </>
                         },
                         {
+                            label: 'Xu đã sủ dụng',
+                            children:
+                                <>
+                                    {data.totalCoinDiscount === 0 ?
+                                        <span>0 xu</span>
+                                        :
+                                        <>
+                                            {data.totalCoinDiscount} xu
+                                        </>
+                                    }
+                                </>
+                        },
+                        {
                             label: 'Voucher từ Shop',
                             children:
                                 <>
