@@ -27,6 +27,7 @@ import classNames from 'classnames/bind';
 import styles from './OrderDetail.module.scss';
 import ModalChangeOrderStatus from '~/components/Modals/ModalChangeOrderStatus';
 import BackPreviousPage from '~/components/BackPreviousPage';
+import ModalShowOrderCoupons from '~/components/Modals/ModalShowOrderCoupons';
 const cx = classNames.bind(styles);
 
 function OrderDetail() {
@@ -122,7 +123,7 @@ function OrderDetail() {
                                         :
                                         <>
                                             {data.totalCouponDiscount} VND
-                                            <Link style={{ marginLeft: "10px" }} >Xem chi tiết</Link>
+                                            <ModalShowOrderCoupons orderId={data.orderId} />
                                         </>
                                     }
                                 </>

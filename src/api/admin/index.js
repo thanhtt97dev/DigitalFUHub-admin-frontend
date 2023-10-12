@@ -9,10 +9,15 @@ export const getOrder = (id) => {
     return apiPostAuth(`api/admins/GetOrder/${id}`);
 };
 
+export const getOrderCoupons = (id) => {
+    return apiPostAuth(`api/admins/OrderCoupon/${id}`);
+};
 
+//order coupons
 export const updateOrderStatus = (data) => {
     return apiPostAuth(`api/admins/UpdateOrderStatus`, data);
 };
+
 
 //transaction
 export const getHistoryTransactionInternal = (data) => {
@@ -37,6 +42,8 @@ export const addNewBusinessFee = (data) => {
 export const getUsers = (data) => {
     return apiPostAuth(`api/admins/GetUsers`, data);
 };
+
+
 
 
 

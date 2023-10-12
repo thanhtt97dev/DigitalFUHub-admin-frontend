@@ -104,11 +104,12 @@ function ModalAddNewBusinessFee({ style, callBack }) {
                         </Row>
 
                         <Row>
-                            <Col offset={1} span={22}>
+                            <Col offset={1} span={10}>
                                 <Form.Item name="fee" label="Giá trị">
-                                    <InputNumber min={0} max={100} /> %
+                                    <InputNumber min={0} max={100} />
                                 </Form.Item>
                             </Col>
+                            <Col span={10}><p>wdaw</p></Col>
                         </Row>
                     </Form>
                 </>
