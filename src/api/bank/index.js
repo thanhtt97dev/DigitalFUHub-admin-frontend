@@ -48,9 +48,3 @@ export const confirmTransferWithdrawSuccess = (data) => {
 export const confirmListTransferWithdrawSuccess = (data) => {
     return apiPostAuth(`api/banks/ConfirmListTransfer`, data);
 };
-
-export const getHistoryTransactionInternal = (data) => {
-    return apiPostAuth(`api/banks/HistoryTransactionInternal`, data);
-};
-
-

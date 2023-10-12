@@ -14,6 +14,11 @@ export const updateOrderStatus = (data) => {
     return apiPostAuth(`api/admins/UpdateOrderStatus`, data);
 };
 
+//transaction
+export const getHistoryTransactionInternal = (data) => {
+    return apiPostAuth(`api/admins/HistoryTransactionInternal`, data);
+};
+
 // withdraw transactionn
 export const rejectWithdrawTransaction = (data) => {
     return apiPostAuth(`api/admins/RejectWithdrawTransaction`, data);

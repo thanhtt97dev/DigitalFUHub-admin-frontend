@@ -66,11 +66,11 @@ const columns = [
     },
     {
         title: 'Số tiền',
-        dataIndex: 'totalAmount',
+        dataIndex: 'totalPayment',
         width: '15%',
-        render: (totalAmount) => {
+        render: (totalPayment) => {
             return (
-                <p>{formatStringToCurrencyVND(totalAmount)} VND</p>
+                <p>{formatStringToCurrencyVND(totalPayment)} VND</p>
             )
         }
     },

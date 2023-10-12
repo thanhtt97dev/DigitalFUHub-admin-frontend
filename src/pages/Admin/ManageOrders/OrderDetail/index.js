@@ -179,7 +179,7 @@ function OrderDetail() {
                                             Thành tiền
                                         </Col>
                                         <Col offset={2} span={12}>
-                                            <span style={{ color: 'red', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalAmount)} VND</span>
+                                            <span style={{ color: 'red', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalPayment)} VND</span>
                                         </Col>
                                     </Row>
                                 </>
