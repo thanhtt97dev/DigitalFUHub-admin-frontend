@@ -145,13 +145,12 @@ function OrderDetail() {
                     ])
 
                     settemDescriptionOrderPayment([
-
                         {
                             label: <b>Tổng tiền</b>,
                             children:
                                 <>
                                     <Row>
-                                        <Col offset={1} span={5}>
+                                        <Col offset={1} span={6}>
                                             Tổng tiền hàng
                                         </Col>
                                         <Col offset={2} span={12}>
@@ -160,7 +159,7 @@ function OrderDetail() {
                                     </Row>
 
                                     <Row>
-                                        <Col offset={1} span={5}>
+                                        <Col offset={1} span={6}>
                                             Giảm giá
                                         </Col>
                                         <Col offset={2} span={12}>
@@ -169,7 +168,7 @@ function OrderDetail() {
                                     </Row>
 
                                     <Row>
-                                        <Col offset={1} span={5}>
+                                        <Col offset={1} span={6}>
                                             Voucher từ Shop
                                         </Col>
                                         <Col offset={2} span={12}>
@@ -189,11 +188,39 @@ function OrderDetail() {
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col offset={1} span={5}>
+                                        <Col offset={1} span={6}>
                                             Thành tiền
                                         </Col>
                                         <Col offset={2} span={12}>
-                                            <span style={{ color: 'red', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalPayment)} VND</span>
+                                            <span style={{ color: 'red', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalAmount)} VND</span>
+                                        </Col>
+                                    </Row>
+                                </>
+                        },
+                        {
+                            label: <b>Số xu áp dụng</b>,
+                            children:
+                                <>
+                                    <Row>
+                                        <Col offset={1} span={6}>
+                                            Thành tiền
+                                        </Col>
+                                        <Col offset={2} span={12}>
+                                            <span style={{ color: 'blue', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalCoinDiscount)} VND</span>
+                                        </Col>
+                                    </Row>
+                                </>
+                        },
+                        {
+                            label: <b>Tổng tiền người mua thanh toán</b>,
+                            children:
+                                <>
+                                    <Row>
+                                        <Col offset={1} span={6}>
+                                            Thành tiền
+                                        </Col>
+                                        <Col offset={2} span={12}>
+                                            <span style={{ color: 'gray', fontSize: "20px" }}>{formatStringToCurrencyVND(data.totalPayment)} VND</span>
                                         </Col>
                                     </Row>
                                 </>
@@ -203,23 +230,23 @@ function OrderDetail() {
                             children:
                                 <>
                                     <Row>
-                                        <Col offset={1} span={5}>
+                                        <Col offset={1} span={6}>
                                             Thành tiền
                                         </Col>
                                         <Col offset={2} span={12}>
                                             <span style={{ color: 'orange', fontSize: "20px" }}>
-                                                - {formatStringToCurrencyVND(Math.round(data.totalAmount * data.businessFeeValue / 100))} VND
+                                                {formatStringToCurrencyVND(Math.round(data.totalAmount * data.businessFeeValue / 100))} VND
                                             </span>
                                         </Col>
                                     </Row>
                                 </>
                         },
                         {
-                            label: <b>Lợi nhuận</b>,
+                            label: <b>Lợi nhuận người bán hàng </b>,
                             children:
                                 <>
                                     <Row>
-                                        <Col offset={1} span={5}>
+                                        <Col offset={1} span={6}>
                                             Thành tiền
                                         </Col>
                                         <Col offset={2} span={12}>
