@@ -99,7 +99,7 @@ function OrderDetail() {
                             children:
                                 <>
                                     {(() => {
-                                        if (data.feedbackId !== null) {
+                                        if (data.isFeedback) {
                                             return (
                                                 <>
                                                     <span style={{ marginRight: "10px" }}>
