@@ -48,3 +48,8 @@ export const confirmTransferWithdrawSuccess = (data) => {
 export const confirmListTransferWithdrawSuccess = (data) => {
     return apiPostAuth(`api/banks/ConfirmListTransfer`, data);
 };
+
+// withdraw transactionn
+export const rejectWithdrawTransaction = (data) => {
+    return apiPostAuth(`api/banks/RejectWithdrawTransaction`, data);
+};

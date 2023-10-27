@@ -47,3 +47,6 @@ export const postUserInfo = (id, data) => {
     return apiPut(`api/users/EditUserInfo/${id}`, data);
 };
 
+export const getUsers = (data) => {
+    return apiPostAuth(`api/users/GetUsers`, data);
+};

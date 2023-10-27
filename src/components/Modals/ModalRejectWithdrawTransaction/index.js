@@ -9,7 +9,7 @@ import {
     RESPONSE_CODE_SUCCESS,
 } from "~/constants";
 
-import { rejectWithdrawTransaction } from '~/api/admin'
+import { rejectWithdrawTransaction } from '~/api/bank'
 
 const { TextArea } = Input;
 

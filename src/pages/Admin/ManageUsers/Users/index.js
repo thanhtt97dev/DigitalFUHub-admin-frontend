@@ -4,7 +4,7 @@ import { Button, Select, Form, Input, Table, Tag, Row, Col, Space, Card, Avatar 
 import Spinning from "~/components/Spinning";
 import NotificationContext from '~/context/NotificationContext';
 
-import { getUsers } from '~/api/admin';
+import { getUsers } from '~/api/user';
 import { Link } from 'react-router-dom';
 import {
     CUSTOMER_ROLE_ID,

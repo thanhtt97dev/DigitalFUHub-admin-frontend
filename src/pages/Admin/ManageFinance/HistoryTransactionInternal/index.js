@@ -3,7 +3,7 @@ import { Card, Table, Select, Button, Form, Input, Space, DatePicker, Tag, notif
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
 
-import { getHistoryTransactionInternal } from '~/api/admin'
+import { getHistoryTransactionInternal } from '~/api/transactionInternal'
 import Spinning from "~/components/Spinning";
 import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
 import dayjs from 'dayjs';
