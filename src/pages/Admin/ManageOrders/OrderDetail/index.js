@@ -10,7 +10,7 @@ import Spinning from '~/components/Spinning';
 import NotificationContext from '~/context/NotificationContext';
 import CarouselProduct from '~/components/Carousels/CarouselCustom'
 
-import { getOrder } from '~/api/admin'
+import { getOrder } from '~/api/order'
 import {
     RESPONSE_CODE_SUCCESS,
     ORDER_WAIT_CONFIRMATION,

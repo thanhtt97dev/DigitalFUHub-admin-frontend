@@ -10,7 +10,7 @@ import {
     ORDER_SELLER_VIOLATES
 } from "~/constants";
 
-import { updateOrderStatus } from '~/api/admin'
+import { updateOrderStatus } from '~/api/order'
 
 const { TextArea } = Input;
 
