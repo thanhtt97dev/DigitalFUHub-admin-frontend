@@ -3,7 +3,7 @@ import { Card, Table, Button, Form, Input, DatePicker, Row, Col, InputNumber } f
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import dayjs from 'dayjs';
 
-import { getBusinessFee } from '~/api/admin'
+import { getBusinessFee } from '~/api/businessFee'
 import Spinning from "~/components/Spinning";
 import { ParseDateTime, } from '~/utils/index'
 import {

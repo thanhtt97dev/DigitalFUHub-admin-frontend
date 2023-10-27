@@ -12,7 +12,7 @@ import {
     RESPONSE_CODE_SUCCESS,
 } from "~/constants";
 
-import { addNewBusinessFee } from '~/api/admin'
+import { addNewBusinessFee } from '~/api/businessFee'
 
 
 function ModalAddNewBusinessFee({ style, callBack }) {
