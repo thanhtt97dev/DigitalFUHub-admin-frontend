@@ -13,9 +13,12 @@ import VIB from '~/assets/images/bank/VIB.png'
 import SHB from '~/assets/images/bank/SHB.png'
 import LPB from '~/assets/images/bank/LPB.png'
 
+export const ADMIN_USER_ID = 1;
+
 export const ADMIN_ROLE = 'Admin';
 export const CUSTOMER_ROLE = 'Customer';
 export const SELLER_ROLE = 'Seller';
+
 export const ADMIN_ROLE_ID = 1;
 export const CUSTOMER_ROLE_ID = 2;
 export const SELLER_ROLE_ID = 3;

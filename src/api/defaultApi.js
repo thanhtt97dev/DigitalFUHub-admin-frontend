@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getTokenInCookies } from '~/utils';
+import { ADMIN_USER_ID } from '~/constants'
 
 
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
@@ -11,6 +12,7 @@ const headerWithToken = () => {
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${getTokenInCookies()}`,
+            'Session-userId': ADMIN_USER_ID
         },
     };
 };
@@ -19,6 +21,7 @@ const headerWithTokenForFile = () => {
     return {
         headers: {
             Authorization: `Bearer ${getTokenInCookies()}`,
+            'Session-userId': ADMIN_USER_ID
         },
         responseType: 'blob'
     };
