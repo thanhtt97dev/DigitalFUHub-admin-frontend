@@ -34,6 +34,7 @@ import ModalChangeOrderStatus from '~/components/Modals/ModalChangeOrderStatus';
 import BackPreviousPage from '~/components/BackPreviousPage';
 import ModalShowOrderCoupons from '~/components/Modals/ModalShowOrderCoupons';
 import CardOrderItem from '~/components/Card/CardOrderItem';
+import CalendarTransactionInternal from '~/components/Calendar/CalendarTransactionInternal';
 const cx = classNames.bind(styles);
 
 function OrderDetail() {
@@ -57,6 +58,17 @@ function OrderDetail() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const getOrderDetail = () => {
+        getOrder(id)
+            .then((res) => {
+                setOrder(res.data.result)
+                setLoading(false)
+            })
+            .catch((err) => {
+
+            })
+    }
+
     return (
         <>
 
@@ -71,7 +83,15 @@ function OrderDetail() {
                         <Card
                             title={<><FontAwesomeIcon icon={faBasketShopping} /> Thông tin đơn hàng </>}
                         >
-                            <DescriptionsTableOrderInfo order={order} />
+                            <DescriptionsTableOrderInfo order={order} callBack={getOrderDetail} />
+                        </Card>
+
+                        <Divider />
+
+                        <Card
+                            title={<><FontAwesomeIcon icon={faBasketShopping} /> Thông tin đơn hàng </>}
+                        >
+                            <CalendarTransactionInternal transactionInternals={order.transactionInternals} />
                         </Card>
 
                         <Divider />

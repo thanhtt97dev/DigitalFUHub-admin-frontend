@@ -4,7 +4,7 @@ import { Descriptions, Space, Typography, Rate, Button } from 'antd';
 import { formatStringToCurrencyVND } from '~/utils/index'
 
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 function DescriptionsTableOrderItemInfo({ orderDeatail }) {
     const items = [

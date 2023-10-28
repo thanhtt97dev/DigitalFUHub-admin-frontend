@@ -1,15 +1,8 @@
 import { useLayoutEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Card, Row, Col, Button, Typography, Divider, Image, Tooltip, Rate } from "antd";
+import { Card, Row, Col, Button, Typography, Divider, Image, Tooltip } from "antd";
 import {
     ShopOutlined,
-    CheckCircleOutlined,
-    ClockCircleOutlined,
-    CloseCircleOutlined,
-    ExclamationCircleOutlined,
-    MinusCircleOutlined,
-    SyncOutlined,
-    PlusOutlined,
     MessageOutlined,
 } from "@ant-design/icons";
 
@@ -18,7 +11,6 @@ import { getConversation } from '~/api/chat'
 import {
     RESPONSE_CODE_SUCCESS,
 } from '~/constants'
-import { formatStringToCurrencyVND } from '~/utils/index'
 import DescriptionsTableOrderItemInfo from "~/components/DescriptionsTable/DescriptionsTableOrderItemInfo";
 
 const { Text, Title } = Typography;

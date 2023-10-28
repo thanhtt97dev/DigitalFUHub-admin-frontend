@@ -1,25 +1,58 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useCallback } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Descriptions, Space, Typography, Tag, Button, Avatar, Row, Col } from 'antd';
+import { MessageOutlined } from '@ant-design/icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-regular-svg-icons'
 
 import ModalChangeOrderStatus from '~/components/Modals/ModalChangeOrderStatus'
 
+import { getConversation } from '~/api/chat'
 import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
 import {
+    RESPONSE_CODE_SUCCESS,
     ORDER_WAIT_CONFIRMATION,
     ORDER_CONFIRMED,
     ORDER_COMPLAINT,
     ORDER_SELLER_REFUNDED,
     ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
-    ORDER_SELLER_VIOLATES
+    ORDER_SELLER_VIOLATES,
+    ADMIN_USER_ID
 } from '~/constants'
 
 const { Text, Title } = Typography;
 
 function DescriptionsTableOrderInfo({ order, callBack }) {
+
+    const navigate = useNavigate()
+
+    const handleOpenChatGroup = (shopId, customerId) => {
+        var data = { shopId, userId: customerId, isGroup: true }
+        getConversation(data)
+            .then((res) => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    navigate('/chatBox', { state: { data: res.data.result } })
+                }
+            })
+            .catch(() => {
+
+            })
+    }
+
+    const handleOpenChatWithUser = (userId) => {
+        var data = { shopId: ADMIN_USER_ID, userId: userId }
+        getConversation(data)
+            .then((res) => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    navigate('/chatBox', { state: { data: res.data.result } })
+                }
+            })
+            .catch(() => {
+
+            })
+    }
+
     const items = [
         {
             key: '1',
@@ -30,13 +63,36 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         {
             key: '2',
             label: 'Người mua',
-            children: <Link to={''}><Avatar src={order.customerAvatar} /> {order.customerEmail}</Link>,
+            children:
+                <Space>
+                    <Link to={''}><Avatar src={order.customerAvatar} /> {order.customerEmail}</Link>
+                    <Button
+                        type="default"
+                        size="small"
+                        icon={<MessageOutlined />}
+                        onClick={() => handleOpenChatWithUser(order.customerId)}
+                    >
+                        Nhắn tin
+                    </Button>
+                </Space>,
             span: 3
         },
         {
             key: '3',
             label: 'Tên cửa hàng',
-            children: <Link to={''}><Avatar src={order.customerAvatar} /> {order.shopName}</Link>,
+            children:
+                <Space>
+                    <Link to={''}><Avatar src={order.customerAvatar} /> {order.shopName}</Link>
+                    <Button
+                        type="default"
+                        size="small"
+                        icon={<MessageOutlined />}
+                        onClick={() => handleOpenChatWithUser(order.shopId)}
+                    >
+                        Nhắn tin
+                    </Button>
+                </Space>
+            ,
             span: 3
         },
         {
@@ -67,7 +123,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         {
             key: '7',
             label: 'Số xu đã sử dụng',
-            children: <>{order.totalCouponDiscount} xu</>,
+            children: <>{order.totalCoinDiscount} xu</>,
             span: 3
         },
         {
@@ -103,10 +159,17 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
                         return <Tag color="#eab0b0e0">Người bán hoàn tiền</Tag>
                     } else if (order.orderStatusId === ORDER_DISPUTE) {
                         return (
-                            <Space>
-                                <Tag color="#ffaa01">Tranh chấp</Tag>
-                                <Button >Nhắn tin</Button>
-                                <ModalChangeOrderStatus orderId={order.orderId} callBack={callBack} />
+                            <Space direction='vertical'>
+                                <Space>
+                                    <Tag color="#ffaa01">Tranh chấp</Tag>
+                                    <Button
+                                        icon={<FontAwesomeIcon icon={faComments} />}
+                                        onClick={() => handleOpenChatGroup(order.shopId, order.customerId)}
+                                    >
+                                        Liên hệ với người mua và người bán
+                                    </Button>
+                                    <ModalChangeOrderStatus orderId={order.orderId} callBack={callBack} />
+                                </Space>
                             </Space>
                         )
                     } else {
@@ -120,9 +183,11 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
                                             return <Tag color="#f50">Người bán vi phạm</Tag>
                                         }
                                     })()}
-                                    <Button type='primary'>
-                                        <FontAwesomeIcon icon={faComments} />
-                                        <span style={{ marginLeft: "10px" }}>Liên hệ với người mua và người bán</span>
+                                    <Button
+                                        icon={<FontAwesomeIcon icon={faComments} />}
+                                        onClick={() => handleOpenChatGroup(order.shopId, order.customerId)}
+                                    >
+                                        Liên hệ với người mua và người bán
                                     </Button>
                                 </Space>
 
