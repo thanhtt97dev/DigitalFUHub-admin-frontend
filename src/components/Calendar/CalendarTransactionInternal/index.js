@@ -33,10 +33,10 @@ const getListData = (value, transactionInternals) => {
 
 function CalendarTransactionInternal({ transactionInternals }) {
 
-    const lastTimeTransaction = transactionInternals[transactionInternals.length - 1].dateCreate;
+    const lastTimeTransaction = transactionInternals[transactionInternals.length - 1]?.dateCreate;
 
-    const [value, setValue] = useState(() => dayjs(lastTimeTransaction));
-    const [, setSelectedValue] = useState(() => dayjs(lastTimeTransaction));
+    const [value, setValue] = useState(() => dayjs(lastTimeTransaction ?? new Date()));
+    const [, setSelectedValue] = useState(() => dayjs(lastTimeTransaction ?? new Date()));
     const onSelect = (newValue) => {
         setValue(newValue);
         setSelectedValue(newValue);
@@ -46,6 +46,7 @@ function CalendarTransactionInternal({ transactionInternals }) {
     };
 
     const dateCellRender = (value) => {
+        if (transactionInternals.length === 0) return <></>
         const listData = getListData(value, transactionInternals);
         return (
             <>
