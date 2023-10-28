@@ -91,7 +91,7 @@ function OrderDetail() {
                         <Card
                             title={<><FontAwesomeIcon icon={faBasketShopping} /> Thông tin đơn hàng </>}
                         >
-                            <CalendarTransactionInternal transactionInternals={order.transactionInternals} />
+                            <CalendarTransactionInternal transactionInternals={order.transactionInternals} transactionCoins={order.transactionCoins} />
                         </Card>
 
                         <Divider />
