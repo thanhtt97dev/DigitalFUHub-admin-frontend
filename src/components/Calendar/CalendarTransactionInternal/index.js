@@ -2,7 +2,12 @@
 
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
-import { Tag, Calendar } from 'antd';
+import { Tag, Calendar, Tooltip } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faMoneyBill1Wave,
+    faCoins
+} from '@fortawesome/free-solid-svg-icons'
 
 import {
     TRANSACTION_TYPE_INTERNAL_PAYMENT,
@@ -13,6 +18,8 @@ import {
     TRANSACTION_COIN_TYPE_USE,
     TRANSACTION_COIN_TYPE_REFUND
 } from "~/constants";
+
+import { formatStringToCurrencyVND } from '~/utils/index'
 
 const getListData = (value, transactionInternals, transactionCoins) => {
     let listData = [];
@@ -90,22 +97,64 @@ function CalendarTransactionInternal({ transactionInternals, transactionCoins })
                             var transactionCoinTypeId = item.transactionCoinTypeId
                             if (transactionInternalTypeId !== null) {
                                 if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
-                                    return <Tag color="#108ee9">Thanh toán</Tag>
+                                    return (
+                                        <Tooltip title={<>{formatStringToCurrencyVND(item.paymentAmount)} đ</>} color="#3b7be2" >
+                                            <Tag color="#3b7be2">
+                                                <FontAwesomeIcon icon={faMoneyBill1Wave} /> Thanh toán
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
-                                    return <Tag color="red">Nhận tiền hàng</Tag>
+                                    return (
+                                        <Tooltip title={<>{formatStringToCurrencyVND(item.paymentAmount)} đ</>} color="#cf1322" >
+                                            <Tag color="#cf1322">
+                                                <FontAwesomeIcon icon={faMoneyBill1Wave} /> Trả tiền hàng
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
-                                    return <Tag color="volcano">Nhận tiền hoàn khiếu nại</Tag>
+                                    return (
+                                        <Tooltip title={<>{formatStringToCurrencyVND(item.paymentAmount)} đ</>} color="#8c66c8" >
+                                            <Tag color="#8c66c8">
+                                                <FontAwesomeIcon icon={faMoneyBill1Wave} /> Hoàn tiền
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
-                                    return <Tag color="#87d068">Lợi nhuận</Tag>
+                                    return (
+                                        <Tooltip title={<>{formatStringToCurrencyVND(item.paymentAmount)} đ</>} color="#4ea927" >
+                                            <Tag color="#4ea927">
+                                                <FontAwesomeIcon icon={faMoneyBill1Wave} /> Lợi nhuận
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 }
                             }
                             if (transactionCoinTypeId !== null) {
                                 if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_RECEIVE) {
-                                    return <Tag color="#108ee9">Nhận xu</Tag>
+                                    return (
+                                        <Tooltip title={<>{item.amount} xu</>} color="#108ee9" >
+                                            <Tag color="#108ee9">
+                                                <FontAwesomeIcon icon={faCoins} /> Nhận xu
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 } else if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_USE) {
-                                    return <Tag color="red">Sử dụng xu</Tag>
+                                    return (
+                                        <Tooltip title={<>{item.amount} xu</>} color="red" >
+                                            <Tag color="red">
+                                                <FontAwesomeIcon icon={faCoins} /> Sử dụng xu
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 } else if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_REFUND) {
-                                    return <Tag color="volcano">Hoàn xu</Tag>
+                                    return (
+                                        <Tooltip title={<>{item.amount} xu</>} color="volcano" >
+                                            <Tag color="volcano">
+                                                <FontAwesomeIcon icon={faCoins} /> Hoàn xu
+                                            </Tag>
+                                        </Tooltip>
+                                    )
                                 }
                             }
                         })()}
