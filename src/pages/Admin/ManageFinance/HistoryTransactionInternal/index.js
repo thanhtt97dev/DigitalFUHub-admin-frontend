@@ -51,13 +51,13 @@ const columns = [
         width: '15%',
         render: (paymentAmount, record) => {
             if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
-                return <p style={{ color: "#108ee9" }}>+ {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#3b7be2" }}>+ {formatStringToCurrencyVND(paymentAmount)} VND</p>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
-                return <p style={{ color: "red" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#cf1322" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
-                return <p style={{ color: "red" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#8c66c8" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
-                return <p style={{ color: "#87d068" }}> <FontAwesomeIcon icon={faWallet} /> {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#4ea927" }}> <FontAwesomeIcon icon={faWallet} /> {formatStringToCurrencyVND(paymentAmount)} VND</p>
             }
         }
     },
@@ -77,13 +77,13 @@ const columns = [
         width: '15%',
         render: (transactionInternalTypeId) => {
             if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
-                return <Tag color="#108ee9">Thanh toán</Tag>
+                return <Tag color="#3b7be2">Thanh toán</Tag>
             } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
-                return <Tag color="red">Nhận tiền hàng</Tag>
+                return <Tag color="#cf1322">Nhận tiền hàng</Tag>
             } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
-                return <Tag color="volcano">Nhận tiền hoàn khiếu nại</Tag>
+                return <Tag color="#8c66c8">Nhận tiền hoàn khiếu nại</Tag>
             } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
-                return <Tag color="#87d068">Lợi nhuận</Tag>
+                return <Tag color="#4ea927">Lợi nhuận</Tag>
             }
         }
     },

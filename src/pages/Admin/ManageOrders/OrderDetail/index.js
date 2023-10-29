@@ -6,7 +6,8 @@ import { Card, Col, Row, Tag, Rate, Space, Button, Descriptions, Divider } from 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-regular-svg-icons'
 import {
-    faBasketShopping
+    faBasketShopping,
+    faMoneyBillTransfer
 } from '@fortawesome/free-solid-svg-icons'
 
 import Spinning from '~/components/Spinning';
@@ -89,7 +90,7 @@ function OrderDetail() {
                         <Divider />
 
                         <Card
-                            title={<><FontAwesomeIcon icon={faBasketShopping} /> Thông tin đơn hàng </>}
+                            title={<><FontAwesomeIcon icon={faMoneyBillTransfer} /> Lịch sử giao dịch </>}
                         >
                             <CalendarTransactionInternal transactionInternals={order.transactionInternals} transactionCoins={order.transactionCoins} />
                         </Card>
