@@ -49,8 +49,24 @@ const getListData = (value, transactionInternals, transactionCoins) => {
 
 
 function CalendarTransactionInternal({ transactionInternals, transactionCoins }) {
-
-    const lastTimeTransaction = transactionInternals[transactionInternals.length - 1]?.dateCreate;
+    let lastTimeTransaction = "";
+    if (transactionInternals.length !== 0 && transactionCoins.length !== 0) {
+        const maxDateTransactionInternal = transactionInternals[transactionInternals.length - 1]?.dateCreate;
+        const maxDateTransactionCoin = transactionCoins[transactionCoins.length - 1]?.dateCreate;
+        if (dayjs(maxDateTransactionCoin).isAfter(dayjs(maxDateTransactionCoin))) {
+            lastTimeTransaction = maxDateTransactionInternal
+        } else {
+            lastTimeTransaction = maxDateTransactionCoin
+        }
+    } else if (transactionInternals.length !== 0 && transactionCoins.length === 0) {
+        const maxDateTransactionInternal = transactionInternals[transactionInternals.length - 1]?.dateCreate;
+        lastTimeTransaction = maxDateTransactionInternal
+    } else if (transactionInternals.length === 0 && transactionCoins.length !== 0) {
+        const maxDateTransactionCoin = transactionCoins[transactionCoins.length - 1]?.dateCreate;
+        lastTimeTransaction = maxDateTransactionCoin
+    } else {
+        lastTimeTransaction = dayjs(new Date())
+    }
 
     const [value, setValue] = useState(() => dayjs(lastTimeTransaction ?? new Date()));
     const [, setSelectedValue] = useState(() => dayjs(lastTimeTransaction ?? new Date()));
@@ -63,7 +79,7 @@ function CalendarTransactionInternal({ transactionInternals, transactionCoins })
     };
 
     const dateCellRender = (value) => {
-        if (transactionInternals.length === 0) return <></>
+        if (transactionInternals.length === 0 && transactionCoins.length === 0) return <></>
         const listData = getListData(value, transactionInternals, transactionCoins);
         return (
             <>
@@ -72,31 +88,7 @@ function CalendarTransactionInternal({ transactionInternals, transactionCoins })
                         {(() => {
                             var transactionInternalTypeId = item.transactionInternalTypeId
                             var transactionCoinTypeId = item.transactionCoinTypeId
-                            if (transactionInternalTypeId !== null && transactionCoinTypeId !== null) {
-                                return (
-                                    <>
-                                        {(() => {
-                                            if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
-                                                return <Tag color="#108ee9">Thanh toán</Tag>
-                                            } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
-                                                return <Tag color="red">Nhận tiền hàng</Tag>
-                                            } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
-                                                return <Tag color="volcano">Nhận tiền hoàn khiếu nại</Tag>
-                                            } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
-                                                return <Tag color="#87d068">Lợi nhuận</Tag>
-                                            }
-
-                                            if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_RECEIVE) {
-                                                return <Tag color="#108ee9">Nhận xu</Tag>
-                                            } else if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_USE) {
-                                                return <Tag color="red">Sử dụng xu</Tag>
-                                            } else if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_REFUND) {
-                                                return <Tag color="volcano">Hoàn xu</Tag>
-                                            }
-                                        })()}
-                                    </>
-                                )
-                            } else if (transactionInternalTypeId !== null) {
+                            if (transactionInternalTypeId !== null) {
                                 if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
                                     return <Tag color="#108ee9">Thanh toán</Tag>
                                 } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
@@ -106,7 +98,8 @@ function CalendarTransactionInternal({ transactionInternals, transactionCoins })
                                 } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                                     return <Tag color="#87d068">Lợi nhuận</Tag>
                                 }
-                            } else if (transactionCoinTypeId !== null) {
+                            }
+                            if (transactionCoinTypeId !== null) {
                                 if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_RECEIVE) {
                                     return <Tag color="#108ee9">Nhận xu</Tag>
                                 } else if (transactionCoinTypeId === TRANSACTION_COIN_TYPE_USE) {
@@ -115,7 +108,6 @@ function CalendarTransactionInternal({ transactionInternals, transactionCoins })
                                     return <Tag color="volcano">Hoàn xu</Tag>
                                 }
                             }
-
                         })()}
                     </>
                 ))}
