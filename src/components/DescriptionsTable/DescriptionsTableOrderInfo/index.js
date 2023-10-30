@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Descriptions, Space, Typography, Tag, Button, Avatar, Row, Col } from 'antd';
+import { Descriptions, Space, Tag, Button, Avatar, Row, Col } from 'antd';
 import { MessageOutlined } from '@ant-design/icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments } from '@fortawesome/free-regular-svg-icons'
@@ -21,23 +21,12 @@ import {
     ADMIN_USER_ID
 } from '~/constants'
 
-const { Text, Title } = Typography;
-
 function DescriptionsTableOrderInfo({ order, callBack }) {
 
     const navigate = useNavigate()
 
-    const handleOpenChatGroup = (shopId, customerId) => {
-        var data = { shopId, userId: customerId, isGroup: true }
-        getConversation(data)
-            .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    navigate('/chatBox', { state: { data: res.data.result } })
-                }
-            })
-            .catch(() => {
-
-            })
+    const handleOpenChatGroup = (conversationId) => {
+        navigate('/chatBox', { state: { data: conversationId } })
     }
 
     const handleOpenChatWithUser = (userId) => {
@@ -185,7 +174,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
                                     })()}
                                     <Button
                                         icon={<FontAwesomeIcon icon={faComments} />}
-                                        onClick={() => handleOpenChatGroup(order.shopId, order.customerId)}
+                                        onClick={() => handleOpenChatGroup(order.conversationId)}
                                     >
                                         Liên hệ với người mua và người bán
                                     </Button>
