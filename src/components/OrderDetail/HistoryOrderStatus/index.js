@@ -94,7 +94,7 @@ function HistoryOrderStatus({ historyOrderStatus }) {
                                     if (item.orderStatusId === ORDER_WAIT_CONFIRMATION) {
                                         return (
                                             <>
-                                                <HistoryOrderStatusItem children={TagOrderStatusBought} date={date} />
+                                                <HistoryOrderStatusItem children={TagOrderStatusBought} date={date} note={note} />
                                                 <HistoryOrderStatusItem children={TagOrderStatusWaitConfirm} date={date} note={note} />
                                             </>
 
