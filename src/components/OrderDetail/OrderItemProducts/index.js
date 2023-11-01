@@ -15,7 +15,7 @@ import DescriptionsTableOrderItemInfo from "~/components/DescriptionsTable/Descr
 
 const { Text, Title } = Typography;
 
-function CardOrderItem({ order }) {
+function OrderItemProducts({ order }) {
     const navigate = useNavigate()
 
     const handleOpenChatWithSeller = () => {
@@ -121,4 +121,4 @@ function CardOrderItem({ order }) {
     );
 }
 
-export default CardOrderItem;
+export default OrderItemProducts;

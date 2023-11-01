@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
-import { Descriptions, Space, Typography, Rate, Button } from 'antd';
+import React from 'react';
+import { Descriptions, Space, Typography, Rate } from 'antd';
 
 import {
     formatStringToCurrencyVND,
-    getUserId
 } from '~/utils/index'
-import {
-    RESPONSE_CODE_SUCCESS
-} from '~/constants'
 
-import { getFeedbackDetail } from "~/api/feedback";
 import ModalViewFeedBackDetail from '~/components/Modals/ModalViewFeedBackDetail';
 
 const { Text } = Typography;
