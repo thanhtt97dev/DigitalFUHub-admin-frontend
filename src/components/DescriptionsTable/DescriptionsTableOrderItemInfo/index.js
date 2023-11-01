@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Descriptions, Space, Typography, Rate, Button } from 'antd';
 
-import { formatStringToCurrencyVND } from '~/utils/index'
+import {
+    formatStringToCurrencyVND,
+    getUserId
+} from '~/utils/index'
+import {
+    RESPONSE_CODE_SUCCESS
+} from '~/constants'
 
+import { getFeedbackDetail } from "~/api/feedback";
+import ModalViewFeedBackDetail from '~/components/Modals/ModalViewFeedBackDetail';
 
 const { Text } = Typography;
 
 function DescriptionsTableOrderItemInfo({ orderDeatail }) {
+
     const items = [
         {
             key: '1',
@@ -43,13 +52,16 @@ function DescriptionsTableOrderItemInfo({ orderDeatail }) {
             children: orderDeatail.isFeedback ?
                 <>
                     <Rate disabled defaultValue={orderDeatail.feedbackRate} />
-                    <Button type='link' >Chi tiết</Button>
+                    <ModalViewFeedBackDetail orderId={orderDeatail.orderDetailId} />
                 </>
                 :
                 "Chưa có đánh giá",
             span: 3
         },
     ];
+
+
+
     return (
         <Descriptions size='small' layout="horizontal" bordered items={items} />
     );
