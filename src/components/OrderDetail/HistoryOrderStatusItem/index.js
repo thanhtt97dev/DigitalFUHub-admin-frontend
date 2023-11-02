@@ -24,7 +24,7 @@ function HistoryOrderStatusItem({ children, date, note }) {
                 style={
                     {
                         position: "relative",
-                        width: "150px"
+                        width: "160px"
                     }
                 }
                 onClick={handleOpenModalViewNote}
@@ -42,7 +42,7 @@ function HistoryOrderStatusItem({ children, date, note }) {
                                 padding: "0px",
                                 top: "40px",
                                 textAlign: "center",
-                                width: "150px"
+                                width: "160px"
                             }
                         }
                     >
