@@ -144,3 +144,9 @@ export const ORDER_SELLER_REFUNDED = 4;
 export const ORDER_DISPUTE = 5;
 export const ORDER_REJECT_COMPLAINT = 6;
 export const ORDER_SELLER_VIOLATES = 7;
+
+//order status
+export const RESPONSE_CODE_ORDER_STATUS_CHANGED_BEFORE = "ORDER_STATUS_01";
+
+//feedback
+export const RESPONSE_CODE_FEEDBACK_ORDER_UN_COMFIRM = "FEEDBACK_01";

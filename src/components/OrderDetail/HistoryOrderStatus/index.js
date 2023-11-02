@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Space } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCalendarDays,
     faArrowRightLong
 } from '@fortawesome/free-solid-svg-icons'
+import dayjs from 'dayjs';
 
 import HistoryOrderStatusItem from "~/components/OrderDetail/HistoryOrderStatusItem"
 
@@ -75,6 +76,26 @@ const TagOrderStatusSellerViolates = (
 
 function HistoryOrderStatus({ historyOrderStatus }) {
 
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+        setData(arrangeDateHistoryOrderStatus(historyOrderStatus))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const arrangeDateHistoryOrderStatus = (data) => {
+        data.sort(function (record1, record2) {
+            var dateRecord1 = dayjs(record1.dateCreate)
+            var dateRecord2 = dayjs(record2.dateCreate)
+            if (dateRecord1 > dateRecord2) return 1;
+            else if (dateRecord1 < dateRecord2) return -1;
+            else return 0;
+        });
+        for (let index = 0; index < data.length; index++) {
+            data[index].index = index + 1
+        }
+        return data
+    }
 
     return (
         <>
@@ -86,7 +107,7 @@ function HistoryOrderStatus({ historyOrderStatus }) {
                     <Space
                         split={<FontAwesomeIcon icon={faArrowRightLong} fontSize={35} />}
                     >
-                        {historyOrderStatus.map((item, index) => {
+                        {data.map((item, index) => {
                             return (
                                 (() => {
                                     var date = ParseDateTime(item.dateCreate)
@@ -103,11 +124,11 @@ function HistoryOrderStatus({ historyOrderStatus }) {
                                     else if (item.orderStatusId === ORDER_COMPLAINT) {
                                         return <HistoryOrderStatusItem children={TagOrderStatusComplaint} date={date} note={note} />
                                     }
-                                    else if (item.orderStatusId === ORDER_SELLER_REFUNDED) {
-                                        return <HistoryOrderStatusItem children={TagOrderStatusSellerRefunded} date={date} note={note} />
-                                    }
                                     else if (item.orderStatusId === ORDER_DISPUTE) {
                                         return <HistoryOrderStatusItem children={TagOrderStatusDispute} date={date} note={note} />
+                                    }
+                                    else if (item.orderStatusId === ORDER_SELLER_REFUNDED) {
+                                        return <HistoryOrderStatusItem children={TagOrderStatusSellerRefunded} date={date} note={note} />
                                     }
                                     else if (item.orderStatusId === ORDER_REJECT_COMPLAINT) {
                                         return <HistoryOrderStatusItem children={TagOrderStatusRejectComplaint} date={date} note={note} />

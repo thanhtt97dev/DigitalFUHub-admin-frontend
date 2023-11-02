@@ -1,13 +1,15 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useContext } from "react";
 import { Divider, Modal, Button, Form, Select, Row, Col, Input } from "antd";
 
 import { ExclamationCircleFilled } from "@ant-design/icons";
 
+import { NotificationContext } from "~/context/NotificationContext";
+
 import {
     RESPONSE_CODE_SUCCESS,
-    ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
-    ORDER_SELLER_VIOLATES
+    ORDER_SELLER_VIOLATES,
+    RESPONSE_CODE_ORDER_STATUS_CHANGED_BEFORE
 } from "~/constants";
 
 import { updateOrderStatus } from '~/api/order'
@@ -17,6 +19,7 @@ const { TextArea } = Input;
 
 function ModalChangeOrderStatus({ orderId, style, callBack }) {
 
+    const notification = useContext(NotificationContext);
     const [form] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -40,6 +43,10 @@ function ModalChangeOrderStatus({ orderId, style, callBack }) {
                     setTimeout(() => {
                         setOpenModal(false)
                     }, 200)
+                } else if (res.data.status.responseCode === RESPONSE_CODE_ORDER_STATUS_CHANGED_BEFORE) {
+                    notification("info", "Trạng thái đơn hàng đã được thay đổi trước đó! Vui lòng tải lại trang!")
+                } else {
+                    notification("error", "Đã có lỗi xảy ra.")
                 }
             })
             .catch(() => {
@@ -48,6 +55,7 @@ function ModalChangeOrderStatus({ orderId, style, callBack }) {
             .finally(() => {
                 setTimeout(() => {
                     setConfirmLoading(false)
+                    setOpenModal(false)
                 }, 500)
             })
     }
@@ -62,7 +70,7 @@ function ModalChangeOrderStatus({ orderId, style, callBack }) {
     const initFormValues = [
         {
             name: 'status',
-            value: ORDER_DISPUTE
+            value: ORDER_REJECT_COMPLAINT
         },
         {
             name: 'note',
@@ -106,7 +114,6 @@ function ModalChangeOrderStatus({ orderId, style, callBack }) {
                             <Col offset={1} span={12}>
                                 <Form.Item name="status" >
                                     <Select >
-                                        <Select.Option value={ORDER_DISPUTE}>Tranh chấp</Select.Option>
                                         <Select.Option value={ORDER_REJECT_COMPLAINT}>Từ chối khiếu nại</Select.Option>
                                         <Select.Option value={ORDER_SELLER_VIOLATES}>Người bán vi phạm</Select.Option>
                                     </Select>
