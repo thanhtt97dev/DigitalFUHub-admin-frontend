@@ -90,7 +90,7 @@ function BusinessFee() {
     const [searchData, setSearchData] = useState({
         businessFeeId: '',
         maxFee: 100,
-        fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
+        fromDate: dayjs().subtract(365, 'day').format('M/D/YYYY'),
         toDate: dayjs().format('M/D/YYYY'),
     });
 
@@ -158,7 +158,7 @@ function BusinessFee() {
                         width: '100%',
                         minHeight: "690px"
                     }}
-                    title="Danh sách rút tiền"
+                    title="Phí kinh doanh"
                     hoverable
                 >
                     <Form

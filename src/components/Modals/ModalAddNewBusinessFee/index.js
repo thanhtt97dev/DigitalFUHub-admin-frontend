@@ -23,7 +23,6 @@ function ModalAddNewBusinessFee({ style, callBack }) {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [btnLoading, setBtnLoading] = useState(false)
 
-
     useLayoutEffect(() => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,12 +35,12 @@ function ModalAddNewBusinessFee({ style, callBack }) {
         addNewBusinessFee(data)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setConfirmLoading(false)
-                    callBack();
                     setTimeout(() => {
-                        setOpenModal(false)
+                        setConfirmLoading(false)
                     }, 500)
+                    setOpenModal(false)
                     notification('success', 'Tạo phí kinh doanh mới thành công!')
+                    callBack();
                 } else if (res.data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
                     notification('error', 'Xảy ra một vài vấn đề, hãy thử lại!')
                 }
@@ -104,12 +103,12 @@ function ModalAddNewBusinessFee({ style, callBack }) {
                         </Row>
 
                         <Row>
-                            <Col offset={1} span={10}>
+                            <Col offset={1} span={8}>
                                 <Form.Item name="fee" label="Giá trị">
                                     <InputNumber min={0} max={100} />
                                 </Form.Item>
                             </Col>
-                            <Col span={10}><p>wdaw</p></Col>
+                            <Col span={1}><p>%</p></Col>
                         </Row>
                     </Form>
                 </>
