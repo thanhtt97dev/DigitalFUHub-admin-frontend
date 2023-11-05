@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { getOrders } from '~/api/order'
 import Spinning from "~/components/Spinning";
-import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
+import { formatPrice, ParseDateTime } from '~/utils/index'
 import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
@@ -70,7 +70,7 @@ const columns = [
         width: '15%',
         render: (totalPayment) => {
             return (
-                <p>{formatStringToCurrencyVND(totalPayment)} VND</p>
+                <p>{formatPrice(totalPayment)} VND</p>
             )
         }
     },

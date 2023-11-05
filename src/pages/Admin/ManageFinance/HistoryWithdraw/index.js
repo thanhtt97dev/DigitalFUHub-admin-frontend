@@ -9,7 +9,7 @@ import {
 
 import { getWithdrawTransaction, confirmTransferWithdrawSuccess } from '~/api/bank'
 import Spinning from "~/components/Spinning";
-import { formatStringToCurrencyVND, ParseDateTime, getVietQrImgSrc } from '~/utils/index'
+import { formatPrice, ParseDateTime, getVietQrImgSrc } from '~/utils/index'
 import {
     RESPONSE_CODE_BANK_WITHDRAW_PAID,
     RESPONSE_CODE_SUCCESS,
@@ -62,7 +62,7 @@ function HistoryWithdraw() {
             width: '10%',
             render: (amount) => {
                 return (
-                    <p>{formatStringToCurrencyVND(amount)} VND</p>
+                    <p>{formatPrice(amount)}</p>
                 )
             }
         },

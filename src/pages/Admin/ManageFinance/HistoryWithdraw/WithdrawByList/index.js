@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 
 import Spinning from "~/components/Spinning";
-import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
+import { formatPrice, ParseDateTime } from '~/utils/index'
 import BackPreviousPage from "~/components/BackPreviousPage";
 import * as ExcelJS from "exceljs"
 import saveAs from "file-saver";
@@ -48,7 +48,7 @@ function WithdrawByList() {
             width: '10%',
             render: (amount) => {
                 return (
-                    <p>{formatStringToCurrencyVND(amount)} VND</p>
+                    <p>{formatPrice(amount)}</p>
                 )
             }
         },

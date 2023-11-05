@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { getHistoryTransactionInternal } from '~/api/transactionInternal'
 import Spinning from "~/components/Spinning";
-import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
+import { formatPrice, ParseDateTime } from '~/utils/index'
 import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
@@ -51,13 +51,13 @@ const columns = [
         width: '15%',
         render: (paymentAmount, record) => {
             if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
-                return <p style={{ color: "#3b7be2" }}>+ {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#3b7be2" }}>+ {formatPrice(paymentAmount)}</p>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
-                return <p style={{ color: "#cf1322" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#cf1322" }}>- {formatPrice(paymentAmount)}</p>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
-                return <p style={{ color: "#8c66c8" }}>- {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#8c66c8" }}>- {formatPrice(paymentAmount)}</p>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
-                return <p style={{ color: "#4ea927" }}> <FontAwesomeIcon icon={faWallet} /> {formatStringToCurrencyVND(paymentAmount)} VND</p>
+                return <p style={{ color: "#4ea927" }}> <FontAwesomeIcon icon={faWallet} /> {formatPrice(paymentAmount)}</p>
             }
         }
     },
