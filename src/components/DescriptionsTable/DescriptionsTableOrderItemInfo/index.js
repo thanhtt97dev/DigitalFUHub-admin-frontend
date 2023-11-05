@@ -2,7 +2,7 @@ import React from 'react';
 import { Descriptions, Space, Typography, Rate } from 'antd';
 
 import {
-    formatStringToCurrencyVND,
+    formatPrice,
 } from '~/utils/index'
 
 import ModalViewFeedBackDetail from '~/components/Modals/ModalViewFeedBackDetail';
@@ -18,11 +18,11 @@ function DescriptionsTableOrderItemInfo({ orderDeatail }) {
             children: <>
                 {
                     orderDeatail.discount === 0 ?
-                        <Text>{formatStringToCurrencyVND(orderDeatail.price)}₫</Text>
+                        <Text>{formatPrice(orderDeatail.price)}</Text>
                         :
                         <Space size={[8, 0]}>
-                            <Text delete>{formatStringToCurrencyVND(orderDeatail.price)}₫</Text>
-                            <Text>{formatStringToCurrencyVND(orderDeatail.price - (orderDeatail.price * orderDeatail.discount / 100))}₫</Text>
+                            <Text delete>{formatPrice(orderDeatail.price)}</Text>
+                            <Text>{formatPrice(orderDeatail.price - (orderDeatail.price * orderDeatail.discount / 100))}</Text>
                         </Space>
                 }
             </>
@@ -38,7 +38,7 @@ function DescriptionsTableOrderItemInfo({ orderDeatail }) {
         {
             key: '3',
             label: 'Thành tiền',
-            children: `${formatStringToCurrencyVND(orderDeatail.totalAmount)}đ`,
+            children: `${formatPrice(orderDeatail.totalAmount)}đ`,
             span: 3
         },
         {

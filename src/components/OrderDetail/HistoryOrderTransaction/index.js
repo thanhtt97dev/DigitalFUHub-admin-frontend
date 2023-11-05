@@ -19,7 +19,7 @@ import {
     TRANSACTION_COIN_TYPE_REFUND
 } from "~/constants";
 
-import { ParseDateTime, formatStringToCurrencyVND } from '~/utils/index'
+import { ParseDateTime, formatPrice } from '~/utils/index'
 
 const columnsHistoryTransaction = [
     {
@@ -38,19 +38,19 @@ const columnsHistoryTransaction = [
                     if (transactionInternalTypeId !== null) {
                         if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
                             return (
-                                <p style={{ color: "#3b7be2" }}>{formatStringToCurrencyVND(record.paymentAmount)} đ</p>
+                                <p style={{ color: "#3b7be2" }}>{formatPrice(record.paymentAmount)}</p>
                             )
                         } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
                             return (
-                                <p style={{ color: "#cf1322" }}>{formatStringToCurrencyVND(record.paymentAmount)} đ</p>
+                                <p style={{ color: "#cf1322" }}>{formatPrice(record.paymentAmount)}</p>
                             )
                         } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
                             return (
-                                <p style={{ color: "#8c66c8" }}>{formatStringToCurrencyVND(record.paymentAmount)} đ</p>
+                                <p style={{ color: "#8c66c8" }}>{formatPrice(record.paymentAmount)}</p>
                             )
                         } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                             return (
-                                <p style={{ color: "#4ea927" }}>{formatStringToCurrencyVND(record.paymentAmount)} đ</p>
+                                <p style={{ color: "#4ea927" }}>{formatPrice(record.paymentAmount)}</p>
                             )
                         }
                     }
@@ -94,7 +94,7 @@ const columnsHistoryTransaction = [
                     if (transactionInternalTypeId !== null) {
                         if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
                             return (
-                                <Tooltip title={<>{formatStringToCurrencyVND(record.paymentAmount)} đ</>} color="#3b7be2" >
+                                <Tooltip title={<>{formatPrice(record.paymentAmount)}</>} color="#3b7be2" >
                                     <Tag color="#3b7be2">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} /> Thanh toán
                                     </Tag>
@@ -102,7 +102,7 @@ const columnsHistoryTransaction = [
                             )
                         } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
                             return (
-                                <Tooltip title={<>{formatStringToCurrencyVND(record.paymentAmount)} đ</>} color="#cf1322" >
+                                <Tooltip title={<>{formatPrice(record.paymentAmount)}</>} color="#cf1322" >
                                     <Tag color="#cf1322">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} /> Trả tiền hàng
                                     </Tag>
@@ -110,7 +110,7 @@ const columnsHistoryTransaction = [
                             )
                         } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
                             return (
-                                <Tooltip title={<>{formatStringToCurrencyVND(record.paymentAmount)} đ</>} color="#8c66c8" >
+                                <Tooltip title={<>{formatPrice(record.paymentAmount)}</>} color="#8c66c8" >
                                     <Tag color="#8c66c8">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} /> Hoàn tiền
                                     </Tag>
@@ -118,7 +118,7 @@ const columnsHistoryTransaction = [
                             )
                         } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                             return (
-                                <Tooltip title={<>{formatStringToCurrencyVND(record.paymentAmount)} đ</>} color="#4ea927" >
+                                <Tooltip title={<>{formatPrice(record.paymentAmount)}</>} color="#4ea927" >
                                     <Tag color="#4ea927">
                                         <FontAwesomeIcon icon={faMoneyBill1Wave} /> Lợi nhuận
                                     </Tag>

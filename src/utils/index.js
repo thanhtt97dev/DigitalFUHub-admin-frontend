@@ -285,7 +285,6 @@ export function formatPrice(price) {
         style: 'currency',
         currency: 'VND',
         minimumFractionDigits: 0, // Số lẻ sau dấu phẩy
-        maximumFractionDigits: 0, // Số lẻ sau dấu phẩy
     });
 }
 

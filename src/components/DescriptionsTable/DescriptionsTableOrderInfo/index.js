@@ -8,7 +8,7 @@ import { faComments } from '@fortawesome/free-regular-svg-icons'
 import ModalChangeOrderStatus from '~/components/Modals/ModalChangeOrderStatus'
 
 import { getConversation } from '~/api/chat'
-import { formatStringToCurrencyVND, ParseDateTime } from '~/utils/index'
+import { formatPrice, ParseDateTime } from '~/utils/index'
 import {
     RESPONSE_CODE_SUCCESS,
     ORDER_WAIT_CONFIRMATION,
@@ -93,7 +93,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         {
             key: '5',
             label: 'Tổng giá trị đơn hàng',
-            children: <>{formatStringToCurrencyVND(order.totalAmount)} đ</>,
+            children: <>{formatPrice(order.totalAmount)} đ</>,
             span: 3
         },
         {
@@ -104,7 +104,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
                     {order.totalCouponDiscount === 0 ?
                         "Không sử dụng"
                         :
-                        <>{formatStringToCurrencyVND(order.totalCouponDiscount)} đ <Button type='link'>Chi tiết</Button></>
+                        <>{formatPrice(order.totalCouponDiscount)} đ <Button type='link'>Chi tiết</Button></>
                     }
                 </>,
             span: 3
@@ -118,19 +118,19 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         {
             key: '8',
             label: <b>Phí dịch vụ</b>,
-            children: <>{formatStringToCurrencyVND(order.businessFeeValue * order.totalAmount / 100)} đ</>,
+            children: <>{formatPrice(order.businessFeeValue * order.totalAmount / 100)} đ</>,
             span: 3
         },
         {
             key: '9',
             label: <b>Số tiền người mua thanh toán</b>,
-            children: <>{formatStringToCurrencyVND(order.totalPayment)} đ</>,
+            children: <>{formatPrice(order.totalPayment)} đ</>,
             span: 3
         },
         {
             key: '10',
             label: <b>Số tiền người bán nhận</b>,
-            children: <>{formatStringToCurrencyVND(order.totalAmount - order.totalCouponDiscount - order.businessFeeValue * order.totalAmount / 100)} đ</>,
+            children: <>{formatPrice(order.totalAmount - order.totalCouponDiscount - (order.businessFeeValue * order.totalAmount / 100))} đ</>,
             span: 3
         },
         {
