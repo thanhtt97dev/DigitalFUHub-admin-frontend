@@ -70,7 +70,7 @@ const columns = [
         width: '15%',
         render: (totalPayment) => {
             return (
-                <p>{formatPrice(totalPayment)} VND</p>
+                <p>{formatPrice(totalPayment)}</p>
             )
         }
     },
