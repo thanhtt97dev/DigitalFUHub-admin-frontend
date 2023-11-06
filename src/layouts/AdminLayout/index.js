@@ -44,8 +44,12 @@ const items = [
                 label: <Link to={"/admin/finance/businessFee"}>Phí kinh doanh</Link>,
             },
             {
-                key: '/admin/finance/transaction',
-                label: <Link to={"/admin/finance/transaction"}>Lịch sử giao dịch nội bộ</Link>,
+                key: '/admin/finance/transactionInternal',
+                label: <Link to={"/admin/finance/transactionInternal"}>Giao dịch nội bộ</Link>,
+            },
+            {
+                key: '/admin/finance/transactionCoin',
+                label: <Link to={"/admin/finance/transactionCoin"}>Giao dịch xu</Link>,
             },
         ],
     },

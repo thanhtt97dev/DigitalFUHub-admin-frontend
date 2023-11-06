@@ -13,6 +13,7 @@ import Orders from '~/pages/Admin/ManageOrders/Orders';
 import OrderDetail from '~/pages/Admin/ManageOrders/OrderDetail';
 import UserInfo from '~/pages/Admin/ManageUsers/UserInfo';
 import BusinessFee from '~/pages/Admin/ManageFinance/BusinessFee';
+import HistoryTransactionCoin from '~/pages/Admin/ManageFinance/HistoryTransactionCoin';
 
 const routesConfig = [
     {
@@ -56,10 +57,16 @@ const routesConfig = [
         component: <BusinessFee />
     },
     {
-        path: '/admin/finance/transaction',
+        path: '/admin/finance/transactionInternal',
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <HistoryTransactionInternal />
+    },
+    {
+        path: '/admin/finance/transactionCoin',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <HistoryTransactionCoin />
     },
     {
         path: '/admin/order',
