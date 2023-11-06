@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { getHistoryTransactionCoin } from '~/api/transactionCoin'
 import Spinning from "~/components/Spinning";
-import { formatPrice, ParseDateTime } from '~/utils/index'
+import { ParseDateTime } from '~/utils/index'
 import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
