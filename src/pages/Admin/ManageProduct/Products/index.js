@@ -1,43 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { Table } from 'antd';
+import { Card } from 'antd';
 
 import Spinning from "~/components/Spinning";
 
 import { getProducts } from "~/api/product";
-import { RESPONSE_CODE_SUCCESS } from "~/constants";
+import {
+    RESPONSE_CODE_SUCCESS,
+    PRODUCT_STATUS_ACTIVE,
+    PRODUCT_STATUS_HIDE,
+    PRODUCT_STATUS_BAN
+} from "~/constants";
+import TableProduct from "~/components/Tables/TableProduct";
 
-const columns = [
+
+const tabList = [
     {
-        title: 'Name',
-        dataIndex: 'name',
-        sorter: true,
-        render: (name) => `${name.first} ${name.last}`,
-        width: '20%',
+        label: "Tất cả",
+        key: "tab1",
     },
     {
-        title: 'Gender',
-        dataIndex: 'gender',
-        filters: [
-            {
-                text: 'Male',
-                value: 'male',
-            },
-            {
-                text: 'Female',
-                value: 'female',
-            },
-        ],
-        width: '20%',
+        label: "Đang hoạt động",
+        key: "tab2",
     },
     {
-        title: 'Email',
-        dataIndex: 'email',
+        label: "Đã ẩn",
+        key: "tab3",
     },
-];
+    {
+        label: "Vi phạm",
+        key: "tab4",
+    },
+]
 
 function Products() {
 
     const [loading, setLoading] = useState(false);
+
     const [searchParams, setSearchParams] = useState({
         shopName: "",
         productName: "",
@@ -58,7 +56,7 @@ function Products() {
         getProducts(searchParams)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.result.products)
+                    setDataTable(res.data.result.products)
                     setTableParams({
                         ...tableParams,
                         pagination: {
@@ -88,18 +86,32 @@ function Products() {
         }
     };
 
+    const [activeTabKey, setActiveTabKey] = useState('tab1');
+    const onTabChange = (key) => {
+        setActiveTabKey(key);
+        setLoading(true);
+    };
+    const contentList = {
+        tab1: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
+        tab2: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable.filter(x => x.productStatusId === PRODUCT_STATUS_ACTIVE)} />,
+        tab3: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable.filter(x => x.productStatusId === PRODUCT_STATUS_HIDE)} />,
+        tab4: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable.filter(x => x.productStatusId === PRODUCT_STATUS_BAN)} />
+    };
+
     return (
         <>
-            <Spinning spinning={loading}>
-                <Table
-                    columns={columns}
-                    rowKey={(record) => record.login.uuid}
-                    dataSource={dataTable}
-                    pagination={tableParams.pagination}
-                    loading={loading}
-                    onChange={handleTableChange}
-                />
-            </Spinning>
+            <Card
+                style={{
+                    width: '100%',
+                    minHeight: '100vh'
+                }}
+                tabList={tabList}
+                activeTabKey={activeTabKey}
+                onTabChange={onTabChange}
+            >
+
+                {contentList[activeTabKey]}
+            </Card>
         </>
     );
 }

@@ -70,7 +70,7 @@ const menuItems = [
     },
     {
         label: <Link to='/admin/product'>Quản lý sản phẩm</Link>,
-        key: 'admin/user',
+        key: 'admin/product',
         icon: <FontAwesomeIcon icon={faVault} spin />
     },
     {

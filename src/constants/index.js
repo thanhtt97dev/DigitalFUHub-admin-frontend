@@ -158,3 +158,9 @@ export const MESSAGE_TYPE_CONVERSATION_IMAGE = "1";
 
 export const USER_CONVERSATION_TYPE_UN_READ = false;
 export const USER_CONVERSATION_TYPE_IS_READ = true;
+
+//product status
+export const PRODUCT_STATUS_ACTIVE = 1;
+export const PRODUCT_STATUS_BAN = 2;
+export const PRODUCT_STATUS_REMOVE = 3;
+export const PRODUCT_STATUS_HIDE = 4;
