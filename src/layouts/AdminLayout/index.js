@@ -9,7 +9,8 @@ import { Layout, Menu, Space, theme, Avatar } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faCartShopping,
-    faUsers
+    faUsers,
+    faVault
 } from '@fortawesome/free-solid-svg-icons'
 
 import styles from './AdminLayout.module.scss'
@@ -57,6 +58,11 @@ const items = [
         label: <Link to='/admin/order'>Quản lý đơn hàng</Link>,
         key: 'admin/order',
         icon: <FontAwesomeIcon icon={faCartShopping} />,
+    },
+    {
+        label: <Link to='/admin/product'>Quản lý sản phẩm</Link>,
+        key: 'admin/user',
+        icon: <FontAwesomeIcon icon={faVault} spin />
     },
     {
         label: <Link to='/admin/user'>Quản lý người dùng</Link>,
