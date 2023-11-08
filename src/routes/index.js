@@ -15,6 +15,8 @@ import UserInfo from '~/pages/Admin/ManageUsers/UserInfo';
 import BusinessFee from '~/pages/Admin/ManageFinance/BusinessFee';
 import ChatBox from '~/pages/ChatBox';
 import HistoryTransactionCoin from '~/pages/Admin/ManageFinance/HistoryTransactionCoin';
+import Products from '~/pages/Admin/ManageProduct/Products';
+import ProductDetail from '~/pages/Admin/ManageProduct/ProductDetail';
 
 const routesConfig = [
     {
@@ -87,6 +89,18 @@ const routesConfig = [
         component: <OrderDetail />
     },
     {
+        path: '/admin/product',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <Products />
+    },
+    {
+        path: '/admin/product/:id',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <ProductDetail />
+    },
+    {
         path: '/admin/user',
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
@@ -102,6 +116,11 @@ const routesConfig = [
         title: 'verification2FA',
         path: '/verification2FA/:id',
         component: <Verification2FA />,
+    },
+    {
+        title: 'chatbox',
+        path: '/chatBox',
+        component: <ChatBox />,
     },
 ];
 

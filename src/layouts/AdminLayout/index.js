@@ -6,7 +6,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { AreaChartOutlined, StockOutlined, MenuUnfoldOutlined, MenuFoldOutlined, ClockCircleOutlined, MessageOutlined } from '@ant-design/icons';
 import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown, Badge } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faUsers, faVault } from '@fortawesome/free-solid-svg-icons';
 import Message from '~/components/Message';
 const cx = classNames.bind(styles);
 const { Content, Sider, Header } = Layout;
@@ -67,6 +67,11 @@ const menuItems = [
         label: <Link to='/admin/order'>Quản lý đơn hàng</Link>,
         key: 'admin/order',
         icon: <FontAwesomeIcon icon={faCartShopping} />,
+    },
+    {
+        label: <Link to='/admin/product'>Quản lý sản phẩm</Link>,
+        key: 'admin/user',
+        icon: <FontAwesomeIcon icon={faVault} spin />
     },
     {
         label: <Link to='/admin/user'>Quản lý người dùng</Link>,
