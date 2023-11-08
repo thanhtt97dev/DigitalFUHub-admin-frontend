@@ -26,9 +26,13 @@
     position: relative;
 }
 
+.custom-wrapper {
+    width: 55%;
+}
+
 .layout-user-chat {
     height: 75vh;
-    width: 40%;
+    width: 45%;
     padding: 10px;
     border: 1px solid rgba(140, 140, 140, 0.35);
 }
@@ -59,10 +63,6 @@
 
 .ant-spin-container .ant-spin-dot {
     width: 90%;
-}
-
-.custom-wrapper {
-    width: 60%;
 }
 
 .text-ellipsis {

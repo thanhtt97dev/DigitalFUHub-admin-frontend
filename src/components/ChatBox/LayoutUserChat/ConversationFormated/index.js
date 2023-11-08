@@ -57,7 +57,7 @@ const ConversationFormated = ({ conversation, handleClickUser, conversationSelec
 
     return (
         <List.Item onClick={() => { handleClickUser(conversation) }}>
-            <Card hoverable className={conversation.conversationId === conversationSelected?.conversationId ? cx('backgroud-selected') : ''} style={{ width: '100%' }} bodyStyle={{ padding: 15 }}>
+            <Card hoverable className={conversation.conversationId === conversationSelected?.conversationId ? cx('backgroud-selected') : ''} style={{ width: '100%' }} bodyStyle={{ padding: 10 }}>
                 <div className={cx('space-div-flex')}>
                     <List.Item.Meta avatar={<AvatarFormated isGroup={conversation.isGroup} />}
                         title={<TitleFormated isGroup={conversation.isGroup} />}

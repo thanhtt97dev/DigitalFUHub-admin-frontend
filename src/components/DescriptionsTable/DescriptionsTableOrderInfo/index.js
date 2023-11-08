@@ -26,7 +26,8 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
     const navigate = useNavigate()
 
     const handleOpenChatGroup = (conversationId) => {
-        navigate('/chatBox', { state: { data: conversationId } })
+        debugger
+        navigate('/admin/chatBox', { state: { data: conversationId } })
     }
 
     const handleOpenChatWithUser = (userId) => {
@@ -34,7 +35,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         getConversation(data)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    navigate('/chatBox', { state: { data: res.data.result } })
+                    navigate('/admin/chatBox', { state: { data: res.data.result } })
                 }
             })
             .catch(() => {
