@@ -10,6 +10,11 @@ const cx = classNames.bind(styles);
 
 const columns = [
     {
+        title: 'ID',
+        dataIndex: 'productId',
+        width: '5%',
+    },
+    {
         title: 'Tên sản phẩm',
         dataIndex: 'productId',
         render: (productId, record) => {
