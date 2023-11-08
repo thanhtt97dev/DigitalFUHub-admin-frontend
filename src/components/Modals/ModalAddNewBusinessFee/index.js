@@ -5,7 +5,7 @@ import {
     ExclamationCircleFilled,
     PlusOutlined
 } from "@ant-design/icons";
-import { NotificationContext } from '~/context/NotificationContext';
+import NotificationContext from "~/context/UI/NotificationContext";
 
 import {
     RESPONSE_CODE_NOT_ACCEPT,

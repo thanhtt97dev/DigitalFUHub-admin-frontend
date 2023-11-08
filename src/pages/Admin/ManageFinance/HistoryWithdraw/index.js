@@ -19,7 +19,7 @@ import {
     BANKS_INFO
 } from "~/constants";
 import DrawerWithdrawTransactionBill from "~/components/Drawers/DrawerWithdrawTransactionBill";
-import { NotificationContext } from '~/context/NotificationContext';
+import NotificationContext from "~/context/UI/NotificationContext";
 
 import classNames from 'classnames/bind';
 import styles from './HistoryWithdraw.module.scss';

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Select, Form, Input, Table, Tag, Row, Col, Space, Card, Avatar } from 'antd';
 
 import Spinning from "~/components/Spinning";
-import NotificationContext from '~/context/NotificationContext';
+import NotificationContext from "~/context/UI/NotificationContext";
 
 import { getUsers } from '~/api/user';
 import { Link } from 'react-router-dom';

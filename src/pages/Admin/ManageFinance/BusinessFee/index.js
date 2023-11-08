@@ -10,7 +10,7 @@ import {
     RESPONSE_CODE_SUCCESS,
     BANKS_INFO
 } from "~/constants";
-import { NotificationContext } from '~/context/NotificationContext';
+import NotificationContext from "~/context/UI/NotificationContext";
 
 import classNames from 'classnames/bind';
 import styles from './BusinessFee.module.scss';

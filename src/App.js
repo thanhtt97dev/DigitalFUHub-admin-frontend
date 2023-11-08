@@ -5,13 +5,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ConfigProvider } from 'antd';
 import viVN from 'antd/locale/vi_VN';
 
-import Notification from './context/NotificationContext';
+import ContextContainer from './context/ContextContainer';
 import Routing from './routes/Routing';
 import refreshToken from '~/api/refreshToken';
 
 function App() {
     return (
-        <Notification>
+        <ContextContainer>
             <AuthProvider
                 authType={'cookie'}
                 authName={'_auth'}
@@ -25,7 +25,7 @@ function App() {
                     </Router>
                 </ConfigProvider>
             </AuthProvider>
-        </Notification>
+        </ContextContainer>
     );
 }
 

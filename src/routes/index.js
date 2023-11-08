@@ -13,6 +13,7 @@ import Orders from '~/pages/Admin/ManageOrders/Orders';
 import OrderDetail from '~/pages/Admin/ManageOrders/OrderDetail';
 import UserInfo from '~/pages/Admin/ManageUsers/UserInfo';
 import BusinessFee from '~/pages/Admin/ManageFinance/BusinessFee';
+import ChatBox from '~/pages/ChatBox';
 import HistoryTransactionCoin from '~/pages/Admin/ManageFinance/HistoryTransactionCoin';
 
 const routesConfig = [
@@ -37,6 +38,11 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <HistoryDeposit />
+    },
+    {
+        path: '/admin/chatBox',
+        layout: <AdminLayout />,
+        component: <ChatBox />
     },
     {
         path: '/admin/finance/withdraw',
