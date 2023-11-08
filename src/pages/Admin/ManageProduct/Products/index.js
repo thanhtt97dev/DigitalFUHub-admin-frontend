@@ -42,6 +42,7 @@ function Products() {
         productCategory: 0,
         soldMin: 0,
         soldMax: 0,
+        productStatusId: 0,
         page: 1
     })
     const [dataTable, setDataTable] = useState([])
@@ -61,19 +62,22 @@ function Products() {
                         ...tableParams,
                         pagination: {
                             ...tableParams.pagination,
-                            total: res.result.totalPages,
+                            total: res.data.result.totalProduct,
                         },
                     });
-                    setLoading(false)
                 }
             })
             .catch((err) => {
 
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [searchParams])
 
     const handleTableChange = (pagination, filters, sorter) => {
+        setSearchParams({
+            ...searchParams,
+            page: pagination.current
+        })
         setTableParams({
             pagination,
             filters,
@@ -88,18 +92,58 @@ function Products() {
 
     const [activeTabKey, setActiveTabKey] = useState('tab1');
     const onTabChange = (key) => {
+        switch (key) {
+            case 'tab1':
+                setSearchParams({
+                    ...searchParams,
+                    page: 1,
+                    productStatusId: 0
+                })
+                break;
+            case 'tab2':
+                setSearchParams({
+                    ...searchParams,
+                    page: 1,
+                    productStatusId: PRODUCT_STATUS_ACTIVE
+                })
+                break;
+            case 'tab3':
+                setSearchParams({
+                    ...searchParams,
+                    page: 1,
+                    productStatusId: PRODUCT_STATUS_HIDE
+                })
+                break;
+            case 'tab4':
+                setSearchParams({
+                    ...searchParams,
+                    page: 1,
+                    productStatusId: PRODUCT_STATUS_BAN
+                })
+                break;
+            default: return;
+        }
         setActiveTabKey(key);
-        setLoading(true);
     };
     const contentList = {
         tab1: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
-        tab2: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable.filter(x => x.productStatusId === PRODUCT_STATUS_ACTIVE)} />,
-        tab3: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable.filter(x => x.productStatusId === PRODUCT_STATUS_HIDE)} />,
-        tab4: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable.filter(x => x.productStatusId === PRODUCT_STATUS_BAN)} />
+        tab2: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
+        tab3: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
+        tab4: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
     };
 
     return (
         <>
+            <Card
+                style={{
+                    width: '100%',
+                    minHeight: '200px',
+                    marginBottom: "20px"
+                }}
+            >
+
+
+            </Card>
             <Card
                 style={{
                     width: '100%',
