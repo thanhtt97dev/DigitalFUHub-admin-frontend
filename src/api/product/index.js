@@ -1,5 +1,9 @@
-import { apiPostAuth } from '../defaultApi';
+import { apiPostAuth, apiGetAuth } from '../defaultApi';
 
 export const getProducts = (data) => {
     return apiPostAuth(`api/products/admin/getProducts`, data);
+};
+
+export const getProductDetail = (id) => {
+    return apiGetAuth(`api/products/admin/${id}`);
 };

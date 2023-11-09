@@ -155,6 +155,13 @@ function Products() {
                     page: 1,
                     productStatusId: 0
                 })
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+                    },
+                });
                 break;
             case 'tab2':
                 setSearchParams({
@@ -162,6 +169,13 @@ function Products() {
                     page: 1,
                     productStatusId: PRODUCT_STATUS_ACTIVE
                 })
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+                    },
+                });
                 break;
             case 'tab3':
                 setSearchParams({
@@ -169,6 +183,13 @@ function Products() {
                     page: 1,
                     productStatusId: PRODUCT_STATUS_HIDE
                 })
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+                    },
+                });
                 break;
             case 'tab4':
                 setSearchParams({
@@ -176,6 +197,13 @@ function Products() {
                     page: 1,
                     productStatusId: PRODUCT_STATUS_BAN
                 })
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        current: 1,
+                        pageSize: 10,
+                    },
+                });
                 break;
             default: return;
         }
