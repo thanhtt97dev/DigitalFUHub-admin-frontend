@@ -71,6 +71,7 @@ function Products() {
 
     const [searchParams, setSearchParams] = useState({
         productId: 0,
+        shopId: 0,
         shopName: "",
         productName: "",
         productCategory: 0,
@@ -219,6 +220,7 @@ function Products() {
 
     const onFinish = (values) => {
         var productId = values.productId === "" ? 0 : values.productId
+        var shopId = values.shopId
         var shopName = values.shopName;
         var productName = values.productName;
         var productCategory = values.productCategory
@@ -226,6 +228,7 @@ function Products() {
         var soldMax = values.soldMax === "" ? 0 : values.soldMax
         setSearchParams({
             ...searchParams,
+            shopId,
             productId,
             shopName,
             productName,
@@ -267,6 +270,14 @@ function Products() {
                                 <Col span={6} offset={2}><label>Tên sản phẩm: </label></Col>
                                 <Col span={12}>
                                     <Form.Item name="productName" >
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col span={6} offset={2}><label>Mã cửa hàng: </label></Col>
+                                <Col span={12}>
+                                    <Form.Item name="shopId" >
                                         <Input />
                                     </Form.Item>
                                 </Col>
