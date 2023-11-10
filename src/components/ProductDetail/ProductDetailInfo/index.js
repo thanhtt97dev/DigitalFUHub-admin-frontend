@@ -6,7 +6,7 @@ import DescriptionsTableProductInfo from "~/components/ProductDetail/Description
 
 
 
-function ProductDetailInfo({ product }) {
+function ProductDetailInfo({ product, callBack }) {
 
     return (
         <Card
@@ -21,7 +21,7 @@ function ProductDetailInfo({ product }) {
                     />
                 </Col>
                 <Col offset={1} span={10}>
-                    <DescriptionsTableProductInfo product={product} />
+                    <DescriptionsTableProductInfo product={product} callBack={callBack} />
                 </Col>
             </Row>
         </Card>

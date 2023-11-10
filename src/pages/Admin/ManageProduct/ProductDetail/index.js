@@ -66,7 +66,7 @@ function ProductDetail() {
                 <></>
                 :
                 <Spinning spinning={loading}>
-                    <ProductDetailInfo product={product} />
+                    <ProductDetailInfo product={product} callBack={getData} />
                     <Divider />
 
                     <Card

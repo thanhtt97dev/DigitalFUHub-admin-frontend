@@ -13,11 +13,12 @@ import {
     PRODUCT_STATUS_HIDE,
     PRODUCT_STATUS_BAN
 } from "~/constants";
+import ModalUpdateProductStatus from '~/components/Modals/ModalUpdateProductStatus';
 
 
 const { Text } = Typography;
 
-function DescriptionsTableProductInfo({ product }) {
+function DescriptionsTableProductInfo({ product, callBack }) {
     const items = [
         {
             key: '1',
@@ -215,6 +216,7 @@ function DescriptionsTableProductInfo({ product }) {
                             return <></>
                         }
                     })()}
+                    <ModalUpdateProductStatus productId={product.productId} callBack={callBack} />
                 </>
             ),
             span: 3

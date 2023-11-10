@@ -11,3 +11,7 @@ export const getProductDetail = (id) => {
 export const updateReportProduct = (data) => {
     return apiPostAuth(`api/reportProducts/admin/update`, data);
 };
+
+export const updateProductStatus = (data) => {
+    return apiPostAuth(`api/products/admin/update`, data);
+};
