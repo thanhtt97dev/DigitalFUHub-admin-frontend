@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { useParams } from 'react-router-dom';
-import { Card, Row, Col, Divider } from "antd";
+import { Card, Divider } from "antd";
 
 
 import Spinning from "~/components/Spinning";

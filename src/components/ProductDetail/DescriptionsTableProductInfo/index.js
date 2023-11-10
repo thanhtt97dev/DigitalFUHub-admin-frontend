@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Descriptions, Space, Typography, Rate, Avatar, Tooltip, Tag } from 'antd';
 
-import ModalViewFeedBackDetail from '~/components/Modals/ModalViewFeedBackDetail';
-
 import {
     formatPrice,
     ParseDateTime

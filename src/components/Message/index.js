@@ -29,7 +29,6 @@ const Message = () => {
     const [hideUI, setHideUI] = useState(false)
 
     useEffect(() => {
-        console.log(location)
         if (location.pathname === "/admin/chatBox") {
             setHideUI(true)
         } else {
@@ -56,7 +55,9 @@ const Message = () => {
     }, [message])
 
     useEffect(() => {
-        handleReciveNewMessage()
+        if (location.pathname !== "/admin/chatBox") {
+            handleReciveNewMessage()
+        }
     })
 
     const handleReciveNewMessage = () => {

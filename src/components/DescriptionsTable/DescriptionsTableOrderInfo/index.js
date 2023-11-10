@@ -72,7 +72,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
             label: 'Tên cửa hàng',
             children:
                 <Space>
-                    <Link to={''}><Avatar src={order.customerAvatar} /> {order.shopName}</Link>
+                    <Link to={''}><Avatar src={order.shopAvatar} /> {order.shopName}</Link>
                     <Button
                         type="default"
                         size="small"

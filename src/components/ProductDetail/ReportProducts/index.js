@@ -6,7 +6,6 @@ import {
     REPORT_PRODUCT_STATUS_VERIFYING,
     REPORT_PRODUCT_STATUS_REJECT,
     REPORT_PRODUCT_STATUS_ACCEPT,
-    REASON_REPORT_PRODUCT_STATUS_OTHER
 } from "~/constants"
 import { ParseDateTime } from "~/utils";
 import ModalUpdateReportProduct from "~/components/Modals/ModalUpdateReportProduct";
