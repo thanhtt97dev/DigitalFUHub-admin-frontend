@@ -281,6 +281,7 @@ export function readDataFileExcelImportProduct(file) {
 
 
 export function formatPrice(price) {
+    if (price === null || price === undefined) return 0;
     return price.toLocaleString('vi-VN', {
         style: 'currency',
         currency: 'VND',

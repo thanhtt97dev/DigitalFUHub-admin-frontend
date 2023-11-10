@@ -164,3 +164,13 @@ export const PRODUCT_STATUS_ACTIVE = 1;
 export const PRODUCT_STATUS_BAN = 2;
 export const PRODUCT_STATUS_REMOVE = 3;
 export const PRODUCT_STATUS_HIDE = 4;
+
+// report product status
+export const REPORT_PRODUCT_STATUS_ALL = 0;
+export const REPORT_PRODUCT_STATUS_VERIFYING = 1;
+export const REPORT_PRODUCT_STATUS_REJECT = 2;
+export const REPORT_PRODUCT_STATUS_ACCEPT = 3;
+
+
+// reason report product status
+export const REASON_REPORT_PRODUCT_STATUS_OTHER = 7;

@@ -7,3 +7,7 @@ export const getProducts = (data) => {
 export const getProductDetail = (id) => {
     return apiGetAuth(`api/products/admin/${id}`);
 };
+
+export const updateReportProduct = (data) => {
+    return apiPostAuth(`api/reportProducts/admin/update`, data);
+};

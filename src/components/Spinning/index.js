@@ -14,7 +14,7 @@ const antIcon = (
 
 function Spinning(props) {
     return (
-        <Spin style={{ top: "20%" }} tip="... Đang tải" size="large" spinning={props.spinning} indicator={antIcon}>
+        <Spin style={{ minHeight: "100vh" }} tip="... Đang tải" size="large" spinning={props.spinning} indicator={antIcon}>
             {props.children}
         </Spin>
     );

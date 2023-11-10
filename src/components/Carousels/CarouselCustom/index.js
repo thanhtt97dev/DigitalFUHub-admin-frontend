@@ -5,7 +5,7 @@ import classNames from 'classnames/bind';
 import styles from './CarouselCustom.module.scss';
 const cx = classNames.bind(styles);
 
-function CarouselCustom({ data, style, callback }) {
+function CarouselCustom({ data, styleCarousel, styleImage, callback }) {
 
     const slider = useRef(null);
 
@@ -20,10 +20,10 @@ function CarouselCustom({ data, style, callback }) {
             <Carousel
                 className={cx("carousel")}
                 ref={slider}
-                style={style}
+                style={styleCarousel}
             >
                 {data.map((x) => {
-                    return <Image src={x} alt='product-img' />
+                    return <Image style={styleImage} src={x} alt='product-img' />
                 })}
             </Carousel>
             <button
