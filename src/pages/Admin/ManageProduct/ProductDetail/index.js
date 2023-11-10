@@ -14,6 +14,9 @@ import {
 } from "~/constants";
 import ReportProducts from "~/components/ProductDetail/ReportProducts";
 
+
+
+
 function ProductDetail() {
 
     const { id } = useParams();
@@ -40,6 +43,23 @@ function ProductDetail() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const getData = () => {
+        setLoading(true)
+        getProductDetail(id)
+            .then((res) => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    setProduct(res.data.result)
+                }
+                setTimeout(() => {
+                    setLoading(false)
+                }, 500)
+            })
+            .catch((err) => {
+                notification('error', "Tham số tìm kiếm không hợp lệ!");
+                setLoading(false)
+            })
+    }
+
     return (
         <>
             {product === null ?
@@ -61,7 +81,7 @@ function ProductDetail() {
 
                     <Divider />
 
-                    <ReportProducts reportProducts={product.reportProducts} />
+                    <ReportProducts reportProducts={product.reportProducts} callBack={getData} />
 
                 </Spinning>
             }
