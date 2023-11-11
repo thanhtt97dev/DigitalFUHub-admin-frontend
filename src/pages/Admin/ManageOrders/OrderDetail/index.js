@@ -56,11 +56,11 @@ function OrderDetail() {
 
                         <Divider />
 
-                        <HistoryOrderStatus historyOrderStatus={order.historyOrderStatus} />
+                        <HistoryOrderStatus order={order} />
 
                         <Divider />
 
-                        <HistoryOrderTransaction transactionCoins={order.transactionCoins} transactionInternals={order.transactionInternals} />
+                        <HistoryOrderTransaction order={order} />
 
                         <Divider />
 

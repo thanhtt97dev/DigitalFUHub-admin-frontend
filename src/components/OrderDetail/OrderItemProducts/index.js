@@ -37,12 +37,8 @@ function OrderItemProducts({ order }) {
         }
     }, [order])
 
-    console.log(order)
-
     return (
         <>
-
-
             <Card
                 title={<Row gutter={[8, 0]} align="bottom">
                     <Col>

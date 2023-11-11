@@ -74,14 +74,14 @@ const TagOrderStatusSellerViolates = (
     </div>
 )
 
-function HistoryOrderStatus({ historyOrderStatus }) {
+function HistoryOrderStatus({ order }) {
 
     const [data, setData] = useState([])
 
     useEffect(() => {
-        setData(arrangeDateHistoryOrderStatus(historyOrderStatus))
+        setData(arrangeDateHistoryOrderStatus(order.historyOrderStatus))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [order])
 
     const arrangeDateHistoryOrderStatus = (data) => {
         data.sort(function (record1, record2) {

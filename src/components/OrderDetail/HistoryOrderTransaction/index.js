@@ -159,14 +159,14 @@ const columnsHistoryTransaction = [
     },
 ];
 
-function HistoryOrderTransaction({ transactionInternals, transactionCoins }) {
+function HistoryOrderTransaction({ order }) {
     var [dataTable, setDataTable] = useState([]);
 
     useEffect(() => {
-        var data = [...transactionInternals, ...transactionCoins]
+        var data = [...order.transactionInternals, ...order.transactionCoins]
         setDataTable([...arrangeDateHistoryTransaction(data)])
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [order])
 
     const arrangeDateHistoryTransaction = (data) => {
         data.sort(function (record1, record2) {
