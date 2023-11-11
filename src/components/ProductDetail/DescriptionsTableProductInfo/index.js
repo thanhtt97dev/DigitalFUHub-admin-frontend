@@ -73,16 +73,6 @@ function DescriptionsTableProductInfo({ product, callBack }) {
             span: 3
         },
         {
-            key: '6',
-            label: 'Giảm giá',
-            labelStyle: { 'text-align': 'left', 'width': "40%" },
-            children: (
-                <>{product.discount} %</>
-            ),
-            span: 3
-        },
-
-        {
             key: '7',
             label: 'Số lượt xem',
             labelStyle: { 'text-align': 'left', 'width': "40%" },

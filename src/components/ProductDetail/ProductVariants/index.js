@@ -32,7 +32,7 @@ const columns = [
         width: '30%',
         render: (discount) => {
             return (
-                <span>{0} %</span>
+                <span>{discount} %</span>
             )
         }
     },
