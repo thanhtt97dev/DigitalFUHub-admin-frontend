@@ -26,7 +26,6 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
     const navigate = useNavigate()
 
     const handleOpenChatGroup = (conversationId) => {
-        debugger
         navigate('/admin/chatBox', { state: { data: conversationId } })
     }
 
@@ -154,7 +153,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
                                     <Tag color="#ffaa01">Tranh chấp</Tag>
                                     <Button
                                         icon={<FontAwesomeIcon icon={faComments} />}
-                                        onClick={() => handleOpenChatGroup(order.shopId, order.customerId)}
+                                        onClick={() => handleOpenChatGroup(order.conversationId)}
                                     >
                                         Liên hệ với người mua và người bán
                                     </Button>
