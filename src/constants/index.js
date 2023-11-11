@@ -174,3 +174,8 @@ export const REPORT_PRODUCT_STATUS_ACCEPT = 3;
 
 // reason report product status
 export const REASON_REPORT_PRODUCT_STATUS_OTHER = 7;
+
+// shop status
+export const SHOP_STATUS_ALL = 0;
+export const SHOP_STATUS_ACTIVATE = 1;
+export const SHOP_STATUS_DEACTIVATE = 2;

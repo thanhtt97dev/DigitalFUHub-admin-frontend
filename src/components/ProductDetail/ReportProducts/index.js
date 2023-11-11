@@ -145,6 +145,7 @@ function ReportProducts({ reportProducts, callBack }) {
                         x: 1500,
                         y: 500
                     }}
+                    rowKey={(record, index) => index}
                 />
             </Card>
         </>

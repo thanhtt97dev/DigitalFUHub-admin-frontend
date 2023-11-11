@@ -3,10 +3,17 @@ import classNames from 'classnames/bind';
 import styles from './AdminLayout.module.scss';
 import logo from '~/assets/images/fpt-logo.jpg';
 import { Link, Outlet } from 'react-router-dom';
-import { AreaChartOutlined, StockOutlined, MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
+import {
+    AreaChartOutlined,
+    StockOutlined,
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+    ShoppingOutlined,
+    ShopOutlined
+} from '@ant-design/icons';
 import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faUsers, faVault } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Message from '~/components/Message';
 const cx = classNames.bind(styles);
 const { Content, Sider, Header } = Layout;
@@ -71,7 +78,12 @@ const menuItems = [
     {
         label: <Link to='/admin/product'>Quản lý sản phẩm</Link>,
         key: 'admin/product',
-        icon: <FontAwesomeIcon icon={faVault} spin />
+        icon: <ShoppingOutlined />
+    },
+    {
+        label: <Link to='/admin/shop'>Quản lý cửa hàng</Link>,
+        key: 'admin/shop',
+        icon: <ShopOutlined />
     },
     {
         label: <Link to='/admin/user'>Quản lý người dùng</Link>,

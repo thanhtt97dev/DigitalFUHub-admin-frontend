@@ -295,6 +295,7 @@ function WithdrawByList() {
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTableView} size='small'
                         scroll={{ y: 290 }}
+                        rowKey={(record, index) => index}
                     />
 
                     <Space direction="horizontal" style={{ width: '100%', justifyContent: 'end' }}>

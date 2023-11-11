@@ -191,6 +191,7 @@ function HistoryOrderTransaction({ transactionInternals, transactionCoins }) {
                 <Table
                     columns={columnsHistoryTransaction}
                     dataSource={dataTable}
+                    rowKey={(record, index) => index}
                     size='small'
                     pagination={false}
                 />

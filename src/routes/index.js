@@ -17,6 +17,8 @@ import ChatBox from '~/pages/ChatBox';
 import HistoryTransactionCoin from '~/pages/Admin/ManageFinance/HistoryTransactionCoin';
 import Products from '~/pages/Admin/ManageProduct/Products';
 import ProductDetail from '~/pages/Admin/ManageProduct/ProductDetail';
+import ShopDetail from '~/pages/Admin/ManageShop/ShopDetail';
+import Shops from '~/pages/Admin/ManageShop/Shops';
 
 const routesConfig = [
     {
@@ -99,6 +101,18 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <ProductDetail />
+    },
+    {
+        path: '/admin/shop',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <Shops />
+    },
+    {
+        path: '/admin/shop/:id',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <ShopDetail />
     },
     {
         path: '/admin/user',

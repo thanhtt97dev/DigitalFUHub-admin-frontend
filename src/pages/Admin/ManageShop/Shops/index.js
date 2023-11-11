@@ -1,18 +1,17 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Card, Form, Row, Col, Space, Select, Input, Button, InputNumber } from 'antd';
+import { Card, Form, Row, Col, Space, InputNumber, Input, Button } from 'antd';
 
 import Spinning from "~/components/Spinning";
 
-import { getProducts } from "~/api/product";
-import { getAllCategory } from "~/api/category"
+import { getShops } from "~/api/shop";
 import {
     RESPONSE_CODE_SUCCESS,
     RESPONSE_CODE_NOT_ACCEPT,
-    PRODUCT_STATUS_ACTIVE,
-    PRODUCT_STATUS_HIDE,
-    PRODUCT_STATUS_BAN
+    SHOP_STATUS_ALL,
+    SHOP_STATUS_ACTIVATE,
+    SHOP_STATUS_DEACTIVATE
 } from "~/constants";
-import TableProduct from "~/components/Tables/TableProduct";
+import TableShop from "~/components/Tables/TableShop";
 import { NotificationContext } from "~/context/UI/NotificationContext";
 
 
@@ -26,12 +25,8 @@ const tabList = [
         key: "tab2",
     },
     {
-        label: "Đã ẩn",
-        key: "tab3",
-    },
-    {
         label: "Vi phạm",
-        key: "tab4",
+        key: "tab3",
     },
 ]
 
@@ -63,21 +58,17 @@ const initFormValues = [
 
 ];
 
-function Products() {
+function Shops() {
 
     const [loading, setLoading] = useState(false);
     const notification = useContext(NotificationContext);
     const [form] = Form.useForm();
 
     const [searchParams, setSearchParams] = useState({
-        productId: 0,
         shopId: 0,
         shopName: "",
-        productName: "",
-        productCategory: 0,
-        soldMin: 0,
-        soldMax: 0,
-        productStatusId: 0,
+        shopEmail: "",
+        shopStatusId: 0,
         page: 1
     })
     const [dataTable, setDataTable] = useState([])
@@ -88,26 +79,13 @@ function Products() {
         },
     });
 
-    const [categories, setCategories] = useState([])
-
-    useEffect(() => {
-        getAllCategory()
-            .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setCategories(res.data.result)
-                }
-            })
-            .catch((err) => {
-
-            })
-    }, [])
 
     useEffect(() => {
         setLoading(true)
-        getProducts(searchParams)
+        getShops(searchParams)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.data.result.products)
+                    setDataTable(res.data.result)
                     setTableParams({
                         ...tableParams,
                         pagination: {
@@ -154,28 +132,21 @@ function Products() {
                 setSearchParams({
                     ...searchParams,
                     page: 1,
-                    productStatusId: 0
+                    shopStatusId: SHOP_STATUS_ALL
                 })
                 break;
             case 'tab2':
                 setSearchParams({
                     ...searchParams,
                     page: 1,
-                    productStatusId: PRODUCT_STATUS_ACTIVE
+                    shopStatusId: SHOP_STATUS_ACTIVATE
                 })
                 break;
             case 'tab3':
                 setSearchParams({
                     ...searchParams,
                     page: 1,
-                    productStatusId: PRODUCT_STATUS_HIDE
-                })
-                break;
-            case 'tab4':
-                setSearchParams({
-                    ...searchParams,
-                    page: 1,
-                    productStatusId: PRODUCT_STATUS_BAN
+                    shopStatusId: SHOP_STATUS_DEACTIVATE
                 })
                 break;
             default: return;
@@ -190,30 +161,21 @@ function Products() {
         setActiveTabKey(key);
     };
     const contentList = {
-        tab1: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
-        tab2: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
-        tab3: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
-        tab4: <TableProduct tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
+        tab1: <TableShop tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
+        tab2: <TableShop tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
+        tab3: <TableShop tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
     };
 
 
     const onFinish = (values) => {
-        var productId = values.productId === "" ? 0 : values.productId
         var shopId = values.shopId
         var shopName = values.shopName;
-        var productName = values.productName;
-        var productCategory = values.productCategory
-        var soldMin = values.soldMin === "" ? 0 : values.soldMin
-        var soldMax = values.soldMax === "" ? 0 : values.soldMax
+        var shopEmail = values.shopEmail;
         setSearchParams({
             ...searchParams,
             shopId,
-            productId,
             shopName,
-            productName,
-            productCategory,
-            soldMin,
-            soldMax
+            shopEmail,
         })
     };
     const onReset = () => {
@@ -238,22 +200,6 @@ function Products() {
                     <Row>
                         <Col span={12}>
                             <Row >
-                                <Col span={6} offset={2}><label>Mã sản phẩm: </label></Col>
-                                <Col span={12}>
-                                    <Form.Item name="productId" >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row >
-                                <Col span={6} offset={2}><label>Tên sản phẩm: </label></Col>
-                                <Col span={12}>
-                                    <Form.Item name="productName" >
-                                        <Input />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row >
                                 <Col span={6} offset={2}><label>Mã cửa hàng: </label></Col>
                                 <Col span={12}>
                                     <Form.Item name="shopId" >
@@ -272,33 +218,10 @@ function Products() {
                         </Col>
                         <Col span={12}>
                             <Row >
-                                <Col span={6} offset={2}><label>Thể loại: </label></Col>
+                                <Col span={6} offset={2}><label>Email cửa hàng: </label></Col>
                                 <Col span={12}>
-                                    <Form.Item name="productCategory" >
-                                        <Select >
-                                            <Select.Option value={0}>Tất cả</Select.Option>
-                                            {categories.map((category, index) => {
-                                                return (
-                                                    <>
-                                                        <Select.Option key={index} value={category.categoryId}>{category.categoryName}</Select.Option>
-                                                    </>
-                                                )
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row >
-                                <Col span={6} offset={2}><label>Doanh số</label></Col>
-                                <Col span={5}>
-                                    <Form.Item name="soldMin" >
-                                        <InputNumber placeholder="Tối thiểu" />
-                                    </Form.Item>
-                                </Col>
-                                <Col offset={1}>-</Col>
-                                <Col offset={1} span={5}>
-                                    <Form.Item name="soldMax" >
-                                        <InputNumber placeholder="Tối đa" />
+                                    <Form.Item name="shopEmail" >
+                                        <Input />
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -335,4 +258,4 @@ function Products() {
     );
 }
 
-export default Products;
+export default Shops;

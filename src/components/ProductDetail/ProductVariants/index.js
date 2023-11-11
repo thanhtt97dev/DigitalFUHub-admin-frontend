@@ -57,6 +57,7 @@ function ProductVariants({ productVariants }) {
                     columns={columns}
                     pagination={false}
                     dataSource={productVariants}
+                    rowKey={(record, index) => index}
                 />
             </Card>
         </>

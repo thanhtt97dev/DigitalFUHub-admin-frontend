@@ -87,6 +87,7 @@ function ModalShowOrderCoupons({ orderId, style, callBack }) {
                         <Col offset={1} span={22}>
                             <Table columns={columns} pagination={{ pageSize: 10 }}
                                 dataSource={dataTable} size='small' scroll={{ y: 290 }}
+                                rowKey={(record, index) => index}
                             />
                         </Col>
                     </Row>

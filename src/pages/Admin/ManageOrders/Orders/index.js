@@ -272,6 +272,7 @@ function Orders() {
                     </Form>
                     <Table columns={columns} pagination={{ pageSize: 10 }}
                         dataSource={dataTable} size='small' scroll={{ y: 290 }}
+                        rowKey={(record, index) => index}
                     />
                 </Card>
             </Spinning>
