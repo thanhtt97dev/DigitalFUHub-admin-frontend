@@ -104,10 +104,10 @@ function DescriptionsTableProductInfo({ product, callBack }) {
             labelStyle: { 'text-align': 'left', 'width': "40%" },
             children: (
                 <>
-                    {product.likedCount === 0 ?
+                    {product.likeCount === 0 ?
                         "Chưa có lượt thích nào"
                         :
-                        <p>{product.likedCount} lượt</p>
+                        <p>{product.likeCount} lượt</p>
                     }
                 </>
 
