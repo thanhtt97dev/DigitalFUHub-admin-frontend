@@ -75,6 +75,7 @@ function ModalRejectWithdrawTransaction({ withdrawTransactionId, style, callBack
                 style={style}
                 loading={btnLoading}
                 danger
+                size="small"
             >
                 Từ chối
             </Button>

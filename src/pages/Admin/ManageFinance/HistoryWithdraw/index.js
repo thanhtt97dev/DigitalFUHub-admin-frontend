@@ -49,7 +49,8 @@ function HistoryWithdraw() {
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '15%',
+            fixed: "left",
+            width: '12%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -69,7 +70,7 @@ function HistoryWithdraw() {
         {
             title: 'Thời gian tạo yêu cầu',
             dataIndex: 'requestDate',
-            width: '12%',
+            width: '10%',
             render: (requestDate) => {
                 return (
                     <p>{ParseDateTime(requestDate)}</p>
@@ -77,9 +78,14 @@ function HistoryWithdraw() {
             }
         },
         {
+            title: 'Đơn vị thụ hưởng',
+            dataIndex: 'creditAccountName',
+            width: '10%',
+        },
+        {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
-            width: '12%',
+            width: '10%',
         },
         {
             title: 'Ngân hàng đối tác',
@@ -103,15 +109,16 @@ function HistoryWithdraw() {
         {
             title: '',
             dataIndex: 'withdrawTransactionStatusId',
-            width: '16%',
+            width: '7%',
+            fixed: "right",
             render: (withdrawTransactionStatusId, record) => {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_PAID ||
                     withdrawTransactionStatusId === WITHDRAW_TRANSACTION_REJECT) {
                     return <DrawerWithdrawTransactionBill userId={record.userId} withdrawTransactionId={record.withdrawTransactionId} />
                 } else {
                     return (
-                        <Space>
-                            <Button onClick={() => handleOpenModal(record)} size="middle">Chuyển khoản</Button>
+                        <Space direction="vertical" align="center">
+                            <Button onClick={() => handleOpenModal(record)} size="small">Chuyển khoản</Button>
                             <ModalRejectWithdrawTransaction withdrawTransactionId={record.withdrawTransactionId} callBack={GetWithdrawTransactions} />
                         </Space>
                     )
@@ -353,7 +360,10 @@ function HistoryWithdraw() {
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTable} size='small'
-                        scroll={{ y: 290 }}
+                        scroll={{
+                            x: 1500,
+                            y: 290
+                        }}
                         rowKey={(record, index) => index}
                     />
                 </Card>

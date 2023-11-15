@@ -30,12 +30,13 @@ function WithdrawByList() {
         {
             title: 'Mã giao dịch',
             dataIndex: 'withdrawTransactionId',
-            width: '7%',
+            width: '4%',
         },
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '15%',
+            fixed: "left",
+            width: '12%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -63,14 +64,19 @@ function WithdrawByList() {
             }
         },
         {
+            title: 'Đơn vị thụ hưởng',
+            dataIndex: 'creditAccountName',
+            width: '10%',
+        },
+        {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
-            width: '13%',
+            width: '10%',
         },
         {
             title: 'Ngân hàng đối tác',
             dataIndex: 'bankName',
-            width: '12%',
+            width: '14%',
         },
         {
             title: 'Trạng thái',
@@ -88,7 +94,8 @@ function WithdrawByList() {
         {
             title: '',
             dataIndex: 'key',
-            width: '6%',
+            width: '3%',
+            fixed: "right",
             render: (key, record) => {
                 return (
                     <Button type="primary" danger onClick={() => handleOpenModalRemoveRecord(key)} ><DeleteOutlined /></Button>
@@ -294,7 +301,10 @@ function WithdrawByList() {
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTableView} size='small'
-                        scroll={{ y: 290 }}
+                        scroll={{
+                            x: 1500,
+                            y: 290
+                        }}
                         rowKey={(record, index) => index}
                     />
 
