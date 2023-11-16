@@ -238,7 +238,7 @@ function Products() {
                     <Row>
                         <Col span={12}>
                             <Row >
-                                <Col span={6} offset={2}><label>Mã sản phẩm: </label></Col>
+                                <Col span={6} offset={2}>Mã sản phẩm:</Col>
                                 <Col span={12}>
                                     <Form.Item name="productId" >
                                         <Input />
@@ -246,7 +246,7 @@ function Products() {
                                 </Col>
                             </Row>
                             <Row >
-                                <Col span={6} offset={2}><label>Tên sản phẩm: </label></Col>
+                                <Col span={6} offset={2}>Tên sản phẩm:</Col>
                                 <Col span={12}>
                                     <Form.Item name="productName" >
                                         <Input />
@@ -254,7 +254,7 @@ function Products() {
                                 </Col>
                             </Row>
                             <Row >
-                                <Col span={6} offset={2}><label>Mã cửa hàng: </label></Col>
+                                <Col span={6} offset={2}>Mã cửa hàng:</Col>
                                 <Col span={12}>
                                     <Form.Item name="shopId" >
                                         <Input />
@@ -262,7 +262,7 @@ function Products() {
                                 </Col>
                             </Row>
                             <Row >
-                                <Col span={6} offset={2}><label>Tên cửa hàng: </label></Col>
+                                <Col span={6} offset={2}>Tên cửa hàng:</Col>
                                 <Col span={12}>
                                     <Form.Item name="shopName" >
                                         <Input />
@@ -272,7 +272,7 @@ function Products() {
                         </Col>
                         <Col span={12}>
                             <Row >
-                                <Col span={6} offset={2}><label>Thể loại: </label></Col>
+                                <Col span={6} offset={2}>Thể loại:</Col>
                                 <Col span={12}>
                                     <Form.Item name="productCategory" >
                                         <Select >
@@ -289,7 +289,7 @@ function Products() {
                                 </Col>
                             </Row>
                             <Row >
-                                <Col span={6} offset={2}><label>Doanh số</label></Col>
+                                <Col span={6} offset={2}>Doanh s</Col>
                                 <Col span={5}>
                                     <Form.Item name="soldMin" >
                                         <InputNumber placeholder="Tối thiểu" />
