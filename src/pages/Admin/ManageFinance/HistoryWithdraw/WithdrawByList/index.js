@@ -35,7 +35,6 @@ function WithdrawByList() {
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            fixed: "left",
             width: '12%',
             render: (email, record) => {
                 return (

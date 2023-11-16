@@ -49,7 +49,6 @@ function HistoryWithdraw() {
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            fixed: "left",
             width: '12%',
             render: (email, record) => {
                 return (
@@ -96,6 +95,7 @@ function HistoryWithdraw() {
             title: 'Trạng thái',
             dataIndex: 'withdrawTransactionStatusId',
             width: '6%',
+            fixed: "right",
             render: (withdrawTransactionStatusId, record) => {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_IN_PROCESSING) {
                     return <Tag color="#ecc30b">Chưa xử lý</Tag>
@@ -271,28 +271,20 @@ function HistoryWithdraw() {
     return (
         <>
             <Spinning spinning={loading}>
-                <Card
-                    style={{
-                        width: '100%',
-                        minHeight: "690px"
-                    }}
-                    title="Danh sách rút tiền"
-                    hoverable
-                >
+                <Card>
                     <Form
-                        name="basic"
                         form={form}
                         onFinish={onFinish}
                         fields={initFormValues}
                     >
                         <Row>
-                            <Col span={3} offset={1}><label>Mã giao dịch: </label></Col>
+                            <Col span={3} offset={1}>Mã giao dịch: </Col>
                             <Col span={6}>
                                 <Form.Item name="withdrawTransactionId" >
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col span={2} offset={1}><label>Ngân hàng: </label></Col>
+                            <Col span={2} offset={1}>Ngân hàng: </Col>
                             <Col span={6}>
                                 <Form.Item name="bankId" >
                                     <Select
@@ -308,14 +300,14 @@ function HistoryWithdraw() {
                         </Row>
 
                         <Row>
-                            <Col span={3} offset={1}><label>Email người tạo yêu cầu: </label></Col>
+                            <Col span={3} offset={1}>Email người tạo yêu cầu: </Col>
                             <Col span={6}>
                                 <Form.Item name="email" >
                                     <Input />
                                 </Form.Item>
                             </Col>
 
-                            <Col span={2} offset={1}><label>Số tài khoản: </label></Col>
+                            <Col span={2} offset={1}>Số tài khoản: </Col>
                             <Col span={6}>
                                 <Form.Item name="creditAccount" >
                                     <Input />
@@ -325,7 +317,7 @@ function HistoryWithdraw() {
                         </Row>
 
                         <Row>
-                            <Col span={3} offset={1}><label>Thời gian tạo yêu cầu: </label></Col>
+                            <Col span={3} offset={1}>Thời gian tạo yêu cầu: </Col>
                             <Col span={6}>
                                 <Form.Item name="date" >
                                     <RangePicker locale={locale}
@@ -334,7 +326,7 @@ function HistoryWithdraw() {
                                 </Form.Item>
                             </Col>
 
-                            <Col span={2} offset={1}><label>Trạng thái: </label></Col>
+                            <Col span={2} offset={1}>Trạng thái: </Col>
                             <Col span={6}>
                                 <Form.Item name="status" >
                                     <Select >
@@ -356,15 +348,17 @@ function HistoryWithdraw() {
                     <Button type="primary" onClick={handleNavigateToWithdrawByList}>
                         <SwapOutlined /> Chuyển khoản theo lô
                     </Button>
+                </Card>
 
+                <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTable} size='small'
                         scroll={{
                             x: 1500,
-                            y: 290
+                            y: 500
                         }}
-                        rowKey={(record, index) => index}
+                        rowKey={(record) => record.withdrawTransactionId}
                     />
                 </Card>
             </Spinning>

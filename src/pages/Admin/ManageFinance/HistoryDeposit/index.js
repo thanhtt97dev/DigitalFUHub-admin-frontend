@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification, Row, Col } from "antd";
+import { Card, Table, Tag, Button, Form, Input, DatePicker, notification, Row, Col } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
 
@@ -167,7 +167,7 @@ function HistoryDeposit() {
                         <Row>
                             <Col span={12}>
                                 <Row>
-                                    <Col span={6} offset={2}><label>Mã giao dịch: </label></Col>
+                                    <Col span={6} offset={2}>Mã giao dịch:</Col>
                                     <Col span={12}>
                                         <Form.Item name="depositTransactionId" >
                                             <Input />
@@ -176,7 +176,7 @@ function HistoryDeposit() {
                                 </Row>
 
                                 <Row>
-                                    <Col span={6} offset={2}><label>Thời gian tạo yêu cầu: </label></Col>
+                                    <Col span={6} offset={2}>Thời gian tạo yêu cầu:</Col>
                                     <Col span={12}>
                                         <Form.Item name="date" >
                                             <RangePicker locale={locale}
@@ -189,7 +189,7 @@ function HistoryDeposit() {
 
                             <Col span={12}>
                                 <Row >
-                                    <Col span={6} offset={2}><label>Email: </label></Col>
+                                    <Col span={6} offset={2}>Email:</Col>
                                     <Col span={12}>
                                         <Form.Item name="email" >
                                             <Input />
