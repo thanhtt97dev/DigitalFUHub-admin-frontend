@@ -272,8 +272,8 @@ function Orders() {
 
                 <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns} pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='middle'
-                        rowKey={(record, index) => index}
+                        dataSource={dataTable} size="small" scroll={{ y: 300 }}
+                        rowKey={(record) => record.orderId}
                     />
                 </Card>
 

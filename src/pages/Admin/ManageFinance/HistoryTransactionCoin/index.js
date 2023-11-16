@@ -222,7 +222,7 @@ function HistoryTransactionCoin() {
 
                 <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns} pagination={{ pageSize: 10 }}
-                        dataSource={dataTable}
+                        dataSource={dataTable} size="small" scroll={{ y: 300 }}
                         rowKey={(record) => record.orderId}
                     />
                 </Card>
