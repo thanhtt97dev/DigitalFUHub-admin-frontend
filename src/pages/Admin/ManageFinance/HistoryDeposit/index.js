@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification } from "antd";
+import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification, Row, Col } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
 
@@ -158,56 +158,62 @@ function HistoryDeposit() {
         <>
             {contextHolder}
             <Spinning spinning={loading}>
-                <Card
-                    style={{
-                        width: '100%',
-                        minHeight: "690px"
-                    }}
-                    hoverable
-                    title="Danh sách nạp tiền"
-                >
+                <Card>
                     <Form
-                        name="basic"
-                        labelCol={{
-                            span: 8,
-                        }}
-                        wrapperCol={{
-                            span: 0,
-                        }}
-                        style={{
-                            maxWidth: 500,
-                            marginLeft: "30px",
-                            position: 'relative',
-                        }}
                         form={form}
                         onFinish={onFinish}
                         fields={initFormValues}
                     >
-                        <Form.Item label="Mã giao dịch" labelAlign="left" name="depositTransactionId">
-                            <Input />
-                        </Form.Item>
+                        <Row>
+                            <Col span={12}>
+                                <Row>
+                                    <Col span={6} offset={2}><label>Mã giao dịch: </label></Col>
+                                    <Col span={12}>
+                                        <Form.Item name="depositTransactionId" >
+                                            <Input />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
 
-                        <Form.Item label="Email" labelAlign="left" name="email">
-                            <Input />
-                        </Form.Item>
+                                <Row>
+                                    <Col span={6} offset={2}><label>Thời gian tạo yêu cầu: </label></Col>
+                                    <Col span={12}>
+                                        <Form.Item name="date" >
+                                            <RangePicker locale={locale}
+                                                format={"M/D/YYYY"}
+                                                placement={"bottomLeft"} />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                            </Col>
 
-                        <Form.Item label="Thời gian tạo yêu cầu" labelAlign="left" name="date">
-                            <RangePicker locale={locale}
-                                format={"M/D/YYYY"}
-                                placement={"bottomLeft"} />
-                        </Form.Item>
+                            <Col span={12}>
+                                <Row >
+                                    <Col span={6} offset={2}><label>Email: </label></Col>
+                                    <Col span={12}>
+                                        <Form.Item name="email" >
+                                            <Input />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
 
-                        <Form.Item style={{ position: 'absolute', top: 110, left: 550 }}>
-                            <Space>
-                                <Button type="primary" htmlType="submit">
-                                    Tìm kiếm
-                                </Button>
-                            </Space>
-                        </Form.Item>
+                                <Row>
+                                    <Col span={6} offset={2}>
+                                        <Button type="primary" htmlType="submit">
+                                            Tìm kiếm
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Row>
                     </Form>
+
+                </Card>
+
+                <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns} pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='small' scroll={{ y: 290 }}
-                        rowKey={(record, index) => index}
+                        dataSource={dataTable}
+                        rowKey={(record, index) => record.depositTransactionId}
                     />
                 </Card>
             </Spinning>
