@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, notification, Select, Row, Col } from "antd";
+import React, { useEffect, useState, useContext } from "react";
+import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, Select, Row, Col, Divider } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
+
+import NotificationContext from "~/context/UI/NotificationContext";
 
 import { getOrders } from '~/api/order'
 import Spinning from "~/components/Spinning";
@@ -110,20 +112,15 @@ const columns = [
 ];
 
 function Orders() {
+    const notification = useContext(NotificationContext);
     const [loading, setLoading] = useState(true)
-    const [api, contextHolder] = notification.useNotification();
-    const openNotification = (type, message) => {
-        api[type]({
-            message: `Thông báo`,
-            description: `${message}`
-        });
-    };
 
     const [form] = Form.useForm();
     const [dataTable, setDataTable] = useState([]);
     const [searchData, setSearchData] = useState({
         orderId: '',
         customerEmail: '',
+        shopId: '',
         shopName: '',
         fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
         toDate: dayjs().format('M/D/YYYY'),
@@ -136,11 +133,11 @@ function Orders() {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
                     setDataTable(res.data.result)
                 } else {
-                    openNotification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
+                    notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
             })
             .catch((err) => {
-                openNotification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
+                console.log(err)
             })
             .finally(() => {
                 setTimeout(() => { setLoading(false) }, 500)
@@ -163,6 +160,10 @@ function Orders() {
             value: searchData.shopName,
         },
         {
+            name: 'shopId',
+            value: searchData.shopId,
+        },
+        {
             name: 'date',
             value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
         },
@@ -175,7 +176,7 @@ function Orders() {
     const onFinish = (values) => {
         setLoading(true);
         if (values.date === null) {
-            openNotification("error", "Thời gian đơn hàng không được trống!")
+            notification("error", "Thời gian đơn hàng không được trống!")
             setLoading(false);
             return;
         }
@@ -183,6 +184,7 @@ function Orders() {
         setSearchData({
             orderId: values.orderId,
             customerEmail: values.customerEmail,
+            shopId: values.shopId,
             shopName: values.shopName,
             fromDate: values.date[0].$d.toLocaleDateString(),
             toDate: values.date[1].$d.toLocaleDateString(),
@@ -194,16 +196,8 @@ function Orders() {
 
     return (
         <>
-            {contextHolder}
             <Spinning spinning={loading}>
-                <Card
-                    style={{
-                        width: '100%',
-                        minHeight: "690px"
-                    }}
-                    hoverable
-                    title="Danh sách nạp tiền"
-                >
+                <Card>
                     <Form
                         name="basic"
                         form={form}
@@ -211,22 +205,29 @@ function Orders() {
                         fields={initFormValues}
                     >
                         <Row>
-                            <Col span={3} offset={1}><label>Mã hóa đơn: </label></Col>
+                            <Col span={3} offset={1}>Mã hóa đơn:</Col>
                             <Col span={6}>
                                 <Form.Item name="orderId" >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+
+                            <Col span={2} offset={1}>Shop Id:</Col>
+                            <Col span={6}>
+                                <Form.Item name="shopId" >
                                     <Input />
                                 </Form.Item>
                             </Col>
                         </Row>
 
                         <Row>
-                            <Col span={3} offset={1}><label>Email khách hàng: </label></Col>
+                            <Col span={3} offset={1}>Email khách hàng:</Col>
                             <Col span={6}>
                                 <Form.Item name="customerEmail" >
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col span={2} offset={1}><label>Tên shop: </label></Col>
+                            <Col span={2} offset={1}>Tên shop:</Col>
                             <Col span={6}>
                                 <Form.Item name="shopName" >
                                     <Input />
@@ -235,7 +236,7 @@ function Orders() {
                         </Row>
 
                         <Row>
-                            <Col span={3} offset={1}><label>Thời gian đơn hàng: </label></Col>
+                            <Col span={3} offset={1}>Thời gian đơn hàng:</Col>
                             <Col span={6}>
                                 <Form.Item name="date" >
                                     <RangePicker locale={locale}
@@ -243,7 +244,7 @@ function Orders() {
                                         placement={"bottomLeft"} />
                                 </Form.Item>
                             </Col>
-                            <Col span={2} offset={1}><label>Mã hóa đơn: </label></Col>
+                            <Col span={2} offset={1}>Trạng thái:</Col>
                             <Col span={6}>
                                 <Form.Item name="status" >
                                     <Select >
@@ -266,15 +267,16 @@ function Orders() {
                                 </Space>
                             </Col>
                         </Row>
-                        <Form.Item style={{ position: 'absolute', top: 180, left: 550 }}>
-
-                        </Form.Item>
                     </Form>
+                </Card>
+
+                <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns} pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='small' scroll={{ y: 290 }}
+                        dataSource={dataTable} size='middle'
                         rowKey={(record, index) => index}
                     />
                 </Card>
+
             </Spinning>
         </>
     )
