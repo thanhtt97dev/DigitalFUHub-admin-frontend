@@ -28,7 +28,7 @@ const { RangePicker } = DatePicker;
 
 const columns = [
     {
-        title: 'Mã hóa đơn',
+        title: 'Mã đơn hàng',
         dataIndex: 'orderId',
         width: '8%',
         render: (orderId) => {
