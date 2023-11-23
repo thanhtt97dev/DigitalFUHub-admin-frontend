@@ -38,9 +38,9 @@ function ModalAddNewBusinessFee({ style, callBack }) {
                     setTimeout(() => {
                         setConfirmLoading(false)
                     }, 500)
+                    callBack();
                     setOpenModal(false)
                     notification('success', 'Tạo phí kinh doanh mới thành công!')
-                    callBack();
                 } else if (res.data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
                     notification('error', 'Xảy ra một vài vấn đề, hãy thử lại!')
                 }

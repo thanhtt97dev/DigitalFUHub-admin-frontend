@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Card, Table, Button, Form, Input, DatePicker, Row, Col, InputNumber } from "antd";
+import { Card, Table, Button, Form, Input, DatePicker, Row, Col, InputNumber, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
-import dayjs from 'dayjs';
+//import dayjs from 'dayjs';
 
 import { getBusinessFee } from '~/api/businessFee'
 import Spinning from "~/components/Spinning";
 import { ParseDateTime, } from '~/utils/index'
 import {
     RESPONSE_CODE_SUCCESS,
-    BANKS_INFO
+    BANKS_INFO,
 } from "~/constants";
 import NotificationContext from "~/context/UI/NotificationContext";
 
@@ -90,8 +90,8 @@ function BusinessFee() {
     const [searchData, setSearchData] = useState({
         businessFeeId: '',
         maxFee: 100,
-        fromDate: dayjs().subtract(365, 'day').format('M/D/YYYY'),
-        toDate: dayjs().format('M/D/YYYY'),
+        fromDate: '',
+        toDate: '',
     });
 
     useEffect(() => {
@@ -109,7 +109,6 @@ function BusinessFee() {
                 }
             })
             .catch((err) => {
-                notification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
             })
             .finally(() => {
                 setTimeout(() => { setLoading(false) }, 500)
@@ -125,15 +124,9 @@ function BusinessFee() {
             name: 'maxFee',
             value: searchData.maxFee,
         },
-        {
-            name: 'date',
-            value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
-        },
     ];
 
     const onFinish = (values) => {
-
-        console.log(values)
         setLoading(true);
         if (values.date === null) {
             notification("error", "Thời gian tạo yêu cầu không được trống!")
@@ -144,23 +137,22 @@ function BusinessFee() {
         setSearchData({
             businessFeeId: values.businessFeeId,
             maxFee: values.maxFee,
-            fromDate: values.date[0].$d.toLocaleDateString(),
-            toDate: values.date[1].$d.toLocaleDateString(),
+            fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
+            toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),
         });
     };
 
+    const onReset = () => {
+        form.resetFields();
+        form.setFieldsValue({
+            maxFee: 100,
+        });
+    };
 
     return (
         <>
             <Spinning spinning={loading}>
-                <Card
-                    style={{
-                        width: '100%',
-                        minHeight: "690px"
-                    }}
-                    title="Phí kinh doanh"
-                    hoverable
-                >
+                <Card>
                     <Form
                         name="basic"
                         form={form}
@@ -196,15 +188,23 @@ function BusinessFee() {
                                 </Form.Item>
                             </Col>
 
-                            <Col offset={2} span={1}>
-                                <Button type="primary" htmlType="submit">
-                                    Tìm kiếm
-                                </Button>
+                            <Col offset={1} span={1}>
+                                <Space>
+                                    <Button htmlType="button" onClick={onReset}>
+                                        Xóa
+                                    </Button>
+                                    <Button type="primary" htmlType="submit">
+                                        Tìm kiếm
+                                    </Button>
+                                </Space>
                             </Col>
                         </Row>
                     </Form>
 
                     <ModalAddNewBusinessFee callBack={getBusinessFeeWithCondition} />
+
+                </Card>
+                <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTable} size='small'
