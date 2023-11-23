@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Card, Table, Select, Button, Form, Input, DatePicker, Tag, Row, Col } from "antd";
+import { Card, Table, Select, Button, Form, Input, DatePicker, Tag, Row, Col, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
 
@@ -8,9 +8,9 @@ import NotificationContext from "~/context/UI/NotificationContext";
 import { getHistoryTransactionInternal } from '~/api/transactionInternal'
 import Spinning from "~/components/Spinning";
 import { formatPrice, ParseDateTime } from '~/utils/index'
-import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
+    PAGE_SIZE,
     TRANSACTION_TYPE_INTERNAL_PAYMENT,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND,
@@ -97,19 +97,35 @@ function HistoryTransactionInternal() {
 
     const [form] = Form.useForm();
     const [dataTable, setDataTable] = useState([]);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: PAGE_SIZE,
+        },
+    });
     const [searchData, setSearchData] = useState({
         orderId: '',
         email: '',
-        fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
-        toDate: dayjs().format('M/D/YYYY'),
-        transactionInternalTypeId: 0
+        fromDate: '',
+        toDate: '',
+        transactionInternalTypeId: 0,
+        page: 1
     });
+    const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
         getHistoryTransactionInternal(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.data.result)
+                    setDataTable(res.data.result.transactionInternals)
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: res.data.result.total,
+                        },
+                    });
+                    setTotalRecord(res.data.result.total)
                 } else {
                     notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
@@ -134,10 +150,6 @@ function HistoryTransactionInternal() {
             value: searchData.email,
         },
         {
-            name: 'date',
-            value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
-        },
-        {
             name: 'transactionInternalTypeId',
             value: searchData.transactionInternalTypeId,
         },
@@ -154,9 +166,29 @@ function HistoryTransactionInternal() {
         setSearchData({
             orderId: values.orderId,
             email: values.email,
-            fromDate: values.date[0].$d.toLocaleDateString(),
-            toDate: values.date[1].$d.toLocaleDateString(),
-            transactionInternalTypeId: values.transactionInternalTypeId
+            fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
+            toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),
+            transactionInternalTypeId: values.transactionInternalTypeId,
+            page: 1
+        });
+    };
+
+    const onReset = () => {
+        form.resetFields();
+        form.setFieldsValue({
+            status: 0,
+        });
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setSearchData({
+            ...searchData,
+            page: pagination.current
+        })
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
         });
     };
 
@@ -217,11 +249,16 @@ function HistoryTransactionInternal() {
                                     </Col>
                                 </Row>
 
-                                <Row >
-                                    <Col offset={8} span={12}>
-                                        <Button type="primary" htmlType="submit">
-                                            Tìm kiếm
-                                        </Button>
+                                <Row>
+                                    <Col span={2} offset={13}>
+                                        <Space>
+                                            <Button htmlType="button" onClick={onReset}>
+                                                Xóa
+                                            </Button>
+                                            <Button type="primary" htmlType="submit">
+                                                Tìm kiếm
+                                            </Button>
+                                        </Space>
                                     </Col>
                                 </Row>
                             </Col>
@@ -231,9 +268,16 @@ function HistoryTransactionInternal() {
                 </Card>
 
                 <Card style={{ marginTop: "20px" }}>
-                    <Table columns={columns} pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='small' scroll={{ y: 300 }}
-                        rowKey={(record) => record.orderId}
+                    <Row align="end">
+                        <b>{totalRecord} Bản ghi</b>
+                    </Row>
+                    <Table
+                        columns={columns}
+                        pagination={tableParams.pagination}
+                        dataSource={dataTable}
+                        rowKey={(record, index) => index}
+                        onChange={handleTableChange}
+                        size="small"
                     />
                 </Card>
             </Spinning>
