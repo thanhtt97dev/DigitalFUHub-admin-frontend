@@ -325,7 +325,7 @@ function WithdrawByList() {
                 cancelText="Hủy"
             >
                 <Divider />
-                <p>Bạn có chắc chắn muốn xóa bản ghi đó không ?</p>
+                <p>Bạn có chắc chắn muốn xóa Kết quả đó không ?</p>
             </Modal>
 
             <Modal

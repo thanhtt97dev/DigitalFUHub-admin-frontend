@@ -25,7 +25,7 @@ const { RangePicker } = DatePicker;
 
 const columns = [
     {
-        title: 'Mã hóa đơn',
+        title: 'Mã đơn hàng',
         dataIndex: 'orderId',
         width: '9%',
         render: (orderId,) => {
@@ -53,13 +53,13 @@ const columns = [
         width: '15%',
         render: (paymentAmount, record) => {
             if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_PAYMENT) {
-                return <p style={{ color: "#3b7be2" }}>+ {formatPrice(paymentAmount)}</p>
+                return <span style={{ color: "#3b7be2" }}>+ {formatPrice(paymentAmount)}</span>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT) {
-                return <p style={{ color: "#cf1322" }}>- {formatPrice(paymentAmount)}</p>
+                return <span style={{ color: "#cf1322" }}>- {formatPrice(paymentAmount)}</span>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND) {
-                return <p style={{ color: "#8c66c8" }}>- {formatPrice(paymentAmount)}</p>
+                return <span style={{ color: "#8c66c8" }}>- {formatPrice(paymentAmount)}</span>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
-                return <p style={{ color: "#4ea927" }}> <FontAwesomeIcon icon={faWallet} /> {formatPrice(paymentAmount)}</p>
+                return <span style={{ color: "#4ea927" }}> <FontAwesomeIcon icon={faWallet} /> {formatPrice(paymentAmount)}</span>
             }
         }
     },
@@ -69,7 +69,7 @@ const columns = [
         width: '15%',
         render: (dateCreate) => {
             return (
-                <p>{ParseDateTime(dateCreate)}</p>
+                <span>{ParseDateTime(dateCreate)}</span>
             )
         }
     },
@@ -271,7 +271,7 @@ function HistoryTransactionInternal() {
 
                 <Card style={{ marginTop: "20px" }}>
                     <Row align="end">
-                        <b>{totalRecord} Bản ghi</b>
+                        <b>{totalRecord} Kết quả</b>
                     </Row>
                     <Table
                         columns={columns}
@@ -279,7 +279,7 @@ function HistoryTransactionInternal() {
                         dataSource={dataTable}
                         rowKey={(record, index) => index}
                         onChange={handleTableChange}
-                        size="small"
+                        size="middle"
                     />
                 </Card>
             </Spinning>

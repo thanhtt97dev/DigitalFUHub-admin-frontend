@@ -41,7 +41,7 @@ const columns = [
         width: '15%',
         render: (amount) => {
             return (
-                <p>{formatPrice(amount)}</p>
+                <span>{formatPrice(amount)}</span>
             )
         }
     },
@@ -51,7 +51,7 @@ const columns = [
         width: '15%',
         render: (requestDate) => {
             return (
-                <p>{ParseDateTime(requestDate)}</p>
+                <span>{ParseDateTime(requestDate)}</span>
             )
         }
     },
@@ -62,9 +62,9 @@ const columns = [
         render: (paidDate, record) => {
             return (
                 record.isPay ?
-                    <p>{ParseDateTime(paidDate)}</p>
+                    <span>{ParseDateTime(paidDate)}</span>
                     :
-                    <p>TBD</p>
+                    <span>TBD</span>
             )
         }
     },
@@ -259,7 +259,7 @@ function HistoryDeposit() {
                         if (totalRecord > PAGE_SIZE) {
                             return (
                                 <Row align="end">
-                                    <b>{totalRecord} Bản ghi</b>
+                                    <b>{totalRecord} Kết quả</b>
                                 </Row>
                             )
                         } else {
@@ -272,6 +272,7 @@ function HistoryDeposit() {
                         dataSource={dataTable}
                         rowKey={(record) => record.depositTransactionId}
                         onChange={handleTableChange}
+                        size="middle"
                     />
                 </Card>
             </Spinning>

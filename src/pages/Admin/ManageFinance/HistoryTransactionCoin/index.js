@@ -19,7 +19,7 @@ const { RangePicker } = DatePicker;
 
 const columns = [
     {
-        title: 'Mã hóa đơn',
+        title: 'Mã đơn hàng',
         dataIndex: 'orderId',
         width: '9%',
         render: (orderId,) => {
@@ -39,12 +39,12 @@ const columns = [
         }
     },
     {
-        title: 'Số tiền',
+        title: 'Số lượng',
         dataIndex: 'amount',
         width: '15%',
         render: (amount, record) => {
             return (
-                <>{amount} xu</>
+                <span>{amount} xu</span>
             )
         }
     },
@@ -54,7 +54,7 @@ const columns = [
         width: '15%',
         render: (dateCreate) => {
             return (
-                <p>{ParseDateTime(dateCreate)}</p>
+                <span>{ParseDateTime(dateCreate)}</span>
             )
         }
     },
@@ -258,7 +258,7 @@ function HistoryTransactionCoin() {
 
                 <Card style={{ marginTop: "20px" }}>
                     <Row align="end">
-                        <b>{totalRecord} Bản ghi</b>
+                        <b>{totalRecord} Kết quả</b>
                     </Row>
                     <Table
                         columns={columns}
@@ -266,7 +266,7 @@ function HistoryTransactionCoin() {
                         dataSource={dataTable}
                         rowKey={(record, index) => index}
                         onChange={handleTableChange}
-                        size="small"
+                        size="middle"
                     />
                 </Card>
             </Spinning>

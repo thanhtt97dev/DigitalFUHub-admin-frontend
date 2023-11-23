@@ -55,7 +55,7 @@ function BusinessFee() {
                 return (
                     <>
                         {endDate === null ?
-                            <p style={{ color: "red" }}>Đang được áp dụng</p>
+                            <span style={{ color: "red" }}>Đang được áp dụng</span>
                             :
                             ParseDateTime(endDate)}
                     </>
@@ -69,7 +69,7 @@ function BusinessFee() {
             width: '10%',
             render: (fee) => {
                 return (
-                    <p>{fee}%</p>
+                    <span>{fee}%</span>
                 )
             }
         },
@@ -208,8 +208,8 @@ function BusinessFee() {
                 <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='small'
-                        scroll={{ y: 290 }}
+                        dataSource={dataTable} size='middle'
+                        scroll={{ y: 500 }}
                         rowKey={(record, index) => index}
                     />
                 </Card>

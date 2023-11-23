@@ -62,7 +62,7 @@ function HistoryWithdraw() {
             width: '10%',
             render: (amount) => {
                 return (
-                    <p>{formatPrice(amount)}</p>
+                    <span>{formatPrice(amount)}</span>
                 )
             }
         },
@@ -72,7 +72,7 @@ function HistoryWithdraw() {
             width: '10%',
             render: (requestDate) => {
                 return (
-                    <p>{ParseDateTime(requestDate)}</p>
+                    <span>{ParseDateTime(requestDate)}</span>
                 )
             }
         },
@@ -353,7 +353,7 @@ function HistoryWithdraw() {
                 <Card style={{ marginTop: "20px" }}>
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='small'
+                        dataSource={dataTable} size='middle'
                         scroll={{
                             x: 1500,
                             y: 500

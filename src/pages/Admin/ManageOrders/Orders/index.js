@@ -63,7 +63,7 @@ const columns = [
         width: '15%',
         render: (orderDate) => {
             return (
-                <p>{ParseDateTime(orderDate)}</p>
+                <span>{ParseDateTime(orderDate)}</span>
             )
         }
     },
@@ -73,7 +73,7 @@ const columns = [
         width: '10%',
         render: (totalAmount) => {
             return (
-                <p>{formatPrice(totalAmount)}</p>
+                <span>{formatPrice(totalAmount)}</span>
             )
         }
     },
@@ -83,7 +83,7 @@ const columns = [
         width: '12%',
         render: (totalCouponDiscount) => {
             return (
-                <p>{formatPrice(totalCouponDiscount)}</p>
+                <span>{formatPrice(totalCouponDiscount)}</span>
             )
         }
     },
@@ -93,7 +93,7 @@ const columns = [
         width: '12%',
         render: (totalCoinDiscount) => {
             return (
-                <p>{totalCoinDiscount} xu</p>
+                <pspan>{totalCoinDiscount} xu</pspan>
             )
         }
     },
@@ -103,7 +103,7 @@ const columns = [
         width: '14%',
         render: (totalPayment) => {
             return (
-                <p>{formatPrice(totalPayment)}</p>
+                <span>{formatPrice(totalPayment)}</span>
             )
         }
     },
@@ -113,7 +113,7 @@ const columns = [
         width: '14%',
         render: (totalRefundSeller) => {
             return (
-                <p>{formatPrice(totalRefundSeller)}</p>
+                <span>{formatPrice(totalRefundSeller)}</span>
             )
         }
     },
@@ -123,7 +123,7 @@ const columns = [
         width: '14%',
         render: (totalBenefit) => {
             return (
-                <p>{formatPrice(totalBenefit)}</p>
+                <span>{formatPrice(totalBenefit)}</span>
             )
         }
     },
@@ -133,7 +133,7 @@ const columns = [
         width: '10%',
         render: (businessFee) => {
             return (
-                <p>{businessFee} %</p>
+                <span>{businessFee} %</span>
             )
         }
     },
@@ -373,7 +373,7 @@ function Orders() {
 
                 <Card style={{ marginTop: "20px" }}>
                     <Row align="end">
-                        <b>{totalRecord} Bản ghi</b>
+                        <b>{totalRecord} Kết quả</b>
                     </Row>
                     <Table
                         columns={columns}
@@ -383,12 +383,8 @@ function Orders() {
                         onChange={handleTableChange}
                         scroll={{
                             x: 2000,
-                            y: 500
                         }}
-                        style={{
-                            minHeight: "600px"
-                        }}
-                        size="small"
+                        size="middle"
                     />
                 </Card>
 
