@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Card, Table, Tag, Button, Form, Input, DatePicker, notification, Row, Col } from "antd";
+import React, { useEffect, useState, useContext } from "react";
+import { Card, Table, Tag, Button, Form, Input, DatePicker, Row, Col, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
+
+import { NotificationContext } from '~/context/UI/NotificationContext';
 
 import { getDepositTransaction } from '~/api/bank'
 import Spinning from "~/components/Spinning";
 import { formatPrice, ParseDateTime } from '~/utils/index'
-import dayjs from 'dayjs';
-import { RESPONSE_CODE_SUCCESS } from "~/constants";
+//import dayjs from 'dayjs';
+import {
+    RESPONSE_CODE_SUCCESS,
+    PAGE_SIZE
+} from "~/constants";
 
 
 
@@ -85,34 +90,46 @@ const columns = [
 
 function HistoryDeposit() {
     const [loading, setLoading] = useState(true)
-    const [api, contextHolder] = notification.useNotification();
-    const openNotification = (type, message) => {
-        api[type]({
-            message: `Thông báo`,
-            description: `${message}`
-        });
-    };
+    const notification = useContext(NotificationContext);
 
     const [form] = Form.useForm();
     const [dataTable, setDataTable] = useState([]);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: PAGE_SIZE,
+        },
+    });
     const [searchData, setSearchData] = useState({
         depositTransactionId: '',
         email: '',
-        fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
-        toDate: dayjs().format('M/D/YYYY'),
+        // fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
+        // toDate: dayjs().format('M/D/YYYY'),
+        fromDate: '',
+        toDate: '',
+        page: 1
     });
+    const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
         getDepositTransaction(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.data.result)
+                    setDataTable(res.data.result.depositTransactions)
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: res.data.result.total,
+                        },
+                    });
+                    setTotalRecord(res.data.result.total)
                 } else {
-                    openNotification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
+                    notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
             })
             .catch((err) => {
-                openNotification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
+                notification("error", "Chưa thể đáp ứng yêu cầu! Hãy thử lại!")
             })
             .finally(() => {
                 setTimeout(() => { setLoading(false) }, 500)
@@ -130,16 +147,16 @@ function HistoryDeposit() {
             name: 'email',
             value: searchData.email,
         },
-        {
-            name: 'date',
-            value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
-        },
+        // {
+        //     name: 'date',
+        //     value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
+        // },
     ];
 
     const onFinish = (values) => {
         setLoading(true);
         if (values.date === null) {
-            openNotification("error", "Thời gian tạo yêu cầu không được trống!")
+            notification("error", "Thời gian tạo yêu cầu không được trống!")
             setLoading(false);
             return;
         }
@@ -147,16 +164,33 @@ function HistoryDeposit() {
         setSearchData({
             depositTransactionId: values.depositTransactionId,
             email: values.email,
-            fromDate: values.date[0].$d.toLocaleDateString(),
-            toDate: values.date[1].$d.toLocaleDateString(),
+            fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
+            toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),
+            //fromDate: values.date[0].$d.toLocaleDateString(),
+            //toDate: values.date[1].$d.toLocaleDateString(),
+            page: 1
+        });
+    };
+
+    const onReset = () => {
+        form.resetFields();
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setSearchData({
+            ...searchData,
+            page: pagination.current
+        })
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
         });
     };
 
 
-
     return (
         <>
-            {contextHolder}
             <Spinning spinning={loading}>
                 <Card>
                     <Form
@@ -199,9 +233,14 @@ function HistoryDeposit() {
 
                                 <Row>
                                     <Col span={6} offset={2}>
-                                        <Button type="primary" htmlType="submit">
-                                            Tìm kiếm
-                                        </Button>
+                                        <Space>
+                                            <Button htmlType="button" onClick={onReset}>
+                                                Xóa
+                                            </Button>
+                                            <Button type="primary" htmlType="submit">
+                                                Tìm kiếm
+                                            </Button>
+                                        </Space>
                                     </Col>
                                 </Row>
                             </Col>
@@ -211,9 +250,23 @@ function HistoryDeposit() {
                 </Card>
 
                 <Card style={{ marginTop: "20px" }}>
-                    <Table columns={columns} pagination={{ pageSize: 10 }}
+                    {(() => {
+                        if (totalRecord > PAGE_SIZE) {
+                            return (
+                                <Row align="end">
+                                    <b>{totalRecord} Bản ghi</b>
+                                </Row>
+                            )
+                        } else {
+                            return <></>
+                        }
+                    })()}
+                    <Table
+                        columns={columns}
+                        pagination={tableParams.pagination}
                         dataSource={dataTable}
-                        rowKey={(record, index) => record.depositTransactionId}
+                        rowKey={(record) => record.depositTransactionId}
+                        onChange={handleTableChange}
                     />
                 </Card>
             </Spinning>

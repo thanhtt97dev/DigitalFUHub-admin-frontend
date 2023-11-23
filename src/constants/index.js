@@ -179,3 +179,12 @@ export const REASON_REPORT_PRODUCT_STATUS_OTHER = 7;
 export const SHOP_STATUS_ALL = 0;
 export const SHOP_STATUS_ACTIVATE = 1;
 export const SHOP_STATUS_DEACTIVATE = 2;
+
+// Paginations
+export const PAGE_SIZE = 10;
+export const PAGE_SIZE_FEEDBACK = 5;
+export const PAGE_SIZE_PRODUCT = 30;
+export const PAGE_SIZE_NOTIFICATION = 5;
+export const PAGE_SIZE_PRODUCT_WISH_LIST = 30;
+export const PAGE_SIZE_PRODUCT_HOME_PAGE = 48;
+export const PAGE_SIZE_SEARCH_PRODUCT = 20;
