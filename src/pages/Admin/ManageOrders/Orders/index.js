@@ -11,6 +11,7 @@ import { formatPrice, ParseDateTime } from '~/utils/index'
 import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
+    PAGE_SIZE,
     ORDER_WAIT_CONFIRMATION,
     ORDER_CONFIRMED,
     ORDER_COMPLAINT,
@@ -29,7 +30,7 @@ const columns = [
     {
         title: 'Mã hóa đơn',
         dataIndex: 'orderId',
-        width: '9%',
+        width: '8%',
         render: (orderId) => {
             return (
                 <Link to={`/admin/order/${orderId}`}>{orderId}</Link>
@@ -39,7 +40,7 @@ const columns = [
     {
         title: 'Email khách hàng',
         dataIndex: 'customerEmail',
-        width: '20%',
+        width: '15%',
         render: (customerEmail, record) => {
             return (
                 <Link to={`/admin/user/${record.customerId}`}>{customerEmail}</Link>
@@ -49,7 +50,7 @@ const columns = [
     {
         title: 'Tên shop',
         dataIndex: 'shopName',
-        width: '20%',
+        width: '15%',
         render: (shopName, record) => {
             return (
                 <Link to={`/admin/seller/${record.sellerId}`}>{shopName}</Link>
@@ -57,7 +58,7 @@ const columns = [
         }
     },
     {
-        title: 'Thời gian đơn hàng',
+        title: 'Thời gian mua',
         dataIndex: 'orderDate',
         width: '15%',
         render: (orderDate) => {
@@ -67,9 +68,39 @@ const columns = [
         }
     },
     {
-        title: 'Số tiền',
+        title: 'Giá trị đơn hàng',
+        dataIndex: 'totalAmount',
+        width: '10%',
+        render: (totalAmount) => {
+            return (
+                <p>{formatPrice(totalAmount)}</p>
+            )
+        }
+    },
+    {
+        title: 'Mã giảm giá sử dụng',
+        dataIndex: 'totalCouponDiscount',
+        width: '12%',
+        render: (totalCouponDiscount) => {
+            return (
+                <p>{formatPrice(totalCouponDiscount)}</p>
+            )
+        }
+    },
+    {
+        title: 'Xu đã sử dụng',
+        dataIndex: 'totalCoinDiscount',
+        width: '12%',
+        render: (totalCoinDiscount) => {
+            return (
+                <p>{totalCoinDiscount} xu</p>
+            )
+        }
+    },
+    {
+        title: 'Người mua thanh toán',
         dataIndex: 'totalPayment',
-        width: '15%',
+        width: '14%',
         render: (totalPayment) => {
             return (
                 <p>{formatPrice(totalPayment)}</p>
@@ -77,9 +108,39 @@ const columns = [
         }
     },
     {
+        title: 'Số tiền trả người bán',
+        dataIndex: 'totalRefundSeller',
+        width: '14%',
+        render: (totalRefundSeller) => {
+            return (
+                <p>{formatPrice(totalRefundSeller)}</p>
+            )
+        }
+    },
+    {
+        title: 'Lợi nhuận',
+        dataIndex: 'totalBenefit',
+        width: '14%',
+        render: (totalBenefit) => {
+            return (
+                <p>{formatPrice(totalBenefit)}</p>
+            )
+        }
+    },
+    {
+        title: 'Phí kinh doanh',
+        dataIndex: 'businessFee',
+        width: '10%',
+        render: (businessFee) => {
+            return (
+                <p>{businessFee} %</p>
+            )
+        }
+    },
+    {
         title: 'Trạng thái',
         dataIndex: 'orderStatusId',
-        width: '15%',
+        width: '10%',
         render: (orderStatusId) => {
             if (orderStatusId === ORDER_WAIT_CONFIRMATION) {
                 return <Tag color="#108ee9">Chờ xác nhận</Tag>
@@ -96,18 +157,20 @@ const columns = [
             } else if (orderStatusId === ORDER_SELLER_VIOLATES) {
                 return <Tag color="#f50">Người bán vi phạm</Tag>
             }
-        }
+        },
+        fixed: "right"
     },
     {
         dataIndex: 'orderId',
-        width: '9%',
+        width: '7%',
         render: (orderId) => {
             return (
                 <Link to={`/admin/order/${orderId}`}>
-                    <Button type="dashed" danger >Chi tiết</Button>
+                    <Button size="small" type="link" >Chi tiết</Button>
                 </Link>
             )
-        }
+        },
+        fixed: "right"
     },
 ];
 
@@ -117,21 +180,37 @@ function Orders() {
 
     const [form] = Form.useForm();
     const [dataTable, setDataTable] = useState([]);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: PAGE_SIZE,
+        },
+    });
     const [searchData, setSearchData] = useState({
         orderId: '',
         customerEmail: '',
         shopId: '',
         shopName: '',
-        fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
-        toDate: dayjs().format('M/D/YYYY'),
-        status: 0
+        fromDate: '',
+        toDate: '',
+        status: 0,
+        page: 1
     });
+    const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
         getOrders(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.data.result)
+                    setDataTable(res.data.result.orders)
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: res.data.result.total,
+                        },
+                    });
+                    setTotalRecord(res.data.result.total)
                 } else {
                     notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
@@ -164,10 +243,6 @@ function Orders() {
             value: searchData.shopId,
         },
         {
-            name: 'date',
-            value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
-        },
-        {
             name: 'status',
             value: searchData.status,
         },
@@ -186,12 +261,35 @@ function Orders() {
             customerEmail: values.customerEmail,
             shopId: values.shopId,
             shopName: values.shopName,
-            fromDate: values.date[0].$d.toLocaleDateString(),
-            toDate: values.date[1].$d.toLocaleDateString(),
-            status: values.status
+            fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
+            toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),
+            status: values.status,
+            page: 1
         });
     };
 
+    const onReset = () => {
+        form.resetFields();
+        form.setFieldsValue({
+            orderId: '',
+            customerEmail: '',
+            shopId: '',
+            shopName: '',
+            status: 0,
+        });
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setSearchData({
+            ...searchData,
+            page: pagination.current
+        })
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
 
 
     return (
@@ -261,6 +359,9 @@ function Orders() {
                             </Col>
                             <Col offset={1}>
                                 <Space>
+                                    <Button htmlType="button" onClick={onReset}>
+                                        Xóa
+                                    </Button>
                                     <Button type="primary" htmlType="submit">
                                         Tìm kiếm
                                     </Button>
@@ -271,9 +372,23 @@ function Orders() {
                 </Card>
 
                 <Card style={{ marginTop: "20px" }}>
-                    <Table columns={columns} pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size="small" scroll={{ y: 300 }}
+                    <Row align="end">
+                        <b>{totalRecord} Bản ghi</b>
+                    </Row>
+                    <Table
+                        columns={columns}
+                        pagination={tableParams.pagination}
+                        dataSource={dataTable}
                         rowKey={(record) => record.orderId}
+                        onChange={handleTableChange}
+                        scroll={{
+                            x: 2000,
+                            y: 500
+                        }}
+                        style={{
+                            minHeight: "600px"
+                        }}
+                        size="small"
                     />
                 </Card>
 
