@@ -176,7 +176,9 @@ function HistoryTransactionInternal() {
     const onReset = () => {
         form.resetFields();
         form.setFieldsValue({
-            status: 0,
+            orderId: '',
+            email: '',
+            transactionInternalTypeId: 0,
         });
     };
 

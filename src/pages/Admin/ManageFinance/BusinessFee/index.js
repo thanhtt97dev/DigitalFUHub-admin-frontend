@@ -145,6 +145,7 @@ function BusinessFee() {
     const onReset = () => {
         form.resetFields();
         form.setFieldsValue({
+            businessFeeId: '',
             maxFee: 100,
         });
     };

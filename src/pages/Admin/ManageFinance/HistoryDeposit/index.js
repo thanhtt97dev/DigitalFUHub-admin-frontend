@@ -174,6 +174,11 @@ function HistoryDeposit() {
 
     const onReset = () => {
         form.resetFields();
+        form.setFieldsValue({
+            depositTransactionId: '',
+            email: '',
+            transactionInternalTypeId: 0,
+        });
     };
 
     const handleTableChange = (pagination, filters, sorter) => {
