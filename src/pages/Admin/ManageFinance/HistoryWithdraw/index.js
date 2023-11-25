@@ -16,6 +16,8 @@ import {
     WITHDRAW_TRANSACTION_IN_PROCESSING,
     WITHDRAW_TRANSACTION_PAID,
     WITHDRAW_TRANSACTION_REJECT,
+    WITHDRAW_TRANSACTION_CANCEL,
+    PAGE_SIZE,
     BANKS_INFO
 } from "~/constants";
 import DrawerWithdrawTransactionBill from "~/components/Drawers/DrawerWithdrawTransactionBill";
@@ -44,12 +46,12 @@ function HistoryWithdraw() {
         {
             title: 'Mã giao dịch',
             dataIndex: 'withdrawTransactionId',
-            width: '4%',
+            width: '7%',
         },
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '12%',
+            width: '15%',
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -67,7 +69,7 @@ function HistoryWithdraw() {
             }
         },
         {
-            title: 'Thời gian tạo yêu cầu',
+            title: 'Thời gian yêu cầu',
             dataIndex: 'requestDate',
             width: '10%',
             render: (requestDate) => {
@@ -77,19 +79,47 @@ function HistoryWithdraw() {
             }
         },
         {
+            title: 'Thời gian chuyển khoản',
+            dataIndex: 'paidDate',
+            width: '15%',
+            render: (paidDate) => {
+                if (paidDate === null) {
+                    return "N/A"
+                } else {
+                    return <span>{ParseDateTime(paidDate)}</span>
+                }
+            }
+        },
+        {
             title: 'Đơn vị thụ hưởng',
             dataIndex: 'creditAccountName',
             width: '10%',
+            render: (creditAccountName) => {
+                return (
+                    <span>{creditAccountName}</span>
+                )
+            }
         },
         {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
             width: '10%',
+            render: (creditAccount) => {
+                return (
+                    <span>{creditAccount}</span>
+                )
+            }
         },
         {
             title: 'Ngân hàng đối tác',
             dataIndex: 'bankName',
             width: '14%',
+            render: (bankName) => {
+                return (
+                    <span>{bankName}</span>
+                )
+            }
+
         },
         {
             title: 'Trạng thái',
@@ -103,6 +133,8 @@ function HistoryWithdraw() {
                     return <Tag color="#52c41a">Thành công</Tag>
                 } else if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_REJECT) {
                     return <Tag color="red">Từ chối</Tag>
+                } else if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_CANCEL) {
+                    return <Tag color="gray">Đã hủy</Tag>
                 }
             }
         },
@@ -115,13 +147,15 @@ function HistoryWithdraw() {
                 if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_PAID ||
                     withdrawTransactionStatusId === WITHDRAW_TRANSACTION_REJECT) {
                     return <DrawerWithdrawTransactionBill userId={record.userId} withdrawTransactionId={record.withdrawTransactionId} />
-                } else {
+                } else if (withdrawTransactionStatusId === WITHDRAW_TRANSACTION_IN_PROCESSING) {
                     return (
-                        <Space direction="vertical" align="center">
+                        <Space direction="horizontal" align="center">
                             <Button onClick={() => handleOpenModal(record)} size="small">Chuyển khoản</Button>
                             <ModalRejectWithdrawTransaction withdrawTransactionId={record.withdrawTransactionId} callBack={GetWithdrawTransactions} />
                         </Space>
                     )
+                } else {
+                    return <></>
                 }
             }
         },
@@ -140,22 +174,29 @@ function HistoryWithdraw() {
 
 
     const [dataTable, setDataTable] = useState([]);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: PAGE_SIZE,
+        },
+    });
     const [searchData, setSearchData] = useState({
         withdrawTransactionId: '',
         email: '',
-        fromDate: dayjs().subtract(3, 'day').format('M/D/YYYY'),
-        toDate: dayjs().format('M/D/YYYY'),
+        fromDate: '',
+        toDate: '',
         bankId: 0,
         creditAccount: '',
-        status: 0
+        status: 0,
+        page: 1
     });
+    const [totalRecord, setTotalRecord] = useState(0)
 
     const filterOptions = (inputValue, option) => {
         return option.props.name.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1;
     }
 
     useEffect(() => {
-
         GetWithdrawTransactions();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchData])
@@ -164,11 +205,15 @@ function HistoryWithdraw() {
         getWithdrawTransaction(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    let data = []
-                    res.data.result.forEach((x, index) => {
-                        data = [...data, { key: index, ...x }]
-                    })
-                    setDataTable(data)
+                    setDataTable(res.data.result.withdrawTransactions)
+                    setTableParams({
+                        ...tableParams,
+                        pagination: {
+                            ...tableParams.pagination,
+                            total: res.data.result.total,
+                        },
+                    });
+                    setTotalRecord(res.data.result.total)
                 } else {
                     notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
                 }
@@ -189,10 +234,6 @@ function HistoryWithdraw() {
         {
             name: 'email',
             value: searchData.email,
-        },
-        {
-            name: 'date',
-            value: [dayjs(searchData.fromDate, 'M/D/YYYY'), dayjs(searchData.toDate, 'M/D/YYYY')]
         },
         {
             name: 'bankId',
@@ -219,11 +260,32 @@ function HistoryWithdraw() {
         setSearchData({
             withdrawTransactionId: values.withdrawTransactionId,
             email: values.email,
-            fromDate: values.date[0].$d.toLocaleDateString(),
-            toDate: values.date[1].$d.toLocaleDateString(),
+            fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
+            toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),
             bankId: values.bankId,
             creditAccount: values.creditAccount,
-            status: values.status
+            status: values.status,
+            page: 1
+        });
+    };
+
+    const onReset = () => {
+        form.resetFields();
+        form.setFieldsValue({
+            depositTransactionId: '',
+            status: 0,
+        });
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setSearchData({
+            ...searchData,
+            page: pagination.current
+        })
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
         });
     };
 
@@ -331,16 +393,22 @@ function HistoryWithdraw() {
                                 <Form.Item name="status" >
                                     <Select >
                                         <Select.Option value={0}>Tất cả</Select.Option>
-                                        <Select.Option value={1}>Chưa xử lý	</Select.Option>
-                                        <Select.Option value={2}>Thành công</Select.Option>
-                                        <Select.Option value={3}>Từ chối</Select.Option>
+                                        <Select.Option value={WITHDRAW_TRANSACTION_IN_PROCESSING}>Chưa xử lý	</Select.Option>
+                                        <Select.Option value={WITHDRAW_TRANSACTION_PAID}>Thành công</Select.Option>
+                                        <Select.Option value={WITHDRAW_TRANSACTION_REJECT}>Từ chối</Select.Option>
+                                        <Select.Option value={WITHDRAW_TRANSACTION_CANCEL}>Đã hủy</Select.Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
                             <Col offset={1} span={1}>
-                                <Button type="primary" htmlType="submit">
-                                    Tìm kiếm
-                                </Button>
+                                <Space>
+                                    <Button htmlType="button" onClick={onReset}>
+                                        Xóa
+                                    </Button>
+                                    <Button type="primary" htmlType="submit">
+                                        Tìm kiếm
+                                    </Button>
+                                </Space>
                             </Col>
                         </Row>
                     </Form>
@@ -351,14 +419,19 @@ function HistoryWithdraw() {
                 </Card>
 
                 <Card style={{ marginTop: "20px" }}>
-                    <Table columns={columns}
-                        pagination={{ pageSize: 10 }}
-                        dataSource={dataTable} size='middle'
+                    <Row align="end">
+                        <b>{totalRecord} Kết quả</b>
+                    </Row>
+                    <Table
+                        columns={columns}
+                        pagination={tableParams.pagination}
+                        dataSource={dataTable}
+                        rowKey={(record) => record.withdrawTransactionId}
+                        onChange={handleTableChange}
                         scroll={{
                             x: 1500,
-                            y: 500
                         }}
-                        rowKey={(record) => record.withdrawTransactionId}
+                        size="small"
                     />
                 </Card>
             </Spinning>
