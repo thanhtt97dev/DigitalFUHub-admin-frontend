@@ -209,7 +209,6 @@ function BusinessFee() {
                     <Table columns={columns}
                         pagination={{ pageSize: 10 }}
                         dataSource={dataTable} size='middle'
-                        scroll={{ y: 500 }}
                         rowKey={(record, index) => index}
                     />
                 </Card>
