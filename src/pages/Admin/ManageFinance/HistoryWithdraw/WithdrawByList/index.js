@@ -11,11 +11,14 @@ import {
 import dayjs from 'dayjs';
 
 import Spinning from "~/components/Spinning";
-import { formatPrice, ParseDateTime } from '~/utils/index'
+import {
+    formatPrice,
+    ParseDateTime,
+} from '~/utils/index'
 import BackPreviousPage from "~/components/BackPreviousPage";
 import * as ExcelJS from "exceljs"
 import saveAs from "file-saver";
-import { dowloadFile } from '~/api/storage'
+import { dowloadFileWithdrawByList } from '~/api/storage'
 import {
     MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME,
     RESPONSE_CODE_SUCCESS, RESPONSE_CODE_BANK_WITHDRAW_PAID,
@@ -148,7 +151,7 @@ function WithdrawByList() {
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            setListRecordSelected([...selectedRowKeys])
+            setListRecordSelected([...selectedRows])
         },
     };
 
@@ -231,8 +234,10 @@ function WithdrawByList() {
     const handleRemoveRecord = () => {
         var data = dataTable.filter((x) => x.withdrawTransactionId !== recordRemove)
         var dataView = dataTableView.filter((x) => x.withdrawTransactionId !== recordRemove)
+        var selectedRecords = listRecordSelected.filter((x) => x.withdrawTransactionId !== recordRemove)
         setDataTable(data)
         setDataTableView(dataView)
+        setListRecordSelected(selectedRecords)
         setOpenModalRemoveRecord(false)
     }
 
@@ -245,23 +250,34 @@ function WithdrawByList() {
     }
 
     const handleRemoveRecords = () => {
-        var data = dataTable.filter((x) => !listRecordSelected.includes(x.withdrawTransactionId))
+        var arr = GetListSelectedWithdrawKey()
+        var data = dataTable.filter((x) => !arr.includes(x.withdrawTransactionId))
+        var selectedRecords = listRecordSelected.filter((x) => !arr.includes(x.withdrawTransactionId))
         setDataTable(data)
         setDataTableView(data)
-        setListRecordSelected(0)
+        setListRecordSelected(selectedRecords)
+        setListRecordSelected([])
         setOpenModalRemoveRecords(false)
+    }
+
+    const GetListSelectedWithdrawKey = () => {
+        var arr = [];
+        listRecordSelected.forEach(x => {
+            arr.push(x.withdrawTransactionId)
+        })
+        return arr;
     }
 
     const handleDownLoadFile = () => {
         setLoading(true)
-        dowloadFile(MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME)
+        dowloadFileWithdrawByList()
             .then(res => {
                 const workbook = new ExcelJS.Workbook();
                 workbook.xlsx
                     .load(res.data)
                     .then(async () => {
                         const worksheet = workbook.getWorksheet(1);
-                        dataTable.forEach((data) => {
+                        listRecordSelected.forEach((data) => {
                             worksheet.addRow([data.key, data.creditAccount, data.creditAccountName, data.bankName, data.amount, data.code]);
                         })
                         const bufferhe = await workbook.xlsx.writeBuffer();
@@ -273,6 +289,9 @@ function WithdrawByList() {
                     .catch((error) => {
                         console.error(error.message);
                     });
+                setTimeout(() => {
+                    setOpenModal(true)
+                }, 500)
             })
             .catch(() => {
                 openNotification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
@@ -285,10 +304,7 @@ function WithdrawByList() {
 
     const handleConfirmTransfer = () => {
         setLoadingBtnConfirmModal(true)
-        let data = []
-        dataTable.forEach((x) => {
-            data = [...data, x.withdrawTransactionId]
-        })
+        var data = GetListSelectedWithdrawKey()
         confirmListTransferWithdrawSuccess({ ids: data })
             .then(res => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
@@ -296,6 +312,7 @@ function WithdrawByList() {
                     data = dataTable.filter((x) => !data.includes(x.withdrawTransactionId))
                     setDataTable(data)
                     setDataTableView(data)
+                    setListRecordSelected([])
                     openNotification("success", "Xác nhận chuyển khoản thành công!")
                 } else if (res.data.status.responseCode === RESPONSE_CODE_BANK_WITHDRAW_PAID) {
                     openNotification("error", `Mã hóa đơn này đã được xác nhận trước đó!`)
@@ -414,7 +431,12 @@ function WithdrawByList() {
                     />
                 </Card>
                 <Space direction="horizontal" style={{ width: '100%', justifyContent: 'end', marginTop: "10px" }}>
-                    <Button type="primary" size="large" onClick={handleOpenModal}>
+                    <Button
+                        type="primary"
+                        size="large"
+                        onClick={handleOpenModal}
+                        disabled={listRecordSelected.length === 0}
+                    >
                         <CheckCircleOutlined /> Xác nhận đã chuyển khoản
                     </Button>
                     <Button

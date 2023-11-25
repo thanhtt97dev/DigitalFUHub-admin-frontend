@@ -315,3 +315,18 @@ export const getVietQrImgSrc = (bankCode, creditAccount, creditAccountName, amou
 export const setUpDataToExportWithdrawExcelFile = (data) => {
 
 }
+
+
+export const base64ToBlob = (base64String, contentType) => {
+    contentType = contentType || '';
+    const byteCharacters = atob(base64String);
+    const byteNumbers = new Array(byteCharacters.length);
+
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: contentType });
+    return blob;
+}
