@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
-import { Card, Table, Tag, Button, Form, Input, Space, notification, Modal, Divider } from "antd";
+import { Card, Table, Tag, Button, Form, Input, Space, notification, Modal, Divider, Row, Col, Select, DatePicker } from "antd";
+import locale from 'antd/es/date-picker/locale/vi_VN';
 
 import { Link } from "react-router-dom";
 import {
@@ -8,6 +8,7 @@ import {
     DownloadOutlined,
     CheckCircleOutlined
 } from '@ant-design/icons';
+import dayjs from 'dayjs';
 
 import Spinning from "~/components/Spinning";
 import { formatPrice, ParseDateTime } from '~/utils/index'
@@ -19,9 +20,33 @@ import {
     MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME,
     RESPONSE_CODE_SUCCESS, RESPONSE_CODE_BANK_WITHDRAW_PAID,
     RESPONSE_CODE_FAILD,
-    RESPONSE_CODE_DATA_NOT_FOUND
+    RESPONSE_CODE_DATA_NOT_FOUND,
+    BANKS_INFO
 } from '~/constants'
-import { confirmListTransferWithdrawSuccess } from '~/api/bank'
+import {
+    confirmListTransferWithdrawSuccess,
+    getAllWithdrawUnPay
+} from '~/api/bank'
+import styles from '../HistoryWithdraw.module.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
+const { RangePicker } = DatePicker;
+
+
+const bankOptions = [{ value: 0, name: "All", label: <>Tất cả</> }]
+BANKS_INFO.forEach((bank) => {
+    let bankOption = {
+        value: bank.id,
+        name: bank.name,
+        label: <div><img src={bank.image} className={cx("option-images-display")} alt={bank.name} /> <p className={cx("option-text-display")}>{bank.name}</p></div>
+    }
+    bankOptions.push(bankOption)
+})
+
+const filterOptions = (inputValue, option) => {
+    return option.props.name.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1;
+}
 
 
 function WithdrawByList() {
@@ -29,13 +54,13 @@ function WithdrawByList() {
     const columns = [
         {
             title: 'Mã giao dịch',
+            with: "5%",
             dataIndex: 'withdrawTransactionId',
-            width: '4%',
         },
         {
             title: 'Email người tạo yêu cầu',
             dataIndex: 'email',
-            width: '12%',
+            with: "12%",
             render: (email, record) => {
                 return (
                     <Link to={`/admin/user/${record.userId}`}>{email}</Link>
@@ -45,42 +70,36 @@ function WithdrawByList() {
         {
             title: 'Số tiền',
             dataIndex: 'amount',
-            width: '10%',
             render: (amount) => {
                 return (
-                    <p>{formatPrice(amount)}</p>
+                    <span>{formatPrice(amount)}</span>
                 )
             }
         },
         {
             title: 'Thời gian tạo yêu cầu',
             dataIndex: 'requestDate',
-            width: '10%',
             render: (requestDate) => {
                 return (
-                    <p>{ParseDateTime(requestDate)}</p>
+                    <span>{ParseDateTime(requestDate)}</span>
                 )
             }
         },
         {
             title: 'Đơn vị thụ hưởng',
             dataIndex: 'creditAccountName',
-            width: '10%',
         },
         {
             title: 'Số tài khoản',
             dataIndex: 'creditAccount',
-            width: '10%',
         },
         {
             title: 'Ngân hàng đối tác',
             dataIndex: 'bankName',
-            width: '14%',
         },
         {
             title: 'Trạng thái',
             dataIndex: 'isPay',
-            width: '6%',
             render: (paidDate, record) => {
                 return (
                     record.isPay ?
@@ -92,19 +111,17 @@ function WithdrawByList() {
         },
         {
             title: '',
-            dataIndex: 'key',
-            width: '3%',
+            dataIndex: 'withdrawTransactionId',
             fixed: "right",
-            render: (key, record) => {
+            width: "5%",
+            render: (withdrawTransactionId, record) => {
                 return (
-                    <Button type="primary" danger onClick={() => handleOpenModalRemoveRecord(key)} ><DeleteOutlined /></Button>
+                    <Button type="primary" danger onClick={() => handleOpenModalRemoveRecord(withdrawTransactionId)} ><DeleteOutlined /></Button>
                 )
             }
         },
 
     ];
-
-    const location = useLocation();
     const [loading, setLoading] = useState(true)
     const [api, contextHolder] = notification.useNotification();
     const openNotification = (type, message) => {
@@ -114,10 +131,7 @@ function WithdrawByList() {
         });
     };
 
-    const [searchData, setSearchData] = useState({
-        withdrawTransactionId: '',
-        email: '',
-    });
+
 
     const [form] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
@@ -126,10 +140,20 @@ function WithdrawByList() {
     const [recordRemove, setRecordRemove] = useState(0)
     const [openModalRemoveRecord, setOpenModalRemoveRecord] = useState(false)
 
+    const [openModalRemoveRecords, setOpenModalRemoveRecords] = useState(false)
+
     const [dataTable, setDataTable] = useState([]);
     const [dataTableView, setDataTableView] = useState([]);
+    const [listRecordSelected, setListRecordSelected] = useState([]);
 
+    const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            setListRecordSelected([...selectedRowKeys])
+        },
+    };
 
+    /*
+    const location = useLocation();
     useEffect(() => {
         if (location.state === null) {
             alert("Xảy ra sự cố! Hãy thử lại sau!");
@@ -141,28 +165,54 @@ function WithdrawByList() {
         }, 500)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+    */
 
-    const initFormValues = [
-        {
-            name: 'withdrawTransactionId',
-            value: searchData.withdrawTransactionId,
-        },
-        {
-            name: 'email',
-            value: searchData.email,
-        },
-    ];
+    useEffect(() => {
+        const body = {
+            withdrawTransactionId: '',
+            email: '',
+            fromDate: '',
+            toDate: '',
+            bankId: 0,
+            creditAccount: '',
+        }
+        getAllWithdrawUnPay(body)
+            .then((res) => {
+                setDataTable(res.data.result)
+                setDataTableView(res.data.result)
+            })
+        setTimeout(() => {
+
+            setLoading(false)
+        }, 500)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const onFinish = (values) => {
-        setSearchData({ withdrawTransactionId: values.withdrawTransactionId, email: values.email })
         let data = dataTable;
-        if (values.withdrawTransactionId !== '') {
+        if (values.withdrawTransactionId !== undefined) {
             data = data.filter((x) => String(x.withdrawTransactionId) === values.withdrawTransactionId)
         }
-        if (values.email !== '') {
+        if (values.email !== undefined) {
             data = data.filter((x) => x.email.includes(values.email))
         }
+        if (values.creditAccountName !== undefined) {
+            data = data.filter((x) => x.creditAccountName.includes(values.creditAccountName))
+        }
+        if (values.creditAccount !== undefined) {
+            data = data.filter((x) => x.creditAccount.includes(values.creditAccount))
+        }
+        if (values.date !== undefined) {
+            var startDate = dayjs(values.date[0].$d)
+            var endDate = dayjs(values.date[1].$d)
+            data = data.filter((x) => dayjs(x.requestDate) >= startDate && dayjs(x.requestDate) <= endDate)
+        }
         setDataTableView(data)
+    };
+
+    const onReset = () => {
+        form.resetFields();
+        setDataTableView(dataTable)
     };
 
     const handleOpenModal = (record) => {
@@ -173,17 +223,33 @@ function WithdrawByList() {
         }, 300)
     }
 
-    const handleOpenModalRemoveRecord = (key) => {
-        setRecordRemove(key)
+    const handleOpenModalRemoveRecord = (withdrawTransactionId) => {
+        setRecordRemove(withdrawTransactionId)
         setOpenModalRemoveRecord(true)
     }
 
     const handleRemoveRecord = () => {
-        let data = dataTable;
-        data = dataTable.filter((x) => x.key !== recordRemove)
+        var data = dataTable.filter((x) => x.withdrawTransactionId !== recordRemove)
+        var dataView = dataTableView.filter((x) => x.withdrawTransactionId !== recordRemove)
+        setDataTable(data)
+        setDataTableView(dataView)
+        setOpenModalRemoveRecord(false)
+    }
+
+    const handleOpenModalRemoveRecords = (record) => {
+        setLoading(true)
+        setTimeout(() => {
+            setLoading(false)
+            setOpenModalRemoveRecords(true)
+        }, 300)
+    }
+
+    const handleRemoveRecords = () => {
+        var data = dataTable.filter((x) => !listRecordSelected.includes(x.withdrawTransactionId))
         setDataTable(data)
         setDataTableView(data)
-        setOpenModalRemoveRecord(false)
+        setListRecordSelected(0)
+        setOpenModalRemoveRecords(false)
     }
 
     const handleDownLoadFile = () => {
@@ -256,63 +322,119 @@ function WithdrawByList() {
         <>
             {contextHolder}
             <Spinning spinning={loading}>
-                <Card
-                    style={{
-                        width: '100%',
-                        minHeight: "690px"
-                    }}
-                    title="Chuyển khoản theo lô"
-                    hoverable
-                >
+                <Card>
                     <Form
-                        name="basic"
-                        labelCol={{
-                            span: 8,
-                        }}
-                        wrapperCol={{
-                            span: 0,
-                        }}
-                        style={{
-                            maxWidth: 500,
-                            marginLeft: "30px",
-                            position: 'relative',
-                        }}
                         form={form}
                         onFinish={onFinish}
-                        fields={initFormValues}
                     >
-                        <Form.Item label="Mã giao dịch" labelAlign="left" name="withdrawTransactionId">
-                            <Input />
-                        </Form.Item>
+                        <Row>
+                            <Col span={3} offset={1}>Mã giao dịch: </Col>
+                            <Col span={6}>
+                                <Form.Item name="withdrawTransactionId" >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                            <Col span={2} offset={1}>Ngân hàng: </Col>
+                            <Col span={6}>
+                                <Form.Item name="bankId" >
+                                    <Select
+                                        showSearch
+                                        placeholder="Ngân hàng thụ hưởng"
+                                        optionFilterProp="children"
+                                        Select={Select}
+                                        options={bankOptions}
+                                        filterOption={filterOptions}
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
 
-                        <Form.Item label="Email người tạo yêu cầu" labelAlign="left" name="email">
-                            <Input />
-                        </Form.Item>
+                        <Row>
+                            <Col span={3} offset={1}>Email người tạo yêu cầu: </Col>
+                            <Col span={6}>
+                                <Form.Item name="email" >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
 
-                        <Form.Item style={{ position: 'absolute', top: 55, left: 550 }}>
-                            <Space>
-                                <Button type="primary" htmlType="submit">
-                                    Tìm kiếm
-                                </Button>
-                            </Space>
-                        </Form.Item>
+                            <Col span={2} offset={1}>Số tài khoản: </Col>
+                            <Col span={6}>
+                                <Form.Item name="creditAccount" >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+
+                        </Row>
+
+                        <Row>
+                            <Col span={3} offset={1}>Thời gian tạo yêu cầu: </Col>
+                            <Col span={6}>
+                                <Form.Item name="date" >
+                                    <RangePicker locale={locale}
+                                        format={"M/D/YYYY"}
+                                        placement={"bottomLeft"} />
+                                </Form.Item>
+                            </Col>
+
+                            <Col span={2} offset={1}>Người thụ hưởng </Col>
+                            <Col span={6}>
+                                <Form.Item name="creditAccountName" >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+
+                            <Col offset={1} span={1}>
+                                <Space>
+                                    <Button htmlType="button" onClick={onReset}>
+                                        Xóa
+                                    </Button>
+                                    <Button type="primary" htmlType="submit">
+                                        Tìm kiếm
+                                    </Button>
+                                </Space>
+                            </Col>
+                        </Row>
+
                     </Form>
-                    <Table columns={columns}
-                        pagination={{ pageSize: 10 }}
-                        dataSource={dataTableView} size='small'
-                        scroll={{
-                            x: 1500,
-                            y: 290
-                        }}
-                        rowKey={(record, index) => index}
-                    />
-
-                    <Space direction="horizontal" style={{ width: '100%', justifyContent: 'end' }}>
-                        <Button type="primary" size="large" onClick={handleOpenModal}><CheckCircleOutlined /> Xác nhận đã chuyển khoản</Button>
-                        <Button size="large" onClick={handleDownLoadFile}><DownloadOutlined /> Tải file</Button>
-                        <BackPreviousPage url={-1} />
-                    </Space>
                 </Card>
+
+                <Card style={{ marginTop: "20px" }}>
+                    <Row align="end">
+                        <b>{dataTableView.length} Kết quả</b>
+                    </Row>
+                    <Table
+                        columns={columns}
+                        dataSource={dataTableView}
+                        rowKey={(record) => record.withdrawTransactionId}
+                        size="small"
+                        rowSelection={{
+                            type: "checkbox",
+                            ...rowSelection,
+                        }}
+                    />
+                </Card>
+                <Space direction="horizontal" style={{ width: '100%', justifyContent: 'end', marginTop: "10px" }}>
+                    <Button type="primary" size="large" onClick={handleOpenModal}>
+                        <CheckCircleOutlined /> Xác nhận đã chuyển khoản
+                    </Button>
+                    <Button
+                        size="large"
+                        danger
+                        onClick={handleOpenModalRemoveRecords}
+                        disabled={listRecordSelected.length === 0}
+                    >
+                        <DeleteOutlined />Xóa ({listRecordSelected.length})
+                    </Button>
+                    <Button
+                        size="large"
+                        onClick={handleDownLoadFile}
+                        disabled={listRecordSelected.length === 0}
+                    >
+                        <DownloadOutlined /> Tải file ({listRecordSelected.length})
+                    </Button>
+                    <BackPreviousPage url={-1} />
+                </Space>
+
             </Spinning>
 
             <Modal
@@ -325,7 +447,20 @@ function WithdrawByList() {
                 cancelText="Hủy"
             >
                 <Divider />
-                <p>Bạn có chắc chắn muốn xóa Kết quả đó không ?</p>
+                <p>Bạn có chắc chắn muốn xóa bản ghi đó không ?</p>
+            </Modal>
+
+            <Modal
+                title="Chú ý"
+                open={openModalRemoveRecords}
+                onCancel={() => setOpenModalRemoveRecords(false)}
+                onOk={handleRemoveRecords}
+                width={500}
+                okText="Đồng ý"
+                cancelText="Hủy"
+            >
+                <Divider />
+                <p>Bạn có chắc chắn muốn các xóa bản ghi đó không ?</p>
             </Modal>
 
             <Modal

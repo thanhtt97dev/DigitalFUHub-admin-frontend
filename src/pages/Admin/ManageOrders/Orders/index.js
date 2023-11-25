@@ -8,7 +8,6 @@ import NotificationContext from "~/context/UI/NotificationContext";
 import { getOrders } from '~/api/order'
 import Spinning from "~/components/Spinning";
 import { formatPrice, ParseDateTime } from '~/utils/index'
-import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
     PAGE_SIZE,

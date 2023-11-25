@@ -53,3 +53,7 @@ export const confirmListTransferWithdrawSuccess = (data) => {
 export const rejectWithdrawTransaction = (data) => {
     return apiPostAuth(`api/banks/RejectWithdrawTransaction`, data);
 };
+
+export const getAllWithdrawUnPay = (data) => {
+    return apiPostAuth(`api/banks/GetAllWithdrawUnPay`, data);
+};
