@@ -15,6 +15,9 @@ import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Message from '~/components/Message';
+
+import SignalR from '~/context/SignalR/index'
+
 const cx = classNames.bind(styles);
 const { Content, Sider, Header } = Layout;
 
@@ -163,28 +166,29 @@ const AdminLayout = () => {
                     mode="inline" items={menuItems} />
             </Sider>
             <Layout>
-                <Header id='header' className={cx('header')}>
-                    <Row align="middle" justify="center">
-                        <Col span={2}>
-                            <Button
-                                type="text"
-                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                                onClick={() => setCollapsed(!collapsed)}
-                                style={{
-                                    fontSize: '16px',
-                                    width: 64,
-                                    height: 64,
-                                }}
-                            />
-                        </Col>
+                <SignalR>
+                    <Header id='header' className={cx('header')}>
+                        <Row align="middle" justify="center">
+                            <Col span={2}>
+                                <Button
+                                    type="text"
+                                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                    onClick={() => setCollapsed(!collapsed)}
+                                    style={{
+                                        fontSize: '16px',
+                                        width: 64,
+                                        height: 64,
+                                    }}
+                                />
+                            </Col>
 
-                        <Col span={22}>
-                            <Row gutter={[16, 0]} justify="end" align="middle">
-                                <Col >
-                                    {/* <Notification /> */}
-                                </Col>
-                                <Col>
-                                    {/* <Link to="/chatBox">
+                            <Col span={22}>
+                                <Row gutter={[16, 0]} justify="end" align="middle">
+                                    <Col >
+                                        {/* <Notification /> */}
+                                    </Col>
+                                    <Col>
+                                        {/* <Link to="/chatBox">
                                         <Badge count={<ClockCircleOutlined style={{ paddingTop: '30px', color: '#f5222d' }} />} size="small">
                                             <MessageOutlined style={{
                                                 fontSize: '25px',
@@ -192,26 +196,27 @@ const AdminLayout = () => {
                                             }} />
                                         </Badge>
                                     </Link> */}
-                                    <Message />
-                                </Col>
-                                <Col align="center" style={{
-                                    marginTop: '-0.5rem'
-                                }}>
-                                    <Dropdown
-                                        menu={{ items }}
-                                        placement="bottomRight"
-                                        arrow={{
-                                            pointAtCenter: true,
-                                        }}
-                                    >
-                                        <Avatar src={logo} size="large" />
-                                    </Dropdown>
-                                </Col>
-                            </Row>
+                                        <Message />
+                                    </Col>
+                                    <Col align="center" style={{
+                                        marginTop: '-0.5rem'
+                                    }}>
+                                        <Dropdown
+                                            menu={{ items }}
+                                            placement="bottomRight"
+                                            arrow={{
+                                                pointAtCenter: true,
+                                            }}
+                                        >
+                                            <Avatar src={logo} size="large" />
+                                        </Dropdown>
+                                    </Col>
+                                </Row>
 
-                        </Col>
-                    </Row>
-                </Header>
+                            </Col>
+                        </Row>
+                    </Header>
+                </SignalR>
                 <Content className={cx('content')}>
                     <Outlet />
                 </Content>
