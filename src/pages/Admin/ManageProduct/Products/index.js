@@ -289,7 +289,7 @@ function Products() {
                                 </Col>
                             </Row>
                             <Row >
-                                <Col span={6} offset={2}>Doanh s</Col>
+                                <Col span={6} offset={2}>Doanh số</Col>
                                 <Col span={5}>
                                     <Form.Item name="soldMin" >
                                         <InputNumber placeholder="Tối thiểu" />

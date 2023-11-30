@@ -9,7 +9,8 @@ import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     ShoppingOutlined,
-    ShopOutlined
+    ShopOutlined,
+    SoundOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,6 +46,17 @@ const menuItems = [
         label: <Link to=''>Thống kê</Link>,
         key: 'dashboard',
         icon: <AreaChartOutlined />,
+    },
+    {
+        label: 'Marketing',
+        key: 'admin/marketing',
+        icon: <SoundOutlined />,
+        children: [
+            {
+                key: '/admin/marketing/sliderHome',
+                label: <Link to={"/admin/marketing/sliderHome"}>Slider Home</Link>,
+            }
+        ],
     },
     {
         label: 'Quản lý tài chính',

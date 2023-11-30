@@ -7,6 +7,7 @@ import Verification2FA from '~/pages/Verification2FA';
 import AdminLayout from '~/layouts/AdminLayout';
 import HistoryDeposit from '~/pages/Admin/ManageFinance/HistoryDeposit';
 import HistoryWithdraw from '~/pages/Admin/ManageFinance/HistoryWithdraw';
+import SliderHome from '~/pages/Admin/ManageMarketing/SliderHome';
 import WithdrawByList from '~/pages/Admin/ManageFinance/HistoryWithdraw/WithdrawByList';
 import HistoryTransactionInternal from '~/pages/Admin/ManageFinance/HistoryTransactionInternal';
 import Orders from '~/pages/Admin/ManageOrders/Orders';
@@ -53,6 +54,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <HistoryWithdraw />
+    },
+    {
+        path: '/admin/marketing/sliderHome',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <SliderHome />
     },
     {
         path: '/admin/finance/withdraw/tranfer-bylist',

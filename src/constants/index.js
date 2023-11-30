@@ -181,6 +181,11 @@ export const SHOP_STATUS_ALL = 0;
 export const SHOP_STATUS_ACTIVATE = 1;
 export const SHOP_STATUS_DEACTIVATE = 2;
 
+// status slider filter
+export const STATUS_ALL_SLIDER_FOR_FILTER = 0;
+export const STATUS_ACTIVE_SLIDER_FOR_FILTER = 1;
+export const STATUS_UN_ACTIVE_SLIDER_FOR_FILTER = 2;
+
 // Paginations
 export const PAGE_SIZE = 10;
 export const PAGE_SIZE_FEEDBACK = 5;
@@ -189,3 +194,4 @@ export const PAGE_SIZE_NOTIFICATION = 5;
 export const PAGE_SIZE_PRODUCT_WISH_LIST = 30;
 export const PAGE_SIZE_PRODUCT_HOME_PAGE = 48;
 export const PAGE_SIZE_SEARCH_PRODUCT = 20;
+export const PAGE_SIZE_SLIDER = 20;	
