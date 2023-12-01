@@ -98,6 +98,7 @@ function HistoryDeposit() {
         pagination: {
             current: 1,
             pageSize: PAGE_SIZE,
+            showSizeChanger: false
         },
     });
     const [searchData, setSearchData] = useState({

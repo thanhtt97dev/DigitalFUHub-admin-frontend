@@ -144,14 +144,7 @@ function Users() {
     return (
         <>
             <Spinning spinning={loading}>
-                <Card
-                    style={{
-                        width: '100%',
-                        minHeight: "690px"
-                    }}
-                    hoverable
-                    title="Danh sách nạp tiền"
-                >
+                <Card>
                     <Form
                         name="basic"
                         form={form}
@@ -230,8 +223,14 @@ function Users() {
 
                         </Row>
 
-                        <Table columns={columns} pagination={{ size: 10 }} dataSource={dataTable} />
+
                     </Form>
+                </Card>
+
+                <Card
+                    style={{ marginTop: "20px" }}
+                >
+                    <Table columns={columns} pagination={{ size: 10 }} dataSource={dataTable} />
                 </Card>
 
 

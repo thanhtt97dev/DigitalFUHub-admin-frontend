@@ -59,6 +59,7 @@ function SliderHome() {
         pagination: {
             current: 1,
             pageSize: PAGE_SIZE_SLIDER,
+            showSizeChanger: false
         },
     });
     const [searchParams, setSearchParams] = useState({

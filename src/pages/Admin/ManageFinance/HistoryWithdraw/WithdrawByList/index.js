@@ -437,7 +437,7 @@ function WithdrawByList() {
                         onClick={handleOpenModal}
                         disabled={listRecordSelected.length === 0}
                     >
-                        <CheckCircleOutlined /> Xác nhận đã chuyển khoản
+                        <CheckCircleOutlined /> Xác nhận đã chuyển khoản ({listRecordSelected.length})
                     </Button>
                     <Button
                         size="large"
