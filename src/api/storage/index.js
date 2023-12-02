@@ -12,22 +12,26 @@ export const uploadFile = (url, data) => {
     return apiPostForm(url, data);
 }
 
-export const dowloadFileWithdrawByList = (url) => {
+export const dowloadFileWithdrawByList = () => {
     return apiGetFile("api/Files/getWithdrawBuyListMbBank");
 };
 
-export const dowloadFileOrderReport = (url) => {
+export const dowloadFileOrderReport = () => {
     return apiGetFile("api/Files/OrderReportFile");
 };
 
-export const dowloadFileWithdrawReport = (url) => {
+export const dowloadFileWithdrawReport = () => {
     return apiGetFile("api/Files/WithdrawTransactionReportFile");
 };
 
-export const dowloadFileTransactionInternalReport = (url) => {
+export const dowloadFileTransactionInternalReport = () => {
     return apiGetFile("api/Files/TransactionInternalReportFile");
 };
 
-export const dowloadFileTransactionCoinReport = (url) => {
+export const dowloadFileTransactionCoinReport = () => {
     return apiGetFile("api/Files/TransactionCoinReportFile");
+};
+
+export const dowloadFileDepositTransactionReport = () => {
+    return apiGetFile("api/Files/DepositTransactionReportFile");
 };

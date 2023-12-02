@@ -61,3 +61,7 @@ export const getAllWithdrawUnPay = (data) => {
 export const getDataReportWithdrawTransaction = (data) => {
     return apiPostAuth(`api/banks/GetDataReportWithdrawTransaction`, data);
 };
+
+export const getDataReportDepositTransaction = (data) => {
+    return apiPostAuth(`api/banks/ReportHistoryDeposit`, data);
+};

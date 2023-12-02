@@ -2,10 +2,22 @@ import React, { useEffect, useState, useContext } from "react";
 import { Card, Table, Tag, Button, Form, Input, DatePicker, Row, Col, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
+import {
+    FileExcelOutlined
+} from '@ant-design/icons';
+import * as ExcelJS from "exceljs"
+import saveAs from "file-saver";
 
 import { NotificationContext } from '~/context/UI/NotificationContext';
 
-import { getDepositTransaction } from '~/api/bank'
+import {
+    getDepositTransaction,
+    getDataReportDepositTransaction
+} from '~/api/bank'
+import {
+    dowloadFileDepositTransactionReport
+} from '~/api/storage'
+
 import Spinning from "~/components/Spinning";
 import { formatPrice, ParseDateTime } from '~/utils/index'
 //import dayjs from 'dayjs';
@@ -14,7 +26,9 @@ import {
     PAGE_SIZE
 } from "~/constants";
 
-
+import classNames from 'classnames/bind';
+import styles from './HistoryDeposit.module.scss';
+const cx = classNames.bind(styles);
 
 const { RangePicker } = DatePicker;
 
@@ -195,6 +209,67 @@ function HistoryDeposit() {
         });
     };
 
+    const handleExportExcel = () => {
+        setLoading(true);
+        getDataReportDepositTransaction(searchData)
+            .then((response) => {
+                var dataOrders = response.data.result
+                dowloadFileDepositTransactionReport()
+                    .then(res => {
+                        const workbook = new ExcelJS.Workbook();
+                        workbook.xlsx
+                            .load(res.data)
+                            .then(async () => {
+                                const worksheet = workbook.getWorksheet(1);
+
+                                //data search
+                                const cellWithdrawTransactionId = worksheet.getCell('B4');
+                                cellWithdrawTransactionId.value = searchData.depositTransactionId;
+
+                                const cellCustomerEmail = worksheet.getCell('E4');
+                                cellCustomerEmail.value = searchData.email;
+
+                                const cellRequestDate = worksheet.getCell('B5');
+                                cellRequestDate.value = searchData.fromDate + " - " + searchData.toDate;
+
+                                // data table
+                                dataOrders.forEach((data) => {
+                                    worksheet.addRow(
+                                        [
+                                            data.depositTransactionId,
+                                            data.userId,
+                                            data.email,
+                                            data.amount,
+                                            ParseDateTime(data.requestDate),
+                                            ParseDateTime(data.paidDate),
+                                            data.code,
+                                            "Thành công",
+                                        ]);
+                                })
+                                const bufferhe = await workbook.xlsx.writeBuffer();
+                                saveAs(
+                                    new Blob([bufferhe], { type: "application/octet-stream" }),
+                                    "BaoCaoLichSuNapTien.xlsx"
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    })
+                    .catch(() => {
+                        notification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+                    })
+                    .finally(() => {
+                        setTimeout(() => setLoading(false), 500)
+                    })
+            })
+            .catch((err) => {
+
+            })
+            .finally(() => {
+                setTimeout(() => { setLoading(false) }, 500)
+            })
+    }
 
     return (
         <>
@@ -239,13 +314,19 @@ function HistoryDeposit() {
                                 </Row>
 
                                 <Row>
-                                    <Col span={6} offset={2}>
-                                        <Space>
-                                            <Button htmlType="button" onClick={onReset}>
-                                                Xóa
-                                            </Button>
-                                            <Button type="primary" htmlType="submit">
-                                                Tìm kiếm
+                                    <Col offset={14}>
+                                        <Space direction="vertical">
+                                            <Space>
+                                                <Button htmlType="button" onClick={onReset}>
+                                                    Xóa
+                                                </Button>
+                                                <Button type="primary" htmlType="submit">
+                                                    Tìm kiếm
+                                                </Button>
+
+                                            </Space>
+                                            <Button className={cx('btn-export-excel')} onClick={handleExportExcel} icon={<FileExcelOutlined />} >
+                                                Xuất báo cáo
                                             </Button>
                                         </Space>
                                     </Col>

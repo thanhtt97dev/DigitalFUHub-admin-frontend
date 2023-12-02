@@ -43,7 +43,7 @@ function BusinessFee() {
             width: '15%',
             render: (startDate) => {
                 return (
-                    <p>{ParseDateTime(startDate)}</p>
+                    <span>{ParseDateTime(startDate)}</span>
                 )
             }
         },
@@ -57,7 +57,8 @@ function BusinessFee() {
                         {endDate === null ?
                             <span style={{ color: "red" }}>Đang được áp dụng</span>
                             :
-                            ParseDateTime(endDate)}
+                            <span>{ParseDateTime(endDate)}</span>
+                        }
                     </>
 
                 )
