@@ -16,6 +16,7 @@ import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Message from '~/components/Message';
+import Notification from '~/components/Notification';
 
 import SignalR from '~/context/SignalR/index'
 
@@ -166,7 +167,7 @@ const AdminLayout = () => {
             >
                 <div className={cx('header-logo')}>
                     <Space>
-                        <Link to={'/home'} className={cx("link")}>
+                        <Link to={'/admin'} className={cx("link")}>
                             <h3>DigitalFUHub</h3>
                         </Link>
                     </Space>
@@ -197,17 +198,9 @@ const AdminLayout = () => {
                             <Col span={22}>
                                 <Row gutter={[16, 0]} justify="end" align="middle">
                                     <Col >
-                                        {/* <Notification /> */}
+                                        <Notification />
                                     </Col>
                                     <Col>
-                                        {/* <Link to="/chatBox">
-                                        <Badge count={<ClockCircleOutlined style={{ paddingTop: '30px', color: '#f5222d' }} />} size="small">
-                                            <MessageOutlined style={{
-                                                fontSize: '25px',
-                                                paddingTop: '20px'
-                                            }} />
-                                        </Badge>
-                                    </Link> */}
                                         <Message />
                                     </Col>
                                     <Col align="center" style={{

@@ -72,6 +72,11 @@ export const apiPostAuthForm = async (url, data) => {
     return response;
 };
 
+export const apiPutAuthForm = async (url, data) => {
+    const response = axios.put(url, data, headerWithTokenForForm());
+    return response;
+};
+
 export const apiPostAuth = async (url, data) => {
     const response = axios.post(url, data, headerWithToken());
     return response;
