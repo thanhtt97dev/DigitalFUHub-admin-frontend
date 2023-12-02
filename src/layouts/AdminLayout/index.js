@@ -54,8 +54,12 @@ const menuItems = [
         icon: <SoundOutlined />,
         children: [
             {
-                key: '/admin/marketing/sliderHome',
-                label: <Link to={"/admin/marketing/sliderHome"}>Slider Home</Link>,
+                key: '/admin/marketing/sliders',
+                label: <Link to={"/admin/marketing/sliders"}>Sliders</Link>,
+            },
+            {
+                key: '/admin/marketing/addSlider',
+                label: <Link to={"/admin/marketing/addSlider"}>Thêm mới slider</Link>,
             }
         ],
     },

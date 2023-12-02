@@ -195,4 +195,6 @@ export const PAGE_SIZE_NOTIFICATION = 5;
 export const PAGE_SIZE_PRODUCT_WISH_LIST = 30;
 export const PAGE_SIZE_PRODUCT_HOME_PAGE = 48;
 export const PAGE_SIZE_SEARCH_PRODUCT = 20;
-export const PAGE_SIZE_SLIDER = 20;	
+export const PAGE_SIZE_SLIDER = 20;
+
+export const UPLOAD_FILE_SIZE_LIMIT = 2 * 1024 * 1024;

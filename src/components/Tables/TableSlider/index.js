@@ -1,10 +1,12 @@
 import React from "react";
-import { Table, Image, Row, Col, Tooltip } from 'antd';
+import { Table, Image, Row } from 'antd';
 import classNames from 'classnames/bind';
+import {
+    ParseDateTime
+} from '~/utils/index'
 
 import styles from './TableSlider.module.scss';
 import { Link } from "react-router-dom";
-import { formatPrice } from "~/utils";
 
 const cx = classNames.bind(styles);
 
@@ -19,7 +21,20 @@ const columns = [
                 </Row>
             )
         },
-        width: '30%',
+        width: '15%',
+        fixed: 'left',
+    },
+    {
+        title: 'Ảnh',
+        dataIndex: 'url',
+        render: (url) => {
+            return (
+                <Row>
+                    <Image src={url} />
+                </Row>
+            )
+        },
+        width: '25%',
         fixed: 'left',
     },
     {
@@ -28,11 +43,11 @@ const columns = [
         render: (link) => {
             return (
                 <Row>
-                    {link}
+                    <Link>{link}</Link>
                 </Row>
             )
         },
-        width: '20%',
+        width: '10%',
     },
     {
         title: 'Ngày tạo',
@@ -40,11 +55,11 @@ const columns = [
         render: (dateCreate) => {
             return (
                 <Row>
-                    {dateCreate}
+                    {ParseDateTime(dateCreate)}
                 </Row>
             )
         },
-        width: '20%',
+        width: '15%',
     },
     {
         title: 'Trạng thái',

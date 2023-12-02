@@ -20,6 +20,7 @@ import Products from '~/pages/Admin/ManageProduct/Products';
 import ProductDetail from '~/pages/Admin/ManageProduct/ProductDetail';
 import ShopDetail from '~/pages/Admin/ManageShop/ShopDetail';
 import Shops from '~/pages/Admin/ManageShop/Shops';
+import AddSlider from '~/pages/Admin/ManageMarketing/AddSlider';
 
 const routesConfig = [
     {
@@ -56,10 +57,16 @@ const routesConfig = [
         component: <HistoryWithdraw />
     },
     {
-        path: '/admin/marketing/sliderHome',
+        path: '/admin/marketing/sliders',
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <SliderHome />
+    },
+    {
+        path: '/admin/marketing/addSlider',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <AddSlider />
     },
     {
         path: '/admin/finance/withdraw/tranfer-bylist',
