@@ -27,3 +27,7 @@ export const dowloadFileWithdrawReport = (url) => {
 export const dowloadFileTransactionInternalReport = (url) => {
     return apiGetFile("api/Files/TransactionInternalReportFile");
 };
+
+export const dowloadFileTransactionCoinReport = (url) => {
+    return apiGetFile("api/Files/TransactionCoinReportFile");
+};

@@ -20,7 +20,10 @@ import {
     TRANSACTION_TYPE_INTERNAL_PAYMENT,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND,
-    TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT
+    TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT,
+    TRANSACTION_COIN_TYPE_RECEIVE,
+    TRANSACTION_COIN_TYPE_USE,
+    TRANSACTION_COIN_TYPE_REFUND
 } from "~/constants"
 
 //API
@@ -410,6 +413,21 @@ export const getTransactionInternalStatus = (status) => {
             return "Nhận tiền hoàn khiếu nại";
         case TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT:
             return "Lợi nhuận";
+        default:
+            return ""
+    }
+}
+
+export const getTransactionCoinStatus = (status) => {
+    switch (status) {
+        case 0:
+            return "Tất cả";
+        case TRANSACTION_COIN_TYPE_RECEIVE:
+            return "Nhận";
+        case TRANSACTION_COIN_TYPE_USE:
+            return "Sử dụng";
+        case TRANSACTION_COIN_TYPE_REFUND:
+            return "Hoàn xu";
         default:
             return ""
     }
