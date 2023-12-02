@@ -12,6 +12,11 @@ import {
     ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
     ORDER_SELLER_VIOLATES,
+    WITHDRAW_TRANSACTION_IN_PROCESSING,
+    WITHDRAW_TRANSACTION_PAID,
+    WITHDRAW_TRANSACTION_REJECT,
+    WITHDRAW_TRANSACTION_CANCEL,
+    BANKS_INFO
 } from "~/constants"
 
 //API
@@ -358,6 +363,32 @@ export const getOrderStatus = (status) => {
             return "Từ chối khiếu nại";
         case ORDER_SELLER_VIOLATES:
             return "Người bán vi phạm";
+        default:
+            return ""
+    }
+}
+
+export const getBankName = (bankId) => {
+    var bankInfo = BANKS_INFO.find(x => x.id === bankId)
+    if (bankInfo === null || bankInfo === undefined) {
+        return ""
+    } else {
+        return bankInfo.name
+    }
+}
+
+export const getWithdrawTransactionStatus = (status) => {
+    switch (status) {
+        case 0:
+            return "Tất cả";
+        case WITHDRAW_TRANSACTION_IN_PROCESSING:
+            return "Chưa xử lý";
+        case WITHDRAW_TRANSACTION_PAID:
+            return "Thành công";
+        case WITHDRAW_TRANSACTION_REJECT:
+            return "Từ chối";
+        case WITHDRAW_TRANSACTION_CANCEL:
+            return "Đã hủy";
         default:
             return ""
     }

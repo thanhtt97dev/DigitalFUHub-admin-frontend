@@ -57,3 +57,7 @@ export const rejectWithdrawTransaction = (data) => {
 export const getAllWithdrawUnPay = (data) => {
     return apiPostAuth(`api/banks/GetAllWithdrawUnPay`, data);
 };
+
+export const getDataReportWithdrawTransaction = (data) => {
+    return apiPostAuth(`api/banks/GetDataReportWithdrawTransaction`, data);
+};

@@ -6,10 +6,26 @@ import {
     SwapOutlined,
     FileExcelOutlined
 } from '@ant-design/icons';
+import * as ExcelJS from "exceljs"
+import saveAs from "file-saver";
 
-import { getWithdrawTransaction, confirmTransferWithdrawSuccess } from '~/api/bank'
+import {
+    getWithdrawTransaction,
+    confirmTransferWithdrawSuccess,
+    getDataReportWithdrawTransaction
+} from '~/api/bank'
+
+import {
+    dowloadFileWithdrawReport
+} from '~/api/storage'
 import Spinning from "~/components/Spinning";
-import { formatPrice, ParseDateTime, getVietQrImgSrc } from '~/utils/index'
+import {
+    formatPrice,
+    ParseDateTime,
+    getVietQrImgSrc,
+    getBankName,
+    getWithdrawTransactionStatus
+} from '~/utils/index'
 import {
     RESPONSE_CODE_BANK_WITHDRAW_PAID,
     RESPONSE_CODE_SUCCESS,
@@ -337,7 +353,76 @@ function HistoryWithdraw() {
     }
 
     const handleExportExcel = () => {
+        setLoading(true);
+        getDataReportWithdrawTransaction(searchData)
+            .then((response) => {
+                var dataOrders = response.data.result
+                dowloadFileWithdrawReport()
+                    .then(res => {
+                        const workbook = new ExcelJS.Workbook();
+                        workbook.xlsx
+                            .load(res.data)
+                            .then(async () => {
+                                const worksheet = workbook.getWorksheet(1);
 
+                                //data search
+                                const cellWithdrawTransactionId = worksheet.getCell('B4');
+                                cellWithdrawTransactionId.value = searchData.withdrawTransactionId;
+
+                                const cellCustomerEmail = worksheet.getCell('B5');
+                                cellCustomerEmail.value = searchData.email;
+
+                                const cellRequestDate = worksheet.getCell('B6');
+                                cellRequestDate.value = searchData.fromDate + " - " + searchData.toDate;
+
+                                const cellBank = worksheet.getCell('E4');
+                                cellBank.value = getBankName(searchData.bankId);
+
+                                const cellCreditAccount = worksheet.getCell('E5');
+                                cellCreditAccount.value = searchData.creditAccount;
+
+                                const cellStatus = worksheet.getCell('E6');
+                                cellStatus.value = getWithdrawTransactionStatus(searchData.status);
+
+                                // data table
+                                dataOrders.forEach((data) => {
+                                    worksheet.addRow(
+                                        [
+                                            data.withdrawTransactionId,
+                                            data.userId,
+                                            data.email,
+                                            data.amount,
+                                            ParseDateTime(data.requestDate),
+                                            data.paidDate === null ? "N/A" : ParseDateTime(data.paidDate),
+                                            data.creditAccountName,
+                                            data.creditAccount,
+                                            data.bankName,
+                                            getWithdrawTransactionStatus(data.withdrawTransactionStatusId),
+                                        ]);
+                                })
+                                const bufferhe = await workbook.xlsx.writeBuffer();
+                                saveAs(
+                                    new Blob([bufferhe], { type: "application/octet-stream" }),
+                                    "BaoCaoLichSuRutTien.xlsx"
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    })
+                    .catch(() => {
+                        notification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+                    })
+                    .finally(() => {
+                        setTimeout(() => setLoading(false), 500)
+                    })
+            })
+            .catch((err) => {
+
+            })
+            .finally(() => {
+                setTimeout(() => { setLoading(false) }, 500)
+            })
     }
 
     return (

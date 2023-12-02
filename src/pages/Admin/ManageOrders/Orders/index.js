@@ -314,7 +314,6 @@ function Orders() {
         getReport(searchData)
             .then((response) => {
                 var dataOrders = response.data.result
-                console.log(dataOrders)
                 dowloadFileOrderReport()
                     .then(res => {
                         const workbook = new ExcelJS.Workbook();

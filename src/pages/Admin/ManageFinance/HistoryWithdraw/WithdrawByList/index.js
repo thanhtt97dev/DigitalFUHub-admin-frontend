@@ -424,6 +424,10 @@ function WithdrawByList() {
                         dataSource={dataTableView}
                         rowKey={(record) => record.withdrawTransactionId}
                         size="small"
+                        pagination={{
+                            pageSize: 100000,
+                            showSizeChanger: false
+                        }}
                         rowSelection={{
                             type: "checkbox",
                             ...rowSelection,

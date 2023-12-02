@@ -17,5 +17,9 @@ export const dowloadFileWithdrawByList = (url) => {
 };
 
 export const dowloadFileOrderReport = (url) => {
-    return apiGetFile("api/Files/order");
+    return apiGetFile("api/Files/OrderReportFile");
+};
+
+export const dowloadFileWithdrawReport = (url) => {
+    return apiGetFile("api/Files/WithdrawTransactionReportFile");
 };
