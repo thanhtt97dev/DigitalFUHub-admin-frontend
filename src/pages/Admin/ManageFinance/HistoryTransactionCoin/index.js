@@ -104,6 +104,7 @@ function HistoryTransactionCoin() {
     const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
+        setLoading(true)
         getHistoryTransactionCoin(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {

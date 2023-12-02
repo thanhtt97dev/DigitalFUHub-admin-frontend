@@ -219,6 +219,7 @@ function HistoryWithdraw() {
     }
 
     useEffect(() => {
+        setLoading(true)
         GetWithdrawTransactions();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchData])

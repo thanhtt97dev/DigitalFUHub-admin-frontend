@@ -216,6 +216,7 @@ function Orders() {
     const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
+        setLoading(true)
         getOrders(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {

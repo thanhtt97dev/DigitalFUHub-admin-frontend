@@ -113,6 +113,7 @@ function HistoryDeposit() {
     const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
+        setLoading(true)
         getDepositTransaction(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {

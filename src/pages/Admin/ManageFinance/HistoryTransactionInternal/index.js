@@ -132,6 +132,7 @@ function HistoryTransactionInternal() {
     const [totalRecord, setTotalRecord] = useState(0)
 
     useEffect(() => {
+        setLoading(true)
         getHistoryTransactionInternal(searchData)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
