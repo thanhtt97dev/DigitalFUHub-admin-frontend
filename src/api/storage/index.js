@@ -15,3 +15,7 @@ export const uploadFile = (url, data) => {
 export const dowloadFileWithdrawByList = (url) => {
     return apiGetFile("api/Files/getWithdrawBuyListMbBank");
 };
+
+export const dowloadFileOrderReport = (url) => {
+    return apiGetFile("api/Files/order");
+};

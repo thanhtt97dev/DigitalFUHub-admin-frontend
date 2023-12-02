@@ -2,12 +2,25 @@ import React, { useEffect, useState, useContext } from "react";
 import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, Select, Row, Col, } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
+import {
+    FileExcelOutlined
+} from '@ant-design/icons';
+import * as ExcelJS from "exceljs"
+import saveAs from "file-saver";
 
 import NotificationContext from "~/context/UI/NotificationContext";
 
-import { getOrders } from '~/api/order'
+import {
+    getOrders,
+    getReport
+} from '~/api/order'
+import { dowloadFileOrderReport } from '~/api/storage'
 import Spinning from "~/components/Spinning";
-import { formatPrice, ParseDateTime } from '~/utils/index'
+import {
+    formatPrice,
+    ParseDateTime,
+    getOrderStatus
+} from '~/utils/index'
 import {
     RESPONSE_CODE_SUCCESS,
     PAGE_SIZE,
@@ -17,8 +30,12 @@ import {
     ORDER_SELLER_REFUNDED,
     ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
-    ORDER_SELLER_VIOLATES
+    ORDER_SELLER_VIOLATES,
+    ORDER_REPORT_EXCEL_FILE_NAME
 } from "~/constants";
+import classNames from 'classnames/bind';
+import styles from './Orders.module.scss';
+const cx = classNames.bind(styles);
 
 
 
@@ -292,6 +309,85 @@ function Orders() {
     };
 
 
+    const handleExportExcel = () => {
+        setLoading(true);
+        getReport(searchData)
+            .then((response) => {
+                var dataOrders = response.data.result
+                console.log(dataOrders)
+                dowloadFileOrderReport()
+                    .then(res => {
+                        const workbook = new ExcelJS.Workbook();
+                        workbook.xlsx
+                            .load(res.data)
+                            .then(async () => {
+                                const worksheet = workbook.getWorksheet(1);
+
+                                //data search
+                                const cellOrderId = worksheet.getCell('K3');
+                                cellOrderId.value = searchData.orderId;
+
+                                const cellCustomerEmail = worksheet.getCell('K4');
+                                cellCustomerEmail.value = searchData.customerEmail;
+
+                                const cellOrderDate = worksheet.getCell('K5');
+                                cellOrderDate.value = searchData.fromDate + " - " + searchData.toDate;
+
+                                const cellShopId = worksheet.getCell('N3');
+                                cellShopId.value = searchData.shopId;
+
+                                const cellShopName = worksheet.getCell('N4');
+                                cellShopName.value = searchData.shopName;
+
+                                const cellOrderStatus = worksheet.getCell('N5');
+                                cellOrderStatus.value = getOrderStatus(searchData.status);
+
+                                // data table
+                                dataOrders.forEach((data) => {
+                                    worksheet.addRow(
+                                        [
+                                            data.orderId,
+                                            data.customerId,
+                                            data.customerEmail,
+                                            data.sellerId,
+                                            data.shopName,
+                                            ParseDateTime(data.orderDate),
+                                            data.totalAmount,
+                                            data.totalCouponDiscount,
+                                            data.totalCoinDiscount,
+                                            data.totalPayment,
+                                            data.totalRefundSeller,
+                                            data.totalBenefit,
+                                            data.businessFee,
+                                            getOrderStatus(data.orderStatusId),
+                                            data.note
+                                        ]);
+                                })
+                                const bufferhe = await workbook.xlsx.writeBuffer();
+                                saveAs(
+                                    new Blob([bufferhe], { type: "application/octet-stream" }),
+                                    ORDER_REPORT_EXCEL_FILE_NAME
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(error.message);
+                            });
+                    })
+                    .catch(() => {
+                        notification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+                    })
+                    .finally(() => {
+                        setTimeout(() => setLoading(false), 500)
+                    })
+            })
+            .catch((err) => {
+
+            })
+            .finally(() => {
+                setTimeout(() => { setLoading(false) }, 500)
+            })
+    }
+
     return (
         <>
             <Spinning spinning={loading}>
@@ -369,6 +465,13 @@ function Orders() {
                             </Col>
                         </Row>
                     </Form>
+                    <Row>
+                        <Col offset={20}>
+                            <Button className={cx('btn-export-excel')} onClick={handleExportExcel} icon={<FileExcelOutlined />} >
+                                Xuất báo cáo
+                            </Button>
+                        </Col>
+                    </Row>
                 </Card>
 
                 <Card style={{ marginTop: "20px" }}>

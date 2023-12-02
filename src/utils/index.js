@@ -3,7 +3,16 @@ import { format, register } from 'timeago.js';
 import jwtDecode from 'jwt-decode'
 import CryptoJS from 'crypto-js';
 import { Workbook } from 'exceljs'
-import { VIET_QR_SRC } from "~/constants"
+import {
+    VIET_QR_SRC,
+    ORDER_WAIT_CONFIRMATION,
+    ORDER_CONFIRMED,
+    ORDER_COMPLAINT,
+    ORDER_SELLER_REFUNDED,
+    ORDER_DISPUTE,
+    ORDER_REJECT_COMPLAINT,
+    ORDER_SELLER_VIOLATES,
+} from "~/constants"
 
 //API
 
@@ -329,4 +338,27 @@ export const base64ToBlob = (base64String, contentType) => {
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], { type: contentType });
     return blob;
+}
+
+export const getOrderStatus = (status) => {
+    switch (status) {
+        case 0:
+            return "Tất cả";
+        case ORDER_WAIT_CONFIRMATION:
+            return "Chờ xác nhận";
+        case ORDER_CONFIRMED:
+            return "Đã xác nhận";
+        case ORDER_COMPLAINT:
+            return "Khiếu nại";
+        case ORDER_SELLER_REFUNDED:
+            return "Người bán hoàn tiền";
+        case ORDER_DISPUTE:
+            return "Tranh chấp";
+        case ORDER_REJECT_COMPLAINT:
+            return "Từ chối khiếu nại";
+        case ORDER_SELLER_VIOLATES:
+            return "Người bán vi phạm";
+        default:
+            return ""
+    }
 }

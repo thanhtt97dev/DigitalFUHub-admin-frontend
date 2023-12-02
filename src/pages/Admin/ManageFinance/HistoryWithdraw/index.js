@@ -3,7 +3,8 @@ import { Card, Table, Tag, Button, Form, Input, DatePicker, Select, Modal, Divid
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link, useNavigate } from "react-router-dom";
 import {
-    SwapOutlined
+    SwapOutlined,
+    FileExcelOutlined
 } from '@ant-design/icons';
 
 import { getWithdrawTransaction, confirmTransferWithdrawSuccess } from '~/api/bank'
@@ -22,9 +23,9 @@ import {
 import DrawerWithdrawTransactionBill from "~/components/Drawers/DrawerWithdrawTransactionBill";
 
 import classNames from 'classnames/bind';
-import styles from './HistoryWithdraw.module.scss';
 import ModalRejectWithdrawTransaction from "~/components/Modals/ModalRejectWithdrawTransaction";
 
+import styles from './HistoryWithdraw.module.scss';
 const cx = classNames.bind(styles);
 const { RangePicker } = DatePicker;
 
@@ -335,6 +336,10 @@ function HistoryWithdraw() {
         return navigate("tranfer-bylist", { state: { dataTable: dataTableRecordsUnPay } })
     }
 
+    const handleExportExcel = () => {
+
+    }
+
     return (
         <>
             {contextHolder}
@@ -419,12 +424,24 @@ function HistoryWithdraw() {
                         </Row>
                     </Form>
 
-                    <Button type="primary" onClick={handleNavigateToWithdrawByList}>
-                        <SwapOutlined /> Chuyển khoản theo lô
-                    </Button>
+
+                    <Row>
+                        <Col offset={1} span={11}>
+                            <Button type="primary" onClick={handleNavigateToWithdrawByList}>
+                                <SwapOutlined /> Chuyển khoản theo lô
+                            </Button>
+                        </Col>
+
+                        <Col offset={8}>
+                            <Button className={cx('btn-export-excel')} onClick={handleExportExcel} icon={<FileExcelOutlined />} >
+                                Xuất báo cáo
+                            </Button>
+                        </Col>
+                    </Row>
                 </Card>
 
                 <Card style={{ marginTop: "20px" }}>
+
                     <Row align="end">
                         <b>{totalRecord} Kết quả</b>
                     </Row>

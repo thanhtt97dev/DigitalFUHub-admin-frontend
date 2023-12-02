@@ -103,6 +103,7 @@ export const BANKS_INFO = [
 ]
 
 export const MB_BANK_TRANFER_BY_LIST_EXCEL_FILE_NAME = 'Chuyenkhoantheobangke.xlsx'
+export const ORDER_REPORT_EXCEL_FILE_NAME = 'OrdersReport.xlsx'
 
 //request's status
 export const RESPONSE_CODE_SUCCESS = "00"
