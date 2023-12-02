@@ -2,10 +2,24 @@ import React, { useEffect, useState, useContext } from "react";
 import { Card, Table, Select, Button, Form, Input, DatePicker, Tag, Row, Col, Space } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link } from "react-router-dom";
+import {
+    FileExcelOutlined
+} from '@ant-design/icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWallet, faUserShield } from "@fortawesome/free-solid-svg-icons"
+import * as ExcelJS from "exceljs"
+import saveAs from "file-saver";
 
 import NotificationContext from "~/context/UI/NotificationContext";
 
-import { getHistoryTransactionInternal } from '~/api/transactionInternal'
+import {
+    dowloadFileTransactionInternalReport
+} from '~/api/storage'
+import {
+    getHistoryTransactionInternal,
+    getDataReportTransactionInternal
+} from '~/api/transactionInternal'
+
 import Spinning from "~/components/Spinning";
 import { formatPrice, ParseDateTime } from '~/utils/index'
 import {
@@ -16,8 +30,11 @@ import {
     TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT
 } from "~/constants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWallet, faUserShield } from "@fortawesome/free-solid-svg-icons"
+
+
+import classNames from 'classnames/bind';
+import styles from './HistoryTransactionInternal.module.scss';
+const cx = classNames.bind(styles);
 
 
 const { RangePicker } = DatePicker;
@@ -195,6 +212,69 @@ function HistoryTransactionInternal() {
         });
     };
 
+    const handleExportExcel = () => {
+        setLoading(true);
+        getDataReportTransactionInternal(searchData)
+            .then((response) => {
+                var dataOrders = response.data.result
+                dowloadFileTransactionInternalReport()
+                    .then(res => {
+                        const workbook = new ExcelJS.Workbook();
+                        workbook.xlsx
+                            .load(res.data)
+                            .then(async () => {
+                                const worksheet = workbook.getWorksheet(1);
+
+                                //data search
+                                const cellOrderId = worksheet.getCell('B4');
+                                cellOrderId.value = searchData.orderId;
+
+                                const cellCustomerEmail = worksheet.getCell('B5');
+                                cellCustomerEmail.value = searchData.email;
+
+                                const cellDate = worksheet.getCell('E4');
+                                cellDate.value = searchData.fromDate + " - " + searchData.toDate;
+
+                                const cellStatus = worksheet.getCell('E5');
+                                cellStatus.value = searchData.status;
+
+                                // data table
+                                dataOrders.forEach((data) => {
+                                    worksheet.addRow(
+                                        [
+                                            data.orderId,
+                                            data.userId,
+                                            (data.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT ? "Admin" : data.email),
+                                            data.paymentAmount,
+                                            ParseDateTime(data.dateCreate),
+                                            data.transactionInternalTypeId
+                                        ]);
+                                })
+                                const bufferhe = await workbook.xlsx.writeBuffer();
+                                saveAs(
+                                    new Blob([bufferhe], { type: "application/octet-stream" }),
+                                    "BaoCaoLichSuGiaoDichNoiBo.xlsx"
+                                );
+                            })
+                            .catch((error) => {
+                                console.error(error.message);
+                            });
+                    })
+                    .catch(() => {
+                        notification("error", "Hệ thống đang gặp sự cố! Vui lòng thử lại sau!")
+                    })
+                    .finally(() => {
+                        setTimeout(() => setLoading(false), 500)
+                    })
+            })
+            .catch((err) => {
+
+            })
+            .finally(() => {
+                setTimeout(() => { setLoading(false) }, 500)
+            })
+    }
+
     return (
         <>
             <Spinning spinning={loading}>
@@ -253,7 +333,7 @@ function HistoryTransactionInternal() {
                                 </Row>
 
                                 <Row>
-                                    <Col span={2} offset={13}>
+                                    <Col span={2} offset={8}>
                                         <Space>
                                             <Button htmlType="button" onClick={onReset}>
                                                 Xóa
@@ -261,7 +341,11 @@ function HistoryTransactionInternal() {
                                             <Button type="primary" htmlType="submit">
                                                 Tìm kiếm
                                             </Button>
+                                            <Button className={cx('btn-export-excel')} onClick={handleExportExcel} icon={<FileExcelOutlined />} >
+                                                Xuất báo cáo
+                                            </Button>
                                         </Space>
+
                                     </Col>
                                 </Row>
                             </Col>

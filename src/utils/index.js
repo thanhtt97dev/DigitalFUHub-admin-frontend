@@ -16,7 +16,11 @@ import {
     WITHDRAW_TRANSACTION_PAID,
     WITHDRAW_TRANSACTION_REJECT,
     WITHDRAW_TRANSACTION_CANCEL,
-    BANKS_INFO
+    BANKS_INFO,
+    TRANSACTION_TYPE_INTERNAL_PAYMENT,
+    TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT,
+    TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND,
+    TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT
 } from "~/constants"
 
 //API
@@ -389,6 +393,23 @@ export const getWithdrawTransactionStatus = (status) => {
             return "Từ chối";
         case WITHDRAW_TRANSACTION_CANCEL:
             return "Đã hủy";
+        default:
+            return ""
+    }
+}
+
+export const getTransactionInternalStatus = (status) => {
+    switch (status) {
+        case 0:
+            return "Tất cả";
+        case TRANSACTION_TYPE_INTERNAL_PAYMENT:
+            return "Thanh toán";
+        case TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT:
+            return "Nhận tiền hàng";
+        case TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND:
+            return "Nhận tiền hoàn khiếu nại";
+        case TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT:
+            return "Lợi nhuận";
         default:
             return ""
     }

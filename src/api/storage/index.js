@@ -23,3 +23,7 @@ export const dowloadFileOrderReport = (url) => {
 export const dowloadFileWithdrawReport = (url) => {
     return apiGetFile("api/Files/WithdrawTransactionReportFile");
 };
+
+export const dowloadFileTransactionInternalReport = (url) => {
+    return apiGetFile("api/Files/TransactionInternalReportFile");
+};
