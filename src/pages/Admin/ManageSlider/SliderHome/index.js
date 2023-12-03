@@ -34,6 +34,7 @@ const tabList = [
 function SliderHome() {
 
     /// states
+    const [isLoadingSliderFlag, setIsLoadingSliderFlag] = useState(false);
     const [dataTable, setDataTable] = useState([]);
     const [tableParams, setTableParams] = useState({
         pagination: {
@@ -43,10 +44,6 @@ function SliderHome() {
         },
     });
     const [searchParams, setSearchParams] = useState({
-        name: "",
-        link: "",
-        startDate: null,
-        endDate: null,
         statusActive: STATUS_ALL_SLIDER_FOR_FILTER,
         page: 1
     });
@@ -92,10 +89,14 @@ function SliderHome() {
                 }, 500);
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams])
+    }, [searchParams, isLoadingSliderFlag])
     ///
 
     /// handles
+    const handleReloadSliders = () => {
+        setIsLoadingSliderFlag(!isLoadingSliderFlag);
+    }
+
     const handleTableChange = (pagination, filters, sorter) => {
         setSearchParams({
             ...searchParams,
@@ -152,9 +153,9 @@ function SliderHome() {
 
     };
     const contentList = {
-        tab1: <TableSlider tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
-        tab2: <TableSlider tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />,
-        tab3: <TableSlider tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} />
+        tab1: <TableSlider tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} handleReloadSliders={handleReloadSliders} />,
+        tab2: <TableSlider tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} handleReloadSliders={handleReloadSliders} />,
+        tab3: <TableSlider tableParams={tableParams} handleTableChange={handleTableChange} data={dataTable} handleReloadSliders={handleReloadSliders} />
     };
 
     return (

@@ -3,7 +3,7 @@ import validator from 'validator';
 import classNames from 'classnames/bind';
 import styles from './EditSlider.module.scss';
 import Spinning from "~/components/Spinning";
-import { getSlider } from "~/api/slider";
+import { getSlider, updateSlider } from "~/api/slider";
 import ModelConfirmation from "~/components/Modals/ModalConfirmation";
 import { useAuthUser } from 'react-auth-kit';
 import BoxImage from "~/components/BoxImage";
@@ -12,7 +12,7 @@ import { UPLOAD_FILE_SIZE_LIMIT } from '~/constants';
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
-import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Switch, Space } from 'antd';
+import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Space } from 'antd';
 
 
 ///
@@ -29,9 +29,7 @@ const EditSlider = () => {
     const navigate = useNavigate();
     const [isOpenModalChangeStatus, setIsOpenModalChangeStatus] = useState(false);
     const [contentModalChangeStatus, setContentModalChangeStatus] = useState('');
-
     const [slider, setSlider] = useState({});
-    const [isCheckedStatus, setIsCheckedStatus] = React.useState(false);
     const [isLoadingSpinning, setIsLoadingSpinning] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [sliderSrc, setsliderSrc] = useState([]);
@@ -68,7 +66,10 @@ const EditSlider = () => {
                         const result = data.result;
                         setSlider(result);
                         setsliderSrc([{ src: result.url, file: null }]);
-                        setIsCheckedStatus(result.isActive);
+
+                        form.setFieldValue("name", result.name);
+                        form.setFieldValue("link", result.link);
+
                     } else if (status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
                         notification("error", "Slider không tồn tại");
                     }
@@ -87,11 +88,17 @@ const EditSlider = () => {
 
     /// handles
     const handleOkChangeStatus = () => {
-        setIsCheckedStatus(!isCheckedStatus);
+        setSlider({ ...slider, isActive: !slider.isActive });
         setIsOpenModalChangeStatus(false);
     }
+
+
     const handleCancelChangeStatus = () => {
         setIsOpenModalChangeStatus(false);
+    }
+
+    const handleCancelPage = () => {
+        return navigate('/admin/slider');
     }
 
     const getBase64 = (file) =>
@@ -103,42 +110,43 @@ const EditSlider = () => {
         });
 
     const onFinish = (values) => {
-
         if (user === undefined || user === null) return navigate('/login');
+        if (id === 0) return;
 
         setIsLoadingSpinning(true);
 
-        const { name, imageSlider, isActive, productId } = values;
+        const { name, link } = values;
 
         // request dto
         const requestDto = {
+            SliderId: id,
             Name: name,
-            Image: imageSlider.file.originFileObj,
-            ProductId: productId,
-            IsActive: isActive
+            Image: sliderSrc[0]?.file ? sliderSrc[0]?.file : null,
+            link: link,
+            IsActive: slider.isActive
         }
 
-        // addSlider(requestDto)
-        //     .then((res) => {
-        //         if (res.status === 200) {
-        //             const data = res.data;
-        //             if (data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-        //                 notification("success", "Thêm mới slider thành công");
-        //                 setIsLoadingSpinning(false);
-        //                 navigate('/admin/marketing/sliders');
-        //             } else if (
-        //                 data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT
-        //                 ||
-        //                 data.status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
-        //                 notification("error", "Yêu cầu không hợp lệ. Vui lòng thử lại!");
-        //                 setIsLoadingSpinning(false);
-        //             }
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         notification("error", "Có lỗi xảy ra. Vui lòng thử lại!");
-        //         setIsLoadingSpinning(false);
-        //     })
+        updateSlider(requestDto)
+            .then((res) => {
+                if (res.status === 200) {
+                    const data = res.data;
+                    if (data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                        notification("success", "Cập nhật slider thành công");
+                        setIsLoadingSpinning(false);
+                        navigate('/admin/slider');
+                    } else if (
+                        data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT
+                        ||
+                        data.status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
+                        notification("error", "Yêu cầu không hợp lệ. Vui lòng thử lại!");
+                        setIsLoadingSpinning(false);
+                    }
+                }
+            })
+            .catch((error) => {
+                notification("error", "Có lỗi xảy ra. Vui lòng thử lại!");
+                setIsLoadingSpinning(false);
+            })
     }
 
     const handleSliderChange = async (info) => {
@@ -155,7 +163,7 @@ const EditSlider = () => {
 
     const handleChangeStatus = () => {
         let contentModal = '';
-        if (isCheckedStatus) {
+        if (slider?.isActive) {
             contentModal = "Slider này sẽ không được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
         } else {
             contentModal = "Slider này sẽ được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
@@ -196,9 +204,24 @@ const EditSlider = () => {
             return Promise.resolve();
         }
     }
-    ///
 
-    console.log('isCheckedSwitch = ' + isCheckedStatus);
+    const linkProductValidator = (value) => {
+        let linkProduct = form.getFieldValue(value.field);
+        if (linkProduct === undefined || linkProduct === "") {
+            return Promise.reject('Link sản phẩm không được để trống');
+        }
+
+        const trimmedValue = linkProduct.replace(/\s+/g, ' ');
+
+        if (!validator.isURL(trimmedValue, { protocols: ["http", "https"], require_tld: false, require_protocol: true })) {
+            return Promise.reject('Link không hợp lệ');
+        } else {
+            return Promise.resolve();
+        }
+
+        // return Promise.resolve();
+    }
+    ///
 
     return (<Spinning spinning={isLoadingSpinning}>
         <Modal
@@ -245,7 +268,7 @@ const EditSlider = () => {
                     ]}
                 >
                     <Row>
-                        <Input style={{ width: '100%' }} value={slider.name} />
+                        <Input style={{ width: '100%' }} value={slider.name} onChange={(e) => setSlider({ ...slider, name: e.target.value })} />
                     </Row>
 
                 </Form.Item>
@@ -299,24 +322,23 @@ const EditSlider = () => {
 
                     </Space>
                 </Form.Item>
-                <Form.Item name='productId'
-                    label={<lable style={{ fontSize: 14 }}>Mã sản phẩm liên quan <Tooltip title="Mã sản phẩm liên quan đến slider"><QuestionCircleOutlined /></Tooltip></lable>}
+                <Form.Item name='link'
+                    label={<lable style={{ fontSize: 14 }}>Link sản phẩm liên quan <Tooltip title="Link sản phẩm liên quan đến slider"><QuestionCircleOutlined /></Tooltip></lable>}
                     style={{ width: '100%' }}
                     rules={[
                         {
-                            required: true,
-                            message: 'Mã sản phẩm liên quan không để trống.'
+                            validator: linkProductValidator
                         }
                     ]}>
                     <Row>
-                        <Input style={{ width: '100%' }} />
+                        <Input value={slider.link} style={{ width: '100%' }} onChange={(e) => setSlider({ ...slider, link: e.target.value })} />
                     </Row>
                 </Form.Item>
                 <Row gutter={8}>
                     <Col span={17}>
                         <Form.Item name="isActive" label={<lable style={{ fontSize: 14 }}>Trạng thái <Tooltip title="Trạng thái hiển thị slider trên trang chủ"><QuestionCircleOutlined /></Tooltip></lable>} labelAlign="left" valuePropName="checked" style={{ width: '100%' }}>
                             {
-                                isCheckedStatus ? <Button type="primary" style={{ backgroundColor: 'green' }} onClick={handleChangeStatus}>
+                                slider?.isActive ? <Button type="primary" style={{ backgroundColor: 'green' }} onClick={handleChangeStatus}>
                                     Đang hiển thị
                                 </Button> : <Button type="primary" danger onClick={handleChangeStatus}>
                                     Đang ẩn
@@ -328,7 +350,10 @@ const EditSlider = () => {
 
                 <Form.Item>
                     <Row className={cx('flex-item-center')}>
-                        <Button type="primary" htmlType="submit">Cập nhật</Button>
+                        <Space align="center">
+                            <Button type="primary" htmlType="submit" danger ghost onClick={handleCancelPage}>Quay lại danh sách</Button>
+                            <Button type="primary" htmlType="submit" ghost>Cập nhật</Button>
+                        </Space>
                     </Row>
                 </Form.Item>
             </Form>
