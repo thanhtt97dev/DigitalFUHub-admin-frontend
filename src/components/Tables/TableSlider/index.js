@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
 import ModelConfirmation from "~/components/Modals/ModalConfirmation";
-import { deleteSlider } from "~/api/slider";
-import { Table, Image, Row, Button, Space } from 'antd';
-import { NotificationContext } from "~/context/UI/NotificationContext";
-import { ParseDateTime } from '~/utils/index'
-import { useAuthUser } from 'react-auth-kit';
-import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
 import { Link } from "react-router-dom";
+import { deleteSlider } from "~/api/slider";
+import { useAuthUser } from 'react-auth-kit';
+import { ParseDateTime } from '~/utils/index';
 import { useNavigate } from 'react-router-dom';
 import { EditOutlined } from '@ant-design/icons';
+import { Table, Image, Row, Button, Space } from 'antd';
+import { NotificationContext } from "~/context/UI/NotificationContext";
+import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
 
-
+/// styles
+const styleImageSlider = { width: 270, height: 90, borderRadius: 2 }
+///
 function TableSlider({ data, tableParams, handleTableChange, handleReloadSliders }) {
 
     /// states
@@ -86,7 +88,7 @@ function TableSlider({ data, tableParams, handleTableChange, handleReloadSliders
             render: (url) => {
                 return (
                     <Row>
-                        <Image src={url} />
+                        <Image src={url} style={styleImageSlider} />
                     </Row>
                 )
             },

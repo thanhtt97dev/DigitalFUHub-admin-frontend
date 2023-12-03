@@ -1,20 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Card } from 'antd';
-
 import Spinning from "~/components/Spinning";
-
-import { getSliders } from "~/api/slider";
-
-import {
-    RESPONSE_CODE_SUCCESS,
-    RESPONSE_CODE_NOT_ACCEPT,
-    STATUS_ALL_SLIDER_FOR_FILTER,
-    STATUS_ACTIVE_SLIDER_FOR_FILTER,
-    STATUS_UN_ACTIVE_SLIDER_FOR_FILTER,
-    PAGE_SIZE_SLIDER
-} from "~/constants";
 import TableSlider from "~/components/Tables/TableSlider";
+import { Card } from 'antd';
+import { getSliders } from "~/api/slider";
 import { NotificationContext } from "~/context/UI/NotificationContext";
+import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, STATUS_ALL_SLIDER_FOR_FILTER, STATUS_ACTIVE_SLIDER_FOR_FILTER, STATUS_UN_ACTIVE_SLIDER_FOR_FILTER, PAGE_SIZE_SLIDER } from "~/constants";
 
 
 const tabList = [
@@ -31,11 +21,14 @@ const tabList = [
         key: "tab3",
     }
 ]
+
 function SliderHome() {
 
     /// states
     const [isLoadingSliderFlag, setIsLoadingSliderFlag] = useState(false);
     const [dataTable, setDataTable] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [activeTabKey, setActiveTabKey] = useState('tab1');
     const [tableParams, setTableParams] = useState({
         pagination: {
             current: 1,
@@ -47,9 +40,6 @@ function SliderHome() {
         statusActive: STATUS_ALL_SLIDER_FOR_FILTER,
         page: 1
     });
-    const [loading, setLoading] = useState(false);
-    const [activeTabKey, setActiveTabKey] = useState('tab1');
-
     ///
 
     /// contexts
@@ -77,7 +67,7 @@ function SliderHome() {
                             },
                         });
                     } else if (status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
-                        notification('error', "Tham số tìm kiếm không hợp lệ!");
+                        notification('error', "Yêu cầu không hợp lệ");
                     }
                 }
 

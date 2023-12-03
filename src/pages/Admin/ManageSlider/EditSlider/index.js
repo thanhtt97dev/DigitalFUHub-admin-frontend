@@ -1,18 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
 import validator from 'validator';
 import classNames from 'classnames/bind';
-import styles from './EditSlider.module.scss';
 import Spinning from "~/components/Spinning";
-import { getSlider, updateSlider } from "~/api/slider";
+import BoxImage from "~/components/BoxImage";
+import styles from './EditSlider.module.scss';
 import ModelConfirmation from "~/components/Modals/ModalConfirmation";
 import { useAuthUser } from 'react-auth-kit';
-import BoxImage from "~/components/BoxImage";
-import { useNavigate, useParams } from 'react-router-dom';
 import { UPLOAD_FILE_SIZE_LIMIT } from '~/constants';
+import { getSlider, updateSlider } from "~/api/slider";
+import { useNavigate, useParams } from 'react-router-dom';
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
 import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Space } from 'antd';
+import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
 
 
 ///
