@@ -3,6 +3,7 @@ import validator from 'validator';
 import classNames from 'classnames/bind';
 import styles from './AddSlider.module.scss';
 import Spinning from "~/components/Spinning";
+import ModelConfirmation from "~/components/Modals/ModalConfirmation";
 import { addSlider } from "~/api/slider";
 import { useAuthUser } from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { UPLOAD_FILE_SIZE_LIMIT } from '~/constants';
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
-import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Switch } from 'antd';
+import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal } from 'antd';
 
 ///
 const cx = classNames.bind(styles);
@@ -24,9 +25,12 @@ const AddSlider = () => {
 
     /// states
     const navigate = useNavigate();
+    const [isOpenModalChangeStatus, setIsOpenModalChangeStatus] = useState(false);
+    const [contentModalChangeStatus, setContentModalChangeStatus] = useState('');
     const [isLoadingSpinning, setIsLoadingSpinning] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [sliderFile, setSliderFile] = useState([]);
+    const [isCheckedStatus, setIsCheckedStatus] = React.useState(false);
     const [openNotificationFileExceedLimit, setOpenNotificationFileExceedLimit] = useState(false);
     const [msgNotificationFileExceedLimit, setMsgNotificationFileExceedLimit] = useState([]);
     const [previewImageTitle, setPreviewImageTitle] = useState('');
@@ -45,6 +49,13 @@ const AddSlider = () => {
     ///
 
     /// handles
+    const handleOkChangeStatus = () => {
+        setIsCheckedStatus(!isCheckedStatus);
+        setIsOpenModalChangeStatus(false);
+    }
+    const handleCancelChangeStatus = () => {
+        setIsOpenModalChangeStatus(false);
+    }
     const getBase64 = (file) =>
         new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -59,13 +70,13 @@ const AddSlider = () => {
 
         setIsLoadingSpinning(true);
 
-        const { name, imageSlider, isActive, productId } = values;
+        const { name, imageSlider, isActive, link } = values;
 
         // request dto
         const requestDto = {
             Name: name,
             Image: imageSlider.file.originFileObj,
-            ProductId: productId,
+            link: link,
             IsActive: isActive
         }
 
@@ -76,7 +87,7 @@ const AddSlider = () => {
                     if (data.status.responseCode === RESPONSE_CODE_SUCCESS) {
                         notification("success", "Thêm mới slider thành công");
                         setIsLoadingSpinning(false);
-                        navigate('/admin/marketing/sliders');
+                        navigate('/admin/slider');
                     } else if (
                         data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT
                         ||
@@ -130,6 +141,18 @@ const AddSlider = () => {
         setOpenNotificationFileExceedLimit(false);
     }
 
+    const handleChangeStatus = () => {
+        let contentModal = '';
+        if (isCheckedStatus) {
+            contentModal = "Slider này sẽ không được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
+        } else {
+            contentModal = "Slider này sẽ được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
+        }
+
+        setContentModalChangeStatus(contentModal);
+        setIsOpenModalChangeStatus(true);
+    }
+
     ///
 
     /// validators
@@ -146,6 +169,23 @@ const AddSlider = () => {
         } else {
             return Promise.resolve();
         }
+    }
+
+    const linkProductValidator = (value) => {
+        let linkProduct = form.getFieldValue(value.field);
+        if (linkProduct === undefined || linkProduct === "") {
+            return Promise.reject('Link sản phẩm không được để trống');
+        }
+
+        const trimmedValue = linkProduct.replace(/\s+/g, ' ');
+
+        if (!validator.isURL(trimmedValue, { protocols: ["http", "https"], require_tld: false, require_protocol: true })) {
+            return Promise.reject('Link không hợp lệ');
+        } else {
+            return Promise.resolve();
+        }
+
+        // return Promise.resolve();
     }
     ///
 
@@ -228,13 +268,12 @@ const AddSlider = () => {
                         </div> : null}
                     </Upload>
                 </Form.Item>
-                <Form.Item name='productId'
-                    label={<lable style={{ fontSize: 14 }}>Mã sản phẩm liên quan <Tooltip title="Mã sản phẩm liên quan đến slider"><QuestionCircleOutlined /></Tooltip></lable>}
+                <Form.Item name='link'
+                    label={<lable style={{ fontSize: 14 }}>Link sản phẩm liên quan <Tooltip title="Link sản phẩm liên quan đến slider"><QuestionCircleOutlined /></Tooltip></lable>}
                     style={{ width: '100%' }}
                     rules={[
                         {
-                            required: true,
-                            message: 'Mã sản phẩm liên quan không để trống.'
+                            validator: linkProductValidator
                         }
                     ]}>
                     <Row>
@@ -244,7 +283,13 @@ const AddSlider = () => {
                 <Row gutter={8}>
                     <Col span={17}>
                         <Form.Item name="isActive" label={<lable style={{ fontSize: 14 }}>Trạng thái <Tooltip title="Trạng thái hiển thị slider trên trang chủ"><QuestionCircleOutlined /></Tooltip></lable>} labelAlign="left" valuePropName="checked" style={{ width: '100%' }}>
-                            <Switch checkedChildren="Hiển thị" unCheckedChildren="Ẩn" />
+                            {
+                                isCheckedStatus ? <Button type="primary" style={{ backgroundColor: 'green' }} onClick={handleChangeStatus}>
+                                    Đang hiển thị
+                                </Button> : <Button type="primary" danger onClick={handleChangeStatus}>
+                                    Đang ẩn
+                                </Button>
+                            }
                         </Form.Item>
                     </Col>
                 </Row>
@@ -256,6 +301,13 @@ const AddSlider = () => {
                 </Form.Item>
             </Form>
         </Card >
+        <ModelConfirmation title="Chỉnh sửa trạng thái"
+            isOpen={isOpenModalChangeStatus}
+            onOk={handleOkChangeStatus}
+            onCancel={handleCancelChangeStatus}
+            contentModal={contentModalChangeStatus}
+            contentButtonCancel="Không"
+            contentButtonOk="Đồng ý" />
     </Spinning>)
 }
 

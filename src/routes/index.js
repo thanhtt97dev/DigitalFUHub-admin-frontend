@@ -7,7 +7,7 @@ import Verification2FA from '~/pages/Verification2FA';
 import AdminLayout from '~/layouts/AdminLayout';
 import HistoryDeposit from '~/pages/Admin/ManageFinance/HistoryDeposit';
 import HistoryWithdraw from '~/pages/Admin/ManageFinance/HistoryWithdraw';
-import SliderHome from '~/pages/Admin/ManageMarketing/SliderHome';
+import SliderHome from '~/pages/Admin/ManageSlider/SliderHome';
 import WithdrawByList from '~/pages/Admin/ManageFinance/HistoryWithdraw/WithdrawByList';
 import HistoryTransactionInternal from '~/pages/Admin/ManageFinance/HistoryTransactionInternal';
 import Orders from '~/pages/Admin/ManageOrders/Orders';
@@ -20,7 +20,8 @@ import Products from '~/pages/Admin/ManageProduct/Products';
 import ProductDetail from '~/pages/Admin/ManageProduct/ProductDetail';
 import ShopDetail from '~/pages/Admin/ManageShop/ShopDetail';
 import Shops from '~/pages/Admin/ManageShop/Shops';
-import AddSlider from '~/pages/Admin/ManageMarketing/AddSlider';
+import AddSlider from '~/pages/Admin/ManageSlider/AddSlider';
+import EditSlider from '~/pages/Admin/ManageSlider/EditSlider';
 
 const routesConfig = [
     {
@@ -57,16 +58,22 @@ const routesConfig = [
         component: <HistoryWithdraw />
     },
     {
-        path: '/admin/marketing/sliders',
+        path: '/admin/slider',
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <SliderHome />
     },
     {
-        path: '/admin/marketing/addSlider',
+        path: '/admin/slider/add',
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <AddSlider />
+    },
+    {
+        path: '/admin/slider/edit/:id',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <EditSlider />
     },
     {
         path: '/admin/finance/withdraw/tranfer-bylist',
