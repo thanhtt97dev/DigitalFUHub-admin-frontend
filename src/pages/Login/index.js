@@ -52,8 +52,8 @@ function Login() {
                     });
                     saveRefreshTokenInCookies(res.data.refreshToken)
                     saveTokenInCookies(res.data.accessToken)
+                    return navigate('/admin');
                 }, 500)
-                return navigate('/admin');
             })
             .catch((err) => {
                 setMessage(err.response.data);

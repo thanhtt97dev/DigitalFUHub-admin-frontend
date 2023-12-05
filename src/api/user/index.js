@@ -50,3 +50,6 @@ export const postUserInfo = (id, data) => {
 export const getUsers = (data) => {
     return apiPostAuth(`api/users/GetUsers`, data);
 };
+export const getUserInfoById = (id) => {
+    return apiGetAuth(`api/users/Admin/UserInfo/${id}`)
+}
