@@ -49,17 +49,17 @@ const menuItems = [
         icon: <AreaChartOutlined />,
     },
     {
-        label: 'Marketing',
-        key: 'admin/marketing',
+        label: 'Quản lý slider',
+        key: 'admin/slider',
         icon: <SoundOutlined />,
         children: [
             {
-                key: '/admin/marketing/sliders',
-                label: <Link to={"/admin/marketing/sliders"}>Sliders</Link>,
+                key: '/admin/slider',
+                label: <Link to={"/admin/slider"}>Sliders</Link>,
             },
             {
                 key: '/admin/marketing/addSlider',
-                label: <Link to={"/admin/marketing/addSlider"}>Thêm mới slider</Link>,
+                label: <Link to={"/admin/slider/add"}>Thêm mới slider</Link>,
             }
         ],
     },
