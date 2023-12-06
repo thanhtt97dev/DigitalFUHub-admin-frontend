@@ -51,7 +51,16 @@ function UserInfo() {
                                 <Tag color={userData?.isConfirm ? 'green' : 'volcano'}>{userData?.isConfirm ? 'Đã xác thực' : 'Chưa xác thực'}</Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label="Trạng thái hoạt động" span={3}>
-                                {userData?.isOnline ? "Đang hoạt động" : moment(userData?.lastTimeOnline).fromNow()}
+                                {userData?.isOnline
+                                    ?
+                                    "Đang hoạt động"
+                                    :
+                                    (userData?.lastTimeOnline
+                                        ?
+                                        moment(userData?.lastTimeOnline).fromNow()
+                                        :
+                                        "Chưa hoạt động")
+                                }
                             </Descriptions.Item>
                             <Descriptions.Item label="Vai trò" span={3}>
                                 {userData?.roleId === SELLER_ROLE
