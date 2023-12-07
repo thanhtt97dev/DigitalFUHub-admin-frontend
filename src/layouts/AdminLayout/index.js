@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './AdminLayout.module.scss';
 import logo from '~/assets/images/fpt-logo.jpg';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import {
     AreaChartOutlined,
     StockOutlined,
@@ -45,17 +45,17 @@ const items = [
 const menuItems = [
     {
         label: <Link to='/admin/statistic'>Thống kê</Link>,
-        key: 'dashboard',
+        key: '/admin/statistic',
         icon: <AreaChartOutlined />,
     },
     {
         label: 'Quản lý slider',
-        key: 'admin/slider',
+        key: '/admin/slider',
         icon: <SoundOutlined />,
         children: [
             {
-                key: '/admin/slider',
-                label: <Link to={"/admin/slider"}>Sliders</Link>,
+                key: '/admin/slider/list',
+                label: <Link to={"/admin/slider"}>Danh sách slider</Link>,
             },
             {
                 key: '/admin/marketing/addSlider',
@@ -65,7 +65,7 @@ const menuItems = [
     },
     {
         label: 'Quản lý tài chính',
-        key: 'admin/finance',
+        key: '/admin/finance',
         icon: <StockOutlined />,
         children: [
             {
@@ -92,22 +92,22 @@ const menuItems = [
     },
     {
         label: <Link to='/admin/order'>Quản lý đơn hàng</Link>,
-        key: 'admin/order',
+        key: '/admin/order',
         icon: <FontAwesomeIcon icon={faCartShopping} />,
     },
     {
         label: <Link to='/admin/product'>Quản lý sản phẩm</Link>,
-        key: 'admin/product',
+        key: '/admin/product',
         icon: <ShoppingOutlined />
     },
     {
         label: <Link to='/admin/shop'>Quản lý cửa hàng</Link>,
-        key: 'admin/shop',
+        key: '/admin/shop',
         icon: <ShopOutlined />
     },
     {
         label: <Link to='/admin/user'>Quản lý người dùng</Link>,
-        key: 'admin/user',
+        key: '/admin/user',
         icon: <FontAwesomeIcon icon={faUsers} />
     },
 ];
@@ -161,7 +161,15 @@ const menuItems = [
 
 const AdminLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
-
+    const location = useLocation();
+    const getSelectedKey = () => {
+        const path = location.pathname.replace(/[0-9]+/g, "");
+        if (path[path.length - 1] === '/') {
+            return [path.slice(0, path.length - 1)]
+        } else {
+            return [path];
+        }
+    }
     return (
         <Layout className={cx('container')}>
             <Sider className={cx('sider')} trigger={null} collapsible collapsed={collapsed} width={260} collapsedWidth={100}
@@ -178,9 +186,12 @@ const AdminLayout = () => {
                 </div>
                 <Menu
                     className={cx("menu")}
-                    defaultOpenKeys={['seller/product', 'seller/order']}
-                    defaultSelectedKeys={['dashboard']}
-                    mode="inline" items={menuItems} />
+                    defaultOpenKeys={['/admin/finance', '/admin/slider']}
+                    defaultSelectedKeys={['admin/dashboard']}
+                    selectedKeys={getSelectedKey()}
+                    mode="inline"
+                    items={menuItems}
+                />
             </Sider>
             <Layout>
                 <SignalR>

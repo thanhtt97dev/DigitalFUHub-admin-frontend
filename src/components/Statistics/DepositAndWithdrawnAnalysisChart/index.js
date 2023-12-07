@@ -18,7 +18,7 @@ import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Card, DatePicker, Select, Space, Spin } from "antd";
 import dayjs from "dayjs";
 import { formatPrice } from "~/utils";
-import { ORDER_COMPLAINT, ORDER_CONFIRMED, ORDER_DISPUTE, ORDER_REJECT_COMPLAINT, ORDER_SELLER_REFUNDED, ORDER_SELLER_VIOLATES, ORDER_WAIT_CONFIRMATION, RESPONSE_CODE_SUCCESS, STATISTIC_BY_MONTH, STATISTIC_BY_YEAR } from "~/constants";
+import { RESPONSE_CODE_SUCCESS, STATISTIC_BY_MONTH, STATISTIC_BY_YEAR } from "~/constants";
 import { getStatisticDepositAndWithdrawnMoney } from "~/api/statistic";
 ChartJS.register(
     CategoryScale,
