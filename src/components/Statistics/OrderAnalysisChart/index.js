@@ -85,7 +85,7 @@ const labels = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Th�
 function OrderAnalysisChart() {
     const [typeSearch, setTypeSearch] = useState(STATISTIC_BY_YEAR);
     const [dateSelected, setDateSelected] = useState(dayjs())
-    const [typeOrders, setTypeOrders] = useState(ORDER_ALL)
+    const [statusOrder, setStatusOrder] = useState(ORDER_ALL)
     const [dataStatistic, setDataStatistic] = useState([])
     const [loading, setLoading] = useState(false);
     const labelsChartRef = useRef([]);
@@ -132,13 +132,13 @@ function OrderAnalysisChart() {
             {
                 month: 0,
                 year: dateSelected.year(),
-                typeOrders
+                statusOrder
             }
             :
             {
                 month: dateSelected.month() + 1,
                 year: dateSelected.year(),
-                typeOrders
+                statusOrder
             }
         setLoading(true);
         getStatisticSales(data)
@@ -159,13 +159,13 @@ function OrderAnalysisChart() {
                     clearTimeout(idTimeout);
                 }, 500)
             })
-    }, [typeSearch, dateSelected, typeOrders])
+    }, [typeSearch, dateSelected, statusOrder])
     const handleSelectTypeSearch = (value) => {
         setTypeSearch(value);
         setDateSelected(dayjs())
     }
     const handleSelectTypeOrders = (value) => {
-        setTypeOrders(value);
+        setStatusOrder(value);
         setDateSelected(dayjs())
     }
     const handleSelectDate = (value, dateString) => {
@@ -188,7 +188,7 @@ function OrderAnalysisChart() {
                         }
                         <Space style={{ marginInlineStart: '5em' }}>
                             <div style={{ marginInlineEnd: '1em' }}>Loại đơn hàng</div>
-                            <Select style={{ width: '12em' }} onChange={handleSelectTypeOrders} value={typeOrders}>
+                            <Select style={{ width: '12em' }} onChange={handleSelectTypeOrders} value={statusOrder}>
                                 <Select.Option value={ORDER_ALL}>Tất cả</Select.Option>
                                 <Select.Option value={ORDER_WAIT_CONFIRMATION}>Chờ xác nhận</Select.Option>
                                 <Select.Option value={ORDER_CONFIRMED}>Đã xác nhận</Select.Option>
