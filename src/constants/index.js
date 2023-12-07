@@ -140,6 +140,7 @@ export const TRANSACTION_COIN_TYPE_RECEIVE = 1;
 export const TRANSACTION_COIN_TYPE_USE = 2;
 export const TRANSACTION_COIN_TYPE_REFUND = 3;
 
+export const ORDER_ALL = 0;
 export const ORDER_WAIT_CONFIRMATION = 1;
 export const ORDER_CONFIRMED = 2;
 export const ORDER_COMPLAINT = 3;
@@ -196,5 +197,8 @@ export const PAGE_SIZE_PRODUCT_WISH_LIST = 30;
 export const PAGE_SIZE_PRODUCT_HOME_PAGE = 48;
 export const PAGE_SIZE_SEARCH_PRODUCT = 20;
 export const PAGE_SIZE_SLIDER = 20;
+
+export const STATISTIC_BY_MONTH = 0;
+export const STATISTIC_BY_YEAR = 1;
 
 export const UPLOAD_FILE_SIZE_LIMIT = 2 * 1024 * 1024;

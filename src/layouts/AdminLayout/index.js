@@ -44,7 +44,7 @@ const items = [
 
 const menuItems = [
     {
-        label: <Link to=''>Thống kê</Link>,
+        label: <Link to='/admin/statistic'>Thống kê</Link>,
         key: 'dashboard',
         icon: <AreaChartOutlined />,
     },

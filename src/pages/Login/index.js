@@ -52,7 +52,7 @@ function Login() {
                     });
                     saveRefreshTokenInCookies(res.data.refreshToken)
                     saveTokenInCookies(res.data.accessToken)
-                    return navigate('/admin');
+                    return navigate('/admin/statistic');
                 }, 500)
             })
             .catch((err) => {
@@ -142,7 +142,6 @@ function Login() {
                     </Button>
                 </Form.Item>
             </Form>
-            ;
         </>
     );
 }

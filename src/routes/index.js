@@ -22,6 +22,7 @@ import ShopDetail from '~/pages/Admin/ManageShop/ShopDetail';
 import Shops from '~/pages/Admin/ManageShop/Shops';
 import AddSlider from '~/pages/Admin/ManageSlider/AddSlider';
 import EditSlider from '~/pages/Admin/ManageSlider/EditSlider';
+import Statistics from '~/pages/Admin/Statistics';
 
 const routesConfig = [
     {
@@ -35,10 +36,10 @@ const routesConfig = [
         component: <AccessDenied />,
     },
     {
-        path: '/admin',
+        path: '/admin/statistic',
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
-        component: <></>,
+        component: <Statistics />,
     },
     {
         path: '/admin/finance/deposit',
