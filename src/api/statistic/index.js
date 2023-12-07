@@ -9,3 +9,6 @@ export const getStatisticDepositAndWithdrawnMoney = (data) => {
 export const getTodoList = () => {
     return apiGetAuth(`api/Statistics/Admin/TodoList`);
 };
+export const getStatisticSalesSummaryCurrentMonth = () => {
+    return apiGetAuth(`api/Statistics/Admin/CurrentMonth`);
+};

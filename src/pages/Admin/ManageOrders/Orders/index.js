@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, Select, Row, Col, } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     FileExcelOutlined
 } from '@ant-design/icons';
@@ -31,7 +31,8 @@ import {
     ORDER_DISPUTE,
     ORDER_REJECT_COMPLAINT,
     ORDER_SELLER_VIOLATES,
-    ORDER_REPORT_EXCEL_FILE_NAME
+    ORDER_REPORT_EXCEL_FILE_NAME,
+    ORDER_ALL
 } from "~/constants";
 import classNames from 'classnames/bind';
 import styles from './Orders.module.scss';
@@ -193,7 +194,7 @@ const columns = [
 function Orders() {
     const notification = useContext(NotificationContext);
     const [loading, setLoading] = useState(true)
-
+    const location = useLocation();
     const [form] = Form.useForm();
     const [dataTable, setDataTable] = useState([]);
     const [tableParams, setTableParams] = useState({
@@ -210,7 +211,7 @@ function Orders() {
         shopName: '',
         fromDate: '',
         toDate: '',
-        status: 0,
+        status: location?.state?.status ? location?.state?.status : ORDER_ALL,
         page: 1
     });
     const [totalRecord, setTotalRecord] = useState(0)

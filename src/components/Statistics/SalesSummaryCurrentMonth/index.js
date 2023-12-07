@@ -1,23 +1,25 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Card, Col, Row, Statistic, Tooltip } from "antd";
 import { useEffect, useState } from "react";
+import { getStatisticSalesSummaryCurrentMonth } from "~/api/statistic";
+import { RESPONSE_CODE_SUCCESS } from "~/constants";
 import { formatPrice } from "~/utils";
 
 
 const stylesCard = { width: '100%' };
-function SalesSummary() {
+function SalesSummaryCurrentMonth() {
     const [data, setData] = useState();
-    // useEffect(() => {
-    //     getStatisticSalesCurrentMonth()
-    //         .then(res => {
-    //             if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-    //                 setData(res.data.result);
-    //             }
-    //         })
-    //         .catch(err => {
+    useEffect(() => {
+        getStatisticSalesSummaryCurrentMonth()
+            .then(res => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    setData(res.data.result);
+                }
+            })
+            .catch(err => {
 
-    //         })
-    // }, [])
+            })
+    }, [])
     return (<>
         <Row gutter={[16, 16]}>
             <Col span={6}>
@@ -68,4 +70,4 @@ function SalesSummary() {
     </>);
 }
 
-export default SalesSummary;
+export default SalesSummaryCurrentMonth;

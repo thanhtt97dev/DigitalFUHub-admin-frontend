@@ -1,10 +1,10 @@
 import { Col, Row } from "antd";
-import { DepositAndWithdrawnAnalysisChart, OrderAnalysisChart, SalesSummary, TodoList } from "~/components/Statistics"
+import { DepositAndWithdrawnAnalysisChart, OrderAnalysisChart, SalesSummaryCurrentMonth, TodoList } from "~/components/Statistics"
 function Statistics() {
     return (<>
         <Row gutter={[8, 16]}>
             <Col span={24}>
-                <SalesSummary />
+                <SalesSummaryCurrentMonth />
             </Col>
             <Col span={24}>
                 <TodoList />

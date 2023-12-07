@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, Table, Tag, Button, Form, Input, DatePicker, Select, Modal, Divider, Row, Col, Space, notification } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
     SwapOutlined,
     FileExcelOutlined
@@ -186,7 +186,7 @@ function HistoryWithdraw() {
     };
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true)
-
+    const location = useLocation();
     const [form] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
     const [qrCode, setQrCode] = useState("");
@@ -209,7 +209,7 @@ function HistoryWithdraw() {
         toDate: '',
         bankId: 0,
         creditAccount: '',
-        status: 0,
+        status: location?.state?.status ? location?.state?.status : 0,
         page: 1
     });
     const [totalRecord, setTotalRecord] = useState(0)

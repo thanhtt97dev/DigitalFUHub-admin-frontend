@@ -164,9 +164,9 @@ function OrderAnalysisChart() {
         setTypeSearch(value);
         setDateSelected(dayjs())
     }
-    const handleSelectTypeOrders = (value) => {
+    const handleSelectStatusOrders = (value) => {
         setStatusOrder(value);
-        setDateSelected(dayjs())
+        // setDateSelected(dayjs())
     }
     const handleSelectDate = (value, dateString) => {
         setDateSelected(value ? value : dayjs())
@@ -188,7 +188,7 @@ function OrderAnalysisChart() {
                         }
                         <Space style={{ marginInlineStart: '5em' }}>
                             <div style={{ marginInlineEnd: '1em' }}>Loại đơn hàng</div>
-                            <Select style={{ width: '12em' }} onChange={handleSelectTypeOrders} value={statusOrder}>
+                            <Select style={{ width: '12em' }} onChange={handleSelectStatusOrders} value={statusOrder}>
                                 <Select.Option value={ORDER_ALL}>Tất cả</Select.Option>
                                 <Select.Option value={ORDER_WAIT_CONFIRMATION}>Chờ xác nhận</Select.Option>
                                 <Select.Option value={ORDER_CONFIRMED}>Đã xác nhận</Select.Option>
