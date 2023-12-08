@@ -15,6 +15,7 @@ const cx = classNames.bind(styles);
 const ShopInformations = ({ shopId }) => {
 
     /// states
+    const [loadingShopInfoFlag, setLoadingShopInfoFlag] = useState(false);
     const [shopInfomation, setShopInfomation] = useState({});
     const notification = useContext(NotificationContext);
     ///
@@ -33,6 +34,10 @@ const ShopInformations = ({ shopId }) => {
     const calculatorRatingStarProduct = () => {
         if (!shopInfomation) return 0;
         return shopInfomation.totalRatingStar / shopInfomation.numberFeedback;
+    }
+
+    const reloadShopInformations = () => {
+        setLoadingShopInfoFlag(!loadingShopInfoFlag);
     }
     ///
 
@@ -64,10 +69,13 @@ const ShopInformations = ({ shopId }) => {
             })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [loadingShopInfoFlag])
 
     return (<div className={cx('margin-bottom-10')}>
-        <DescriptionsTableShopInfomations shop={shopInfomation} calculatorRatingStarProduct={calculatorRatingStarProduct} />
+        <DescriptionsTableShopInfomations shop={shopInfomation}
+            calculatorRatingStarProduct={calculatorRatingStarProduct}
+            reloadShopInformations={reloadShopInformations}
+            notification={notification} />
     </div>);
 }
 

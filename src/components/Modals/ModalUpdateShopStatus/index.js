@@ -1,76 +1,80 @@
-import React, { useLayoutEffect, useState, useContext } from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Divider, Modal, Button, Form, Select, Row, Col, Input } from "antd";
-
 import { ExclamationCircleFilled } from "@ant-design/icons";
-
-import NotificationContext from "~/context/UI/NotificationContext";
-
-import {
-    RESPONSE_CODE_SUCCESS,
-    PRODUCT_STATUS_ACTIVE,
-    PRODUCT_STATUS_BAN,
-} from "~/constants"
-
-import { updateProductStatus } from '~/api/product'
-
+import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT } from "~/constants"
+import { updateShop } from '~/api/shop'
+import { useAuthUser } from 'react-auth-kit';
 const { TextArea } = Input;
 
-const ModalUpdateShopStatus = ({ shopId }) => {
-    const notification = useContext(NotificationContext);
+const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification }) => {
+
+    /// states
     const [form] = Form.useForm();
     const [openModal, setOpenModal] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [btnLoading, setBtnLoading] = useState(false)
+    const [btnLoading, setBtnLoading] = useState(false);
+    ///
 
+    /// variables
+    const auth = useAuthUser();
+    const user = auth();
+    ///
 
-    useLayoutEffect(() => {
+    /// router
+    const navigate = useNavigate();
+    ///
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
+    /// handles
     const handleSubmit = () => {
-        var data = form.getFieldsValue()
-        data = { ...data, shopId }
-        setConfirmLoading(true)
-        updateProductStatus(data)
-            .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setConfirmLoading(false)
 
-                    setTimeout(() => {
-                        setOpenModal(false)
-                    }, 200)
+        if (user === undefined || user === null) return navigate('/login');
+        var { status, note } = form.getFieldsValue();
+        // request dto
+        const dataRequest = {
+            ShopId: shopId,
+            IsActive: status,
+            Note: note
+        }
+
+        updateShop(dataRequest)
+            .then((res) => {
+                if (res.status === 200) {
+                    const data = res.data;
+                    const status = data.status;
+                    if (status.responseCode === RESPONSE_CODE_SUCCESS) {
+                        reloadShopInformations();
+                        setOpenModal(false);
+                        notification("success", "Cập nhật trạng thái cửa hàng thành công");
+                    } else if (status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
+                        notification("error", "Yêu cầu không hợp lệ, vui lòng thử lại");
+                    } else {
+                        notification("error", "Lỗi từ hệ thống, vui lòng thử lại sau");
+                    }
                 } else {
-                    notification("error", "Đã có lỗi xảy ra.")
+                    notification("error", "Lỗi từ hệ thống, vui lòng thử lại sau");
                 }
             })
-            .catch(() => {
-
-            })
-            .finally(() => {
-                setTimeout(() => {
-                    setConfirmLoading(false)
-                    setOpenModal(false)
-                }, 500)
-            })
+            .catch(() => { })
     }
 
     const handleOpenModal = () => {
         setBtnLoading(false)
         setOpenModal(true)
-        //checking user has been linked bank account
     }
+    ///
 
+    // initials
     const initFormValues = [
         {
             name: 'status',
-            value: PRODUCT_STATUS_ACTIVE
+            value: true
         },
         {
             name: 'note',
             value: ''
         },
     ];
+    ///
 
 
     return (
@@ -84,11 +88,10 @@ const ModalUpdateShopStatus = ({ shopId }) => {
             </Button>
 
             <Modal
-                title={<><ExclamationCircleFilled style={{ color: "#faad14" }} /> Chỉnh sửa trạng thái đơn hàng</>}
+                title={<><ExclamationCircleFilled style={{ color: "#faad14" }} /> Chỉnh sửa trạng thái cửa hàng</>}
                 open={openModal}
                 onOk={handleSubmit}
                 onCancel={() => setOpenModal(false)}
-                confirmLoading={confirmLoading}
                 okText={"Xác nhận"}
                 cancelText={"Hủy"}
                 width={"35%"}
@@ -97,18 +100,19 @@ const ModalUpdateShopStatus = ({ shopId }) => {
                     <Divider />
                     <Form
                         name="basic"
+
                         form={form}
                         fields={initFormValues}
                     >
                         <Row>
                             <Col offset={1} span={8}>
-                                Trạng thái đơn hàng:
+                                Trạng thái cửa hàng:
                             </Col>
                             <Col offset={1} span={12}>
                                 <Form.Item name="status" >
                                     <Select >
-                                        <Select.Option value={PRODUCT_STATUS_ACTIVE}>Hoạt động</Select.Option>
-                                        <Select.Option value={PRODUCT_STATUS_BAN}>Cấm</Select.Option>
+                                        <Select.Option value={true}>Hoạt động</Select.Option>
+                                        <Select.Option value={false}>Đình chỉ</Select.Option>
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -123,15 +127,10 @@ const ModalUpdateShopStatus = ({ shopId }) => {
                         <Row>
                             <Col offset={1} span={23}>
                                 <Form.Item name="note" >
-                                    <TextArea rows={4} placeholder="Nhập thông tin lý do chỉnh sửa trạng thái đơn hàng" maxLength={200} />
+                                    <TextArea rows={4} placeholder="Nhập thông tin lý do chỉnh sửa trạng thái cửa hàng" maxLength={200} />
                                 </Form.Item>
                             </Col>
                         </Row>
-
-
-                        <Form.Item style={{ position: 'absolute', top: 180, left: 550 }}>
-
-                        </Form.Item>
                     </Form>
                 </>
 

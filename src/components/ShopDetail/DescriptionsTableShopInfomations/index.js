@@ -20,7 +20,7 @@ const moment = require('moment');
 ///
 
 
-function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct }) {
+function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct, reloadShopInformations, notification }) {
     const items = [
         {
             key: '1',
@@ -103,8 +103,9 @@ function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct })
                                 <Space direction='vertical'>
                                     <Tag color='#f50'>Vi phạm</Tag>
                                     <Space direction='vertical'>
-                                        <span>Chú thích:</span>
-                                        <span>{shop.note}</span>
+                                        <Card bodyStyle={{ padding: 6, backgroundColor: 'lightblue' }}>
+                                            <span>Chú thích: {shop.note}</span>
+                                        </Card>
                                     </Space>
 
                                 </Space>
@@ -112,7 +113,7 @@ function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct })
                             )
                         }
                     })()}
-                    <ModalUpdateShopStatus shopId={shop.userId} />
+                    <ModalUpdateShopStatus shopId={shop.userId} reloadShopInformations={reloadShopInformations} notification={notification} />
                 </>
             ),
             span: 3
