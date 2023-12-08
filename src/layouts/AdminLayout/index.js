@@ -50,21 +50,6 @@ const menuItems = [
         icon: <AreaChartOutlined />,
     },
     {
-        label: 'Quản lý slider',
-        key: '/admin/slider',
-        icon: <SoundOutlined />,
-        children: [
-            {
-                key: '/admin/slider/list',
-                label: <Link to={"/admin/slider"}>Danh sách slider</Link>,
-            },
-            {
-                key: '/admin/marketing/addSlider',
-                label: <Link to={"/admin/slider/add"}>Thêm mới slider</Link>,
-            }
-        ],
-    },
-    {
         label: 'Quản lý tài chính',
         key: '/admin/finance',
         icon: <StockOutlined />,
@@ -110,6 +95,11 @@ const menuItems = [
         label: <Link to='/admin/user'>Quản lý người dùng</Link>,
         key: '/admin/user',
         icon: <FontAwesomeIcon icon={faUsers} />
+    },
+    {
+        label: <Link to='/admin/slider'>Quản lý slider'</Link>,
+        key: '/admin/slider',
+        icon: <SoundOutlined />,
     },
     {
         label: 'Quản lý Tố cáo',

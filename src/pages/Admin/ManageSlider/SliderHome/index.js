@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Spinning from "~/components/Spinning";
 import TableSlider from "~/components/Tables/TableSlider";
-import { Card } from 'antd';
+import { Button, Card } from 'antd';
 import { getSliders } from "~/api/slider";
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, STATUS_ALL_SLIDER_FOR_FILTER, STATUS_ACTIVE_SLIDER_FOR_FILTER, STATUS_UN_ACTIVE_SLIDER_FOR_FILTER, PAGE_SIZE_SLIDER } from "~/constants";
@@ -23,6 +24,8 @@ const tabList = [
 ]
 
 function SliderHome() {
+
+    const navigate = useNavigate();
 
     /// states
     const [isLoadingSliderFlag, setIsLoadingSliderFlag] = useState(false);
@@ -150,6 +153,13 @@ function SliderHome() {
 
     return (
         <Spinning spinning={loading}>
+            <Button
+                type="primary"
+                onClick={() => navigate("/admin/slider/add")}
+                style={{ marginBottom: "10px" }}
+            >
+                + Thêm mới
+            </Button>
             <Card
                 style={{
                     width: '100%',
@@ -159,7 +169,6 @@ function SliderHome() {
                 activeTabKey={activeTabKey}
                 onTabChange={onTabChange}
             >
-
                 {contentList[activeTabKey]}
             </Card>
         </Spinning>
