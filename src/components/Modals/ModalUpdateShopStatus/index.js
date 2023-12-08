@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { Divider, Modal, Button, Form, Select, Row, Col, Input } from "antd";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT } from "~/constants"
-import { updateShop } from '~/api/shop'
+import { updateShop } from '~/api/shop';
 import { useAuthUser } from 'react-auth-kit';
-const { TextArea } = Input;
+import { useNavigate } from 'react-router-dom';
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { Divider, Modal, Form, Select, Row, Col, Input } from "antd";
+import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT } from "~/constants";
 
-const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification }) => {
+///
+const { TextArea } = Input;
+///
+
+const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, openModal, setOpenModal }) => {
 
     /// states
     const [form] = Form.useForm();
-    const [openModal, setOpenModal] = useState(false);
-    const [btnLoading, setBtnLoading] = useState(false);
+    const [isLoadingButtonUpdate, setIsLoadingButtonUpdate] = useState(false);
     ///
 
     /// variables
@@ -43,7 +45,6 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification })
                     const status = data.status;
                     if (status.responseCode === RESPONSE_CODE_SUCCESS) {
                         reloadShopInformations();
-                        setOpenModal(false);
                         notification("success", "Cập nhật trạng thái cửa hàng thành công");
                     } else if (status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
                         notification("error", "Yêu cầu không hợp lệ, vui lòng thử lại");
@@ -53,14 +54,13 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification })
                 } else {
                     notification("error", "Lỗi từ hệ thống, vui lòng thử lại sau");
                 }
+
+                setIsLoadingButtonUpdate(false);
+                setOpenModal(false);
             })
             .catch(() => { })
     }
 
-    const handleOpenModal = () => {
-        setBtnLoading(false)
-        setOpenModal(true)
-    }
     ///
 
     // initials
@@ -77,65 +77,55 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification })
     ///
 
 
-    return (
+    return (<Modal
+        title={<><ExclamationCircleFilled style={{ color: "#faad14" }} /> Chỉnh sửa trạng thái cửa hàng</>}
+        open={openModal}
+        onOk={handleSubmit}
+        onCancel={() => setOpenModal(false)}
+        okText={"Xác nhận"}
+        cancelText={"Hủy"}
+        width={"35%"}
+        confirmLoading={isLoadingButtonUpdate}
+    >
         <>
-            <Button
-                onClick={handleOpenModal}
-                type="link"
-                loading={btnLoading}
+            <Divider />
+            <Form
+                name="basic"
+
+                form={form}
+                fields={initFormValues}
             >
-                Chỉnh sửa
-            </Button>
+                <Row>
+                    <Col offset={1} span={8}>
+                        Trạng thái cửa hàng:
+                    </Col>
+                    <Col offset={1} span={12}>
+                        <Form.Item name="status" >
+                            <Select >
+                                <Select.Option value={true}>Hoạt động</Select.Option>
+                                <Select.Option value={false}>Đình chỉ</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
 
-            <Modal
-                title={<><ExclamationCircleFilled style={{ color: "#faad14" }} /> Chỉnh sửa trạng thái cửa hàng</>}
-                open={openModal}
-                onOk={handleSubmit}
-                onCancel={() => setOpenModal(false)}
-                okText={"Xác nhận"}
-                cancelText={"Hủy"}
-                width={"35%"}
-            >
-                <>
-                    <Divider />
-                    <Form
-                        name="basic"
+                <Row>
+                    <Col offset={1} span={23}>
+                        Thông tin:
+                    </Col>
 
-                        form={form}
-                        fields={initFormValues}
-                    >
-                        <Row>
-                            <Col offset={1} span={8}>
-                                Trạng thái cửa hàng:
-                            </Col>
-                            <Col offset={1} span={12}>
-                                <Form.Item name="status" >
-                                    <Select >
-                                        <Select.Option value={true}>Hoạt động</Select.Option>
-                                        <Select.Option value={false}>Đình chỉ</Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                </Row>
+                <Row>
+                    <Col offset={1} span={23}>
+                        <Form.Item name="note" >
+                            <TextArea rows={4} placeholder="Nhập thông tin lý do chỉnh sửa trạng thái cửa hàng" maxLength={200} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
+        </>
 
-                        <Row>
-                            <Col offset={1} span={23}>
-                                Thông tin:
-                            </Col>
-
-                        </Row>
-                        <Row>
-                            <Col offset={1} span={23}>
-                                <Form.Item name="note" >
-                                    <TextArea rows={4} placeholder="Nhập thông tin lý do chỉnh sửa trạng thái cửa hàng" maxLength={200} />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
-                </>
-
-            </Modal>
-        </>)
+    </Modal>)
 }
 
 export default ModalUpdateShopStatus;

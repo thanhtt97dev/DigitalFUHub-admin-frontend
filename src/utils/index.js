@@ -154,6 +154,27 @@ export const formatTimeAgoVN = (time) => {
     //console.log('time: ' + format('2023-08-20T10:30:00', 'hn_VN'));
 };
 
+export function formatLargeNumber(number) {
+    if (number < 0) {
+        return "Invalid number";
+    }
+    let numberString = number.toString();
+
+    let digitCount = numberString.length;
+
+    let formattedNumber = "";
+
+    for (let i = 0; i < digitCount; i++) {
+        if (i > 0 && i % 3 === 0) {
+            formattedNumber = "," + formattedNumber;
+        }
+
+        formattedNumber = numberString[digitCount - i - 1] + formattedNumber;
+    }
+
+    return formattedNumber;
+}
+
 
 export function formatStringToCurrencyVND(number) {
     number = number + "";
@@ -328,9 +349,9 @@ export const stringGuid = () => {
 
 export function formatNumber(number) {
     if (number >= 1000000) {
-        return (number / 1000000).toFixed(1) + ' tr';
+        return (number / 1000000).toFixed(1) + 'tr';
     } else if (number >= 1000) {
-        return (number / 1000).toFixed(1) + ' k';
+        return (number / 1000).toFixed(1) + 'k';
     } else {
         return number.toString();
     }
