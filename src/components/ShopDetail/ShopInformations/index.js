@@ -1,20 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
-import classNames from 'classnames/bind';
-import styles from '~/pages/Admin/ManageShop/ShopDetail/ShopDetail.module.scss';
-import { NotificationContext } from "~/context/UI/NotificationContext";
+import Spinning from "~/components/Spinning";
+import DescriptionsTableShopInfomations from "../DescriptionsTableShopInfomations";
+import { getShopDetail } from '~/api/shop';
 import { useAuthUser } from 'react-auth-kit';
 import { useNavigate } from 'react-router-dom';
-import { getShopDetail } from '~/api/shop';
+import { NotificationContext } from "~/context/UI/NotificationContext";
 import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
-import DescriptionsTableShopInfomations from "../DescriptionsTableShopInfomations";
-
-///
-const cx = classNames.bind(styles);
-///
 
 const ShopInformations = ({ shopId }) => {
 
     /// states
+    const [isloadingSpinningShopInfo, setIsloadingSpinningShopInfo] = useState(false);
     const [loadingShopInfoFlag, setLoadingShopInfoFlag] = useState(false);
     const [shopInfomation, setShopInfomation] = useState({});
     const notification = useContext(NotificationContext);
@@ -33,7 +29,8 @@ const ShopInformations = ({ shopId }) => {
     /// handles
     const calculatorRatingStarProduct = () => {
         if (!shopInfomation) return 0;
-        return shopInfomation.totalRatingStar / shopInfomation.numberFeedback;
+        var rating = shopInfomation.numberFeedback !== 0 ? shopInfomation.totalRatingStar / shopInfomation.numberFeedback : 0;
+        return rating !== 0 ? rating.toFixed(1) : 0;
     }
 
     const reloadShopInformations = () => {
@@ -44,6 +41,8 @@ const ShopInformations = ({ shopId }) => {
     /// useEffects
     useEffect(() => {
         if (user === undefined || user === null) return navigate('/login');
+
+        setIsloadingSpinningShopInfo(true);
 
         getShopDetail(shopId)
             .then((res) => {
@@ -67,16 +66,21 @@ const ShopInformations = ({ shopId }) => {
             .catch(() => {
                 notification('error', "Hệ thống lỗi, vui lòng thử lại sau");
             })
+            .finally(() => {
+                setTimeout(() => {
+                    setIsloadingSpinningShopInfo(false);
+                }, 500)
+            })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loadingShopInfoFlag])
 
-    return (<div className={cx('margin-bottom-10')}>
+    return (<Spinning spinning={isloadingSpinningShopInfo}>
         <DescriptionsTableShopInfomations shop={shopInfomation}
             calculatorRatingStarProduct={calculatorRatingStarProduct}
             reloadShopInformations={reloadShopInformations}
             notification={notification} />
-    </div>);
+    </Spinning>);
 }
 
 export default ShopInformations;

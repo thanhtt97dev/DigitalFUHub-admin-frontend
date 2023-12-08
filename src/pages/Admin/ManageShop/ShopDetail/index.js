@@ -1,8 +1,6 @@
 import React from "react";
 import { useParams } from 'react-router-dom';
 import ShopInformations from "~/components/ShopDetail/ShopInformations";
-import ShopOrders from "~/components/ShopDetail/ShopOrders";
-import ShopProducts from "~/components/ShopDetail/ShopProducts";
 
 function ShopDetail() {
 
@@ -10,13 +8,7 @@ function ShopDetail() {
     const { id } = useParams();
     ///
 
-    return (
-        <>
-            <ShopInformations shopId={id} />
-            <ShopProducts />
-            <ShopOrders />
-        </>
-    );
+    return (<ShopInformations shopId={id} />);
 }
 
 export default ShopDetail;
