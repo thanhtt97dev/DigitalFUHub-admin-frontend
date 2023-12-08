@@ -2,54 +2,27 @@ import React, { useEffect, useState, useContext } from "react";
 import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, Select, Row, Col, Image, Tooltip, } from "antd";
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link, useLocation } from "react-router-dom";
-import {
-    FileExcelOutlined
-} from '@ant-design/icons';
-import * as ExcelJS from "exceljs"
-import saveAs from "file-saver";
 
 import NotificationContext from "~/context/UI/NotificationContext";
-
-import {
-    getOrders,
-    getReport
-} from '~/api/order'
 
 import {
     getReportProducts,
     getAllReasonReportProduct
 } from '~/api/reportProduct'
 
-import { dowloadFileOrderReport } from '~/api/storage'
 import Spinning from "~/components/Spinning";
 import {
-    formatPrice,
     ParseDateTime,
-    getOrderStatus
 } from '~/utils/index'
 import {
     RESPONSE_CODE_SUCCESS,
     PAGE_SIZE,
-    ORDER_WAIT_CONFIRMATION,
-    ORDER_CONFIRMED,
-    ORDER_COMPLAINT,
-    ORDER_SELLER_REFUNDED,
-    ORDER_DISPUTE,
-    ORDER_REJECT_COMPLAINT,
-    ORDER_SELLER_VIOLATES,
-    ORDER_REPORT_EXCEL_FILE_NAME,
-    ORDER_ALL,
     REPORT_PRODUCT_STATUS_ALL,
     REPORT_PRODUCT_STATUS_VERIFYING,
     REPORT_PRODUCT_STATUS_REJECT,
     REPORT_PRODUCT_STATUS_ACCEPT
 } from "~/constants";
-import classNames from 'classnames/bind';
-import styles from '~/pages/Admin/ManageOrders/Orders/Orders.module.scss';
 import ModalUpdateReportProduct from "~/components/Modals/ModalUpdateReportProduct";
-const cx = classNames.bind(styles);
-
-
 
 const { RangePicker } = DatePicker;
 
