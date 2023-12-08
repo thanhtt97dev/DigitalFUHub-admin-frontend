@@ -43,7 +43,7 @@ function DescriptionsTableProductInfo({ product, callBack }) {
         },
         {
             key: '4',
-            label: 'Tên của hàng',
+            label: 'Tên cửa hàng',
             labelStyle: { 'text-align': 'left', 'width': "40%" },
             children: (
                 <Link to={`/admin/shop/${product.shopId}`}>

@@ -5,6 +5,6 @@ export const getShops = (data) => {
 };
 
 export const getShopDetail = (id) => {
-    return apiGetAuth(`api/shops/GetDetail/${id}`);
+    return apiGetAuth(`api/shops/admin/getById/${id}`);
 };
 

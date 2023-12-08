@@ -23,6 +23,7 @@ import Shops from '~/pages/Admin/ManageShop/Shops';
 import AddSlider from '~/pages/Admin/ManageSlider/AddSlider';
 import EditSlider from '~/pages/Admin/ManageSlider/EditSlider';
 import Statistics from '~/pages/Admin/Statistics';
+import NotFound from '~/pages/NotFound';
 
 const routesConfig = [
     {
@@ -157,6 +158,11 @@ const routesConfig = [
         title: 'chatbox',
         path: '/chatBox',
         component: <ChatBox />,
+    },
+    {
+        title: 'not found',
+        path: '/notFound',
+        component: <NotFound />,
     },
 ];
 

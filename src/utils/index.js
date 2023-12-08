@@ -326,6 +326,16 @@ export const stringGuid = () => {
     return result
 }
 
+export function formatNumber(number) {
+    if (number >= 1000000) {
+        return (number / 1000000).toFixed(1) + ' tr';
+    } else if (number >= 1000) {
+        return (number / 1000).toFixed(1) + ' k';
+    } else {
+        return number.toString();
+    }
+}
+
 export const getVietQrImgSrc = (bankCode, creditAccount, creditAccountName, amount, description) => {
     let result = ""
     result += VIET_QR_SRC + `${bankCode}-${creditAccount}--compact.png?accountName=${creditAccountName}&amount=${amount}&addInfo=${description}`
