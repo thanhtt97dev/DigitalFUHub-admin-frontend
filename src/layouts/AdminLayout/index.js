@@ -10,7 +10,8 @@ import {
     MenuFoldOutlined,
     ShoppingOutlined,
     ShopOutlined,
-    SoundOutlined
+    SoundOutlined,
+    WarningOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -110,6 +111,21 @@ const menuItems = [
         key: '/admin/user',
         icon: <FontAwesomeIcon icon={faUsers} />
     },
+    {
+        label: 'Quản lý Tố cáo',
+        key: '/admin/report',
+        icon: <WarningOutlined />,
+        children: [
+            {
+                key: '/admin/report/product',
+                label: <Link to={"/admin/report/product"}>Tố cáo sản phẩm</Link>,
+            },
+            {
+                key: '/admin/report/shop',
+                label: <Link to={"/admin/report/shop"}>Tố cáo cửa hàng</Link>,
+            }
+        ],
+    },
 ];
 
 // const AdminLayout = () => {
@@ -186,7 +202,7 @@ const AdminLayout = () => {
                 </div>
                 <Menu
                     className={cx("menu")}
-                    defaultOpenKeys={['/admin/finance', '/admin/slider']}
+                    //defaultOpenKeys={['/admin/finance', '/admin/slider']}
                     defaultSelectedKeys={['admin/dashboard']}
                     selectedKeys={getSelectedKey()}
                     mode="inline"

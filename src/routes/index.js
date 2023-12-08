@@ -24,6 +24,7 @@ import AddSlider from '~/pages/Admin/ManageSlider/AddSlider';
 import EditSlider from '~/pages/Admin/ManageSlider/EditSlider';
 import Statistics from '~/pages/Admin/Statistics';
 import NotFound from '~/pages/NotFound';
+import ReportProducts from '~/pages/Admin/ManageReport/ReportProducts';
 
 const routesConfig = [
     {
@@ -148,6 +149,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <UserInfo />
+    },
+    {
+        path: '/admin/report/product',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <ReportProducts />
     },
     {
         title: 'verification2FA',

@@ -321,10 +321,7 @@ function Products() {
                 </Form>
             </Card>
             <Card
-                style={{
-                    width: '100%',
-                    minHeight: '100vh'
-                }}
+                style={{ marginTop: "20px", minHeight: "80vh" }}
                 tabList={tabList}
                 activeTabKey={activeTabKey}
                 onTabChange={onTabChange}

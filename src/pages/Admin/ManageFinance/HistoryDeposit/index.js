@@ -337,7 +337,7 @@ function HistoryDeposit() {
 
                 </Card>
 
-                <Card style={{ marginTop: "20px" }}>
+                <Card style={{ marginTop: "20px", minHeight: "80vh" }}>
                     {(() => {
                         if (totalRecord > PAGE_SIZE) {
                             return (

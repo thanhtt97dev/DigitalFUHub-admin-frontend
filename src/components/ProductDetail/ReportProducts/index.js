@@ -92,7 +92,7 @@ function ReportProducts({ reportProducts, callBack }) {
                                 return (
                                     <Space direction='vertical'>
                                         <Tooltip placement="top" title={record.note}>
-                                            <Tag color='#87d068'>Từ chối</Tag>
+                                            <Tag color='#87d068'>Từ chối tố cáo</Tag>
                                         </Tooltip>
                                     </Space>
                                 )
