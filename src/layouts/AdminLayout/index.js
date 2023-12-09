@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Message from '~/components/Message';
 import Notification from '~/components/Notification';
-
+import logo from '~/assets/images/DIGITALFUHUB.png';
 import SignalR from '~/context/SignalR/index'
 
 const cx = classNames.bind(styles);
@@ -180,7 +180,7 @@ const AdminLayout = () => {
                 <div className={cx('header-logo')}>
                     <Space>
                         <Link to={'/admin'} className={cx("link")}>
-                            <h3>DigitalFUHub</h3>
+                            <img src={logo} style={{ width: '180px', 'marginTop': '1em' }} alt='logo' />
                         </Link>
                     </Space>
                 </div>
