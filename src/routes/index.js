@@ -25,6 +25,7 @@ import EditSlider from '~/pages/Admin/ManageSlider/EditSlider';
 import Statistics from '~/pages/Admin/Statistics';
 import NotFound from '~/pages/NotFound';
 import ReportProducts from '~/pages/Admin/ManageReport/ReportProducts';
+import FeedbackBenefit from '~/pages/Admin/ManageFinance/FeedbackBenefit';
 
 const routesConfig = [
     {
@@ -65,6 +66,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <SliderHome />
+    },
+    {
+        path: '/admin/finance/feedbackBenefit',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <FeedbackBenefit />
     },
     {
         path: '/admin/slider/add',

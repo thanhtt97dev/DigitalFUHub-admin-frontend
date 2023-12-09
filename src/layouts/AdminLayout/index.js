@@ -67,6 +67,10 @@ const menuItems = [
                 label: <Link to={"/admin/finance/businessFee"}>Phí kinh doanh</Link>,
             },
             {
+                key: '/admin/finance/feedbackBenefit',
+                label: <Link to={"/admin/finance/feedbackBenefit"}>Lợi ích phản hồi</Link>,
+            },
+            {
                 key: '/admin/finance/transactionInternal',
                 label: <Link to={"/admin/finance/transactionInternal"}>Giao dịch nội bộ</Link>,
             },

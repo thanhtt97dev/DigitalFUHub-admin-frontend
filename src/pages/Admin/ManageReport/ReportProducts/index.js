@@ -3,7 +3,7 @@ import { Card, Table, Tag, Button, Form, Input, Space, DatePicker, Select, Row, 
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import { Link, useLocation } from "react-router-dom";
 
-import NotificationContext from "~/context/UI/NotificationContext";
+import { NotificationContext } from "~/context/UI/NotificationContext";
 
 import {
     getReportProducts,

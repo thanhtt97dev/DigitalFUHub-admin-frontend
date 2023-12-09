@@ -1,38 +1,35 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Card, Table, Button, Form, Input, DatePicker, Row, Col, InputNumber, Space } from "antd";
-import locale from 'antd/es/date-picker/locale/vi_VN';
-import { getBusinessFee } from '~/api/businessFee'
 import Spinning from "~/components/Spinning";
-import { ParseDateTime, } from '~/utils/index'
-import {
-    RESPONSE_CODE_SUCCESS,
-    BANKS_INFO,
-} from "~/constants";
+import locale from 'antd/es/date-picker/locale/vi_VN';
 import { NotificationContext } from "~/context/UI/NotificationContext";
+import ModalAddNewFeedbackBenefit from "~/components/Modals/ModalAddNewFeedbackBenefit";
+import { ParseDateTime, } from '~/utils/index';
+import { getFeedbackBenefits } from '~/api/feedbackBenefit';
+import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT } from "~/constants";
+import { Card, Table, Button, Form, Input, DatePicker, Row, Col, InputNumber, Space } from "antd";
 
-import classNames from 'classnames/bind';
-import styles from './BusinessFee.module.scss';
-import ModalAddNewBusinessFee from "~/components/Modals/ModalAddNewBusinessFee";
 
-const cx = classNames.bind(styles);
 const { RangePicker } = DatePicker;
 
-const bankOptions = [{ value: 0, name: "All", label: <>Tất cả</> }]
-BANKS_INFO.forEach((bank) => {
-    let bankOption = {
-        value: bank.id,
-        name: bank.name,
-        label: <div><img src={bank.image} className={cx("option-images-display")} alt={bank.name} /> <p className={cx("option-text-display")}>{bank.name}</p></div>
-    }
-    bankOptions.push(bankOption)
-})
-
-function BusinessFee() {
+function FeedbackBenefit() {
+    /// states
+    const [isLoadingSpinningPage, setIsLoadingSpinningPage] = useState(true);
+    const [form] = Form.useForm();
+    const [reloadFeedbackBenefitFlag, setReloadFeedbackBenefitFlag] = useState(false);
+    const [dataTable, setDataTable] = useState([]);
+    const [searchData, setSearchData] = useState({
+        feedbackBenefitId: '',
+        coin: 1000,
+        fromDate: '',
+        toDate: '',
+    });
+    const notification = useContext(NotificationContext);
+    ///
 
     const columns = [
         {
             title: 'Id',
-            dataIndex: 'businessFeeId',
+            dataIndex: 'feedbackBenefitId',
             width: '5%',
         },
         {
@@ -63,79 +60,86 @@ function BusinessFee() {
             }
         },
         {
-            title: 'Giá trị',
-            dataIndex: 'fee',
+            title: 'Coin',
+            dataIndex: 'coin',
             width: '10%',
-            render: (fee) => {
+            render: (coin) => {
                 return (
-                    <span>{fee}%</span>
+                    <span>{coin}</span>
                 )
             }
         },
         {
-            title: 'Tổng số đơn hàng đã áp dụng',
-            dataIndex: 'totalOrderUsed',
+            title: 'Tổng số đánh giá đã áp dụng',
+            dataIndex: 'totalFeedbackUsed',
             width: '15%',
         },
 
     ];
 
-    const notification = useContext(NotificationContext);
-    const [loading, setLoading] = useState(true)
-
-    const [form] = Form.useForm();
-
-    const [dataTable, setDataTable] = useState([]);
-    const [searchData, setSearchData] = useState({
-        businessFeeId: '',
-        maxFee: 100,
-        fromDate: '',
-        toDate: '',
-    });
-
+    /// useEffects
     useEffect(() => {
-        getBusinessFeeWithCondition();
+        const getFeedbackBenefitWithCondition = () => {
+            setIsLoadingSpinningPage(true);
+
+            getFeedbackBenefits(searchData)
+                .then((res) => {
+                    if (res.status === 200) {
+                        const data = res.data;
+                        const status = data.status;
+                        if (status.responseCode === RESPONSE_CODE_SUCCESS) {
+                            setDataTable(data.result);
+                        } else if (status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
+                            notification("error", "Yêu cầu không hợp lệ, vui lòng thử lại");
+                        } else {
+                            notification("error", "Có lỗi từ hệ thống, vui lòng thử lại sau");
+                        }
+                    } else {
+                        notification("error", "Có lỗi từ hệ thống, vui lòng thử lại sau");
+                    }
+                })
+                .catch((err) => { })
+                .finally(() => {
+                    setTimeout(() => { setIsLoadingSpinningPage(false) }, 500)
+                })
+        }
+
+        getFeedbackBenefitWithCondition();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchData])
+    }, [searchData, reloadFeedbackBenefitFlag])
+    ///
 
-    const getBusinessFeeWithCondition = () => {
-        getBusinessFee(searchData)
-            .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setDataTable(res.data.result)
-                } else {
-                    notification("error", "Đang có chút sự cố! Hãy vui lòng thử lại!")
-                }
-            })
-            .catch((err) => {
-            })
-            .finally(() => {
-                setTimeout(() => { setLoading(false) }, 500)
-            })
-    }
-
+    /// init
     const initFormValues = [
         {
-            name: 'businessFeeId',
-            value: searchData.businessFeeId,
+            name: 'feedbackBenefitId',
+            value: searchData.feedbackBenefitId,
         },
         {
-            name: 'maxFee',
-            value: searchData.maxFee,
+            name: 'coin',
+            value: searchData.coin,
         },
     ];
+    ///
+
+    /// handles
+    const reloadFeedbackBenefits = () => {
+        setReloadFeedbackBenefitFlag(!reloadFeedbackBenefitFlag);
+    }
 
     const onFinish = (values) => {
-        setLoading(true);
+        debugger
         if (values.date === null) {
             notification("error", "Thời gian tạo yêu cầu không được trống!")
-            setLoading(false);
             return;
         }
 
+        setIsLoadingSpinningPage(true);
+
         setSearchData({
-            businessFeeId: values.businessFeeId,
-            maxFee: values.maxFee,
+            feedbackBenefitId: values.feedbackBenefitId,
+            coin: values.coin,
             fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
             toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),
         });
@@ -144,14 +148,15 @@ function BusinessFee() {
     const onReset = () => {
         form.resetFields();
         form.setFieldsValue({
-            businessFeeId: '',
-            maxFee: 100,
+            feedbackBenefitId: '',
+            coin: 1000,
         });
     };
+    ///
 
     return (
         <>
-            <Spinning spinning={loading}>
+            <Spinning spinning={isLoadingSpinningPage}>
                 <Card>
                     <Form
                         name="basic"
@@ -162,14 +167,11 @@ function BusinessFee() {
                         <Row>
                             <Col span={3} offset={1}>Id: </Col>
                             <Col span={6}>
-                                <Form.Item name="businessFeeId" >
+                                <Form.Item name="feedbackBenefitId" >
                                     <Input />
                                 </Form.Item>
                             </Col>
                         </Row>
-
-
-
                         <Row>
                             <Col span={3} offset={1}><label>Thời gian áp dụng: </label></Col>
                             <Col span={6}>
@@ -181,10 +183,10 @@ function BusinessFee() {
                             </Col>
                         </Row>
                         <Row>
-                            <Col span={2} offset={1}>{"Giá trị"}</Col>
+                            <Col span={2} offset={1}>{"Coin:"}</Col>
                             <Col offset={1} span={2}>
-                                <Form.Item name="maxFee" >
-                                    <InputNumber max={100} min={0} />
+                                <Form.Item name="coin" >
+                                    <InputNumber min={0} />
                                 </Form.Item>
                             </Col>
 
@@ -201,7 +203,7 @@ function BusinessFee() {
                         </Row>
                     </Form>
 
-                    <ModalAddNewBusinessFee callBack={getBusinessFeeWithCondition} />
+                    <ModalAddNewFeedbackBenefit reloadFeedbackBenefits={reloadFeedbackBenefits} notification={notification} />
 
                 </Card>
                 <Card style={{ marginTop: "20px" }}>
@@ -217,4 +219,4 @@ function BusinessFee() {
     )
 }
 
-export default BusinessFee;
+export default FeedbackBenefit;

@@ -3,7 +3,7 @@ import { Divider, Modal, Button, Form, Select, Row, Col, Input } from "antd";
 
 import { ExclamationCircleFilled } from "@ant-design/icons";
 
-import NotificationContext from "~/context/UI/NotificationContext";
+import { NotificationContext } from "~/context/UI/NotificationContext";
 
 import {
     RESPONSE_CODE_SUCCESS,
@@ -41,6 +41,7 @@ function ModalUpdateProductStatus({ productId, style, callBack }) {
                     callBack()
                     setTimeout(() => {
                         setOpenModal(false)
+                        notification("success", "Cập nhật trạng thái sản phẩm thành công")
                     }, 200)
                 } else {
                     notification("error", "Đã có lỗi xảy ra.")

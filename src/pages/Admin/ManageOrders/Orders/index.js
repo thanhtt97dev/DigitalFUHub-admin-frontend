@@ -8,7 +8,7 @@ import {
 import * as ExcelJS from "exceljs"
 import saveAs from "file-saver";
 
-import NotificationContext from "~/context/UI/NotificationContext";
+import { NotificationContext } from "~/context/UI/NotificationContext";
 
 import {
     getOrders,
