@@ -119,7 +119,6 @@ function Users() {
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchData]);
-
     const initFormValues = [
         {
             name: 'userId',

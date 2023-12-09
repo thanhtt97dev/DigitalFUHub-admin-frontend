@@ -53,3 +53,6 @@ export const getUsers = (data) => {
 export const getUserInfoById = (id) => {
     return apiGetAuth(`api/users/Admin/UserInfo/${id}`)
 }
+export const editStatusUser = (data) => {
+    return apiPostAuth(`api/users/Admin/EditStatus`, data);
+};

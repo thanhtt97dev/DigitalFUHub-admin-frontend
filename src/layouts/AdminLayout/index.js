@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './AdminLayout.module.scss';
-import logo from '~/assets/images/fpt-logo.jpg';
+import logoFPT from '~/assets/images/fpt-logo.jpg';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import {
     AreaChartOutlined,
@@ -238,7 +238,7 @@ const AdminLayout = () => {
                                                 pointAtCenter: true,
                                             }}
                                         >
-                                            <Avatar src={logo} size="large" />
+                                            <Avatar src={logoFPT} size="large" />
                                         </Dropdown>
                                     </Col>
                                 </Row>
