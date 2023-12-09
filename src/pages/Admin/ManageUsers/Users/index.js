@@ -2,13 +2,14 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Button, Select, Form, Input, Table, Tag, Row, Col, Space, Card, Avatar } from 'antd';
 
 import Spinning from "~/components/Spinning";
-import NotificationContext from "~/context/UI/NotificationContext";
+import { NotificationContext } from "~/context/UI/NotificationContext";
 
 import { getUsers } from '~/api/user';
 import { Link } from 'react-router-dom';
 import {
     CUSTOMER_ROLE_ID,
-    SELLER_ROLE_ID
+    SELLER_ROLE_ID,
+    PAGE_SIZE
 }
     from '~/constants'
 import logoFPT from '~/assets/images/fpt-logo.jpg';
@@ -56,7 +57,7 @@ const columns = [
     {
         title: 'Trạng thái',
         dataIndex: 'status',
-        render: (status) => <Tag color={status ? 'green' : 'volcano'}>{status ? 'Activate' : 'Ban'}</Tag>,
+        render: (status) => <Tag color={status ? 'green' : 'volcano'}>{status ? 'Hoạt động' : 'Cấm'}</Tag>,
         width: '10%',
     },
     {
@@ -80,32 +81,34 @@ function Users() {
         fullname: '',
         roleId: 0,
         status: 0,
+        page: 1
     });
 
-    const onFinish = (values) => {
-        setLoading(true);
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: PAGE_SIZE,
+            showSizeChanger: false
+        },
+    });
+    const [totalRecord, setTotalRecord] = useState(0)
 
-        setSearchData({
-            userId: values.userId,
-            email: values.email,
-            fullname: values.fullname,
-            roleId: values.role,
-            status: values.status,
-        });
-    };
 
-    const onFill = () => {
-        form.setFieldsValue({ email: '', fullname: '', role: 0, status: 0 });
-    };
 
     useEffect(() => {
         setLoading(true);
-
         setDataTable([]);
-
         getUsers(searchData)
             .then((res) => {
-                setDataTable(res.data.result);
+                setDataTable(res.data.result.users);
+                setTotalRecord(res.data.result.total)
+                setTableParams({
+                    ...tableParams,
+                    pagination: {
+                        ...tableParams.pagination,
+                        total: res.data.result.total,
+                    },
+                });
                 setTimeout(() => {
                     setLoading(false);
                 }, 500);
@@ -116,7 +119,6 @@ function Users() {
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchData]);
-
 
     const initFormValues = [
         {
@@ -140,6 +142,40 @@ function Users() {
             value: searchData.status,
         },
     ];
+
+
+    const onFinish = (values) => {
+        setLoading(true);
+
+        setSearchData({
+            userId: values.userId,
+            email: values.email,
+            fullname: values.fullname,
+            roleId: values.role,
+            status: values.status,
+            page: 1
+        });
+
+    };
+
+    const onFill = () => {
+        form.setFieldsValue({ email: '', fullname: '', role: 0, status: 0 });
+    };
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setSearchData({
+            ...searchData,
+            page: pagination.current
+        })
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
+
+
+
 
     return (
         <>
@@ -199,8 +235,8 @@ function Users() {
                                         <Form.Item name="status">
                                             <Select>
                                                 <Select.Option value={0}>Tất cả</Select.Option>
-                                                <Select.Option value={1}>Active</Select.Option>
-                                                <Select.Option value={2}>Ban</Select.Option>
+                                                <Select.Option value={1}>Hoạt động</Select.Option>
+                                                <Select.Option value={2}>Cấm</Select.Option>
                                             </Select>
                                         </Form.Item>
                                     </Col>
@@ -230,10 +266,18 @@ function Users() {
                 <Card
                     style={{ marginTop: "20px" }}
                 >
-                    <Table columns={columns} pagination={{ size: 10 }} dataSource={dataTable} />
+                    <Row align="end">
+                        <b>{totalRecord} Kết quả</b>
+                    </Row>
+                    <Table
+                        columns={columns}
+                        pagination={tableParams.pagination}
+                        dataSource={dataTable}
+                        rowKey={(record, index) => index}
+                        onChange={handleTableChange}
+                        size="small"
+                    />
                 </Card>
-
-
             </Spinning>
         </>
     );

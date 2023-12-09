@@ -23,6 +23,9 @@ import Shops from '~/pages/Admin/ManageShop/Shops';
 import AddSlider from '~/pages/Admin/ManageSlider/AddSlider';
 import EditSlider from '~/pages/Admin/ManageSlider/EditSlider';
 import Statistics from '~/pages/Admin/Statistics';
+import NotFound from '~/pages/NotFound';
+import ReportProducts from '~/pages/Admin/ManageReport/ReportProducts';
+import FeedbackBenefit from '~/pages/Admin/ManageFinance/FeedbackBenefit';
 
 const routesConfig = [
     {
@@ -63,6 +66,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <SliderHome />
+    },
+    {
+        path: '/admin/finance/feedbackBenefit',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <FeedbackBenefit />
     },
     {
         path: '/admin/slider/add',
@@ -149,6 +158,12 @@ const routesConfig = [
         component: <UserInfo />
     },
     {
+        path: '/admin/report/product',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <ReportProducts />
+    },
+    {
         title: 'verification2FA',
         path: '/verification2FA/:id',
         component: <Verification2FA />,
@@ -157,6 +172,11 @@ const routesConfig = [
         title: 'chatbox',
         path: '/chatBox',
         component: <ChatBox />,
+    },
+    {
+        title: 'not found',
+        path: '/notFound',
+        component: <NotFound />,
     },
 ];
 

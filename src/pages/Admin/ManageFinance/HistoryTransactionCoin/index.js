@@ -344,7 +344,7 @@ function HistoryTransactionCoin() {
                     </Form>
                 </Card>
 
-                <Card style={{ marginTop: "20px" }}>
+                <Card style={{ marginTop: "20px", minHeight: "80vh" }}>
                     <Row align="end">
                         <b>{totalRecord} Kết quả</b>
                     </Row>

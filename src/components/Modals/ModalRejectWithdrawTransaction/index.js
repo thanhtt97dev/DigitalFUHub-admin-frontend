@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState, useContext } from "react";
 import { Divider, Modal, Button, Form, Row, Col, Input } from "antd";
 
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import NotificationContext from "~/context/UI/NotificationContext";
+import { NotificationContext } from "~/context/UI/NotificationContext";
 
 import {
     RESPONSE_CODE_NOT_ACCEPT,

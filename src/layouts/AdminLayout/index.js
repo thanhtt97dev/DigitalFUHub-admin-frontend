@@ -10,7 +10,8 @@ import {
     MenuFoldOutlined,
     ShoppingOutlined,
     ShopOutlined,
-    SoundOutlined
+    SoundOutlined,
+    WarningOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -49,21 +50,6 @@ const menuItems = [
         icon: <AreaChartOutlined />,
     },
     {
-        label: 'Quản lý slider',
-        key: '/admin/slider',
-        icon: <SoundOutlined />,
-        children: [
-            {
-                key: '/admin/slider/list',
-                label: <Link to={"/admin/slider"}>Danh sách slider</Link>,
-            },
-            {
-                key: '/admin/marketing/addSlider',
-                label: <Link to={"/admin/slider/add"}>Thêm mới slider</Link>,
-            }
-        ],
-    },
-    {
         label: 'Quản lý tài chính',
         key: '/admin/finance',
         icon: <StockOutlined />,
@@ -79,6 +65,10 @@ const menuItems = [
             {
                 key: '/admin/finance/businessFee',
                 label: <Link to={"/admin/finance/businessFee"}>Phí kinh doanh</Link>,
+            },
+            {
+                key: '/admin/finance/feedbackBenefit',
+                label: <Link to={"/admin/finance/feedbackBenefit"}>Lợi ích phản hồi</Link>,
             },
             {
                 key: '/admin/finance/transactionInternal',
@@ -109,6 +99,26 @@ const menuItems = [
         label: <Link to='/admin/user'>Quản lý người dùng</Link>,
         key: '/admin/user',
         icon: <FontAwesomeIcon icon={faUsers} />
+    },
+    {
+        label: <Link to='/admin/slider'>Quản lý slider'</Link>,
+        key: '/admin/slider',
+        icon: <SoundOutlined />,
+    },
+    {
+        label: 'Quản lý Tố cáo',
+        key: '/admin/report',
+        icon: <WarningOutlined />,
+        children: [
+            {
+                key: '/admin/report/product',
+                label: <Link to={"/admin/report/product"}>Tố cáo sản phẩm</Link>,
+            },
+            {
+                key: '/admin/report/shop',
+                label: <Link to={"/admin/report/shop"}>Tố cáo cửa hàng</Link>,
+            }
+        ],
     },
 ];
 
@@ -186,7 +196,7 @@ const AdminLayout = () => {
                 </div>
                 <Menu
                     className={cx("menu")}
-                    defaultOpenKeys={['/admin/finance', '/admin/slider']}
+                    //defaultOpenKeys={['/admin/finance', '/admin/slider']}
                     defaultSelectedKeys={['admin/dashboard']}
                     selectedKeys={getSelectedKey()}
                     mode="inline"

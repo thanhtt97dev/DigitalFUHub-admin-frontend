@@ -1,53 +1,48 @@
-import React, { useLayoutEffect, useState, useContext } from "react";
+import React, { useLayoutEffect, useState } from "react";
+import { addNewFeedbackBenefit } from '~/api/feedbackBenefit';
+import { ExclamationCircleFilled, PlusOutlined } from "@ant-design/icons";
 import { Divider, Modal, Button, Form, Row, Col, InputNumber } from "antd";
-
-import {
-    ExclamationCircleFilled,
-    PlusOutlined
-} from "@ant-design/icons";
-import { NotificationContext } from "~/context/UI/NotificationContext";
-
-import {
-    RESPONSE_CODE_NOT_ACCEPT,
-    RESPONSE_CODE_SUCCESS,
-} from "~/constants";
-
-import { addNewBusinessFee } from '~/api/businessFee'
+import { RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_SUCCESS } from "~/constants";
 
 
-function ModalAddNewBusinessFee({ style, callBack }) {
+function ModalAddNewFeedbackBenefit({ reloadFeedbackBenefits, notification }) {
 
+    /// states
     const [form] = Form.useForm();
-    const notification = useContext(NotificationContext);
     const [openModal, setOpenModal] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [btnLoading, setBtnLoading] = useState(false)
+    const [btnLoading, setBtnLoading] = useState(false);
+    ///
 
     useLayoutEffect(() => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    /// handles
     const handleSubmit = () => {
         var data = form.getFieldsValue()
         data = { ...data }
         setConfirmLoading(true)
-        addNewBusinessFee(data)
+        addNewFeedbackBenefit(data)
             .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setTimeout(() => {
-                        setConfirmLoading(false)
-                    }, 500)
-                    callBack();
-                    setOpenModal(false)
-                    notification('success', 'Tạo phí kinh doanh mới thành công!')
-                } else if (res.data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
-                    notification('error', 'Xảy ra một vài vấn đề, hãy thử lại!')
+                if (res.status === 200) {
+                    if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                        reloadFeedbackBenefits();
+                        notification('success', 'Tạo lợi ích phản hồi mới thành công!');
+                    } else if (res.data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT) {
+                        notification('error', 'Yêu cầu không hợp lệ, vui lòng thử lại!');
+                    } else {
+                        notification('error', 'Lỗi xảy ra từ hệ thống, vui lòng thử lại sau!');
+                    }
+                } else {
+                    notification('error', 'Lỗi xảy ra từ hệ thống, vui lòng thử lại sau!');
                 }
-            })
-            .catch(() => {
+
+                setOpenModal(false);
 
             })
+            .catch(() => { })
             .finally(() => {
                 setTimeout(() => {
                     setConfirmLoading(false)
@@ -59,11 +54,12 @@ function ModalAddNewBusinessFee({ style, callBack }) {
         setBtnLoading(false)
         setOpenModal(true)
     }
+    ///
 
     const initFormValues = [
         {
-            name: 'fee',
-            value: 5
+            name: 'coin',
+            value: 1000
         },
     ];
 
@@ -72,15 +68,14 @@ function ModalAddNewBusinessFee({ style, callBack }) {
             <Button
                 onClick={handleOpenModal}
                 type="primary"
-                style={style}
                 loading={btnLoading}
             >
                 <PlusOutlined />
-                Tạo phí kinh doanh mới
+                Tạo lợi ích phản hồi mới
             </Button>
 
             <Modal
-                title={<><ExclamationCircleFilled style={{ color: "#faad14" }} /> Tạo phí kinh doanh mới</>}
+                title={<><ExclamationCircleFilled style={{ color: "#faad14" }} /> Tạo lợi ích phản hồi mới</>}
                 open={openModal}
                 onOk={handleSubmit}
                 onCancel={() => setOpenModal(false)}
@@ -92,23 +87,22 @@ function ModalAddNewBusinessFee({ style, callBack }) {
                 <>
                     <Divider />
                     <Form
-                        name="basic"
+                        name="add-new-feedback-benefit"
                         form={form}
                         fields={initFormValues}
                     >
                         <Row>
                             <Col offset={1} span={23}>
-                                <p>Bạn đã chắc chắn từ chối yêu cầu rút tiền này không?</p>
+                                <p>Bạn đã chắc chắn tạo mới với giá trị Coin này không?</p>
                             </Col>
                         </Row>
 
                         <Row>
                             <Col offset={1} span={8}>
-                                <Form.Item name="fee" label="Giá trị">
-                                    <InputNumber min={0} max={100} />
+                                <Form.Item name="coin" label="Coin">
+                                    <InputNumber min={0} />
                                 </Form.Item>
                             </Col>
-                            <Col span={1}><p>%</p></Col>
                         </Row>
                     </Form>
                 </>
@@ -118,4 +112,4 @@ function ModalAddNewBusinessFee({ style, callBack }) {
     );
 }
 
-export default ModalAddNewBusinessFee;
+export default ModalAddNewFeedbackBenefit;
