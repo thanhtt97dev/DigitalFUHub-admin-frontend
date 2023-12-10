@@ -19,7 +19,7 @@ function FeedbackBenefit() {
     const [dataTable, setDataTable] = useState([]);
     const [searchData, setSearchData] = useState({
         feedbackBenefitId: '',
-        coin: 1000,
+        coin: 50,
         fromDate: '',
         toDate: '',
     });
@@ -60,7 +60,7 @@ function FeedbackBenefit() {
             }
         },
         {
-            title: 'Coin',
+            title: 'Xu',
             dataIndex: 'coin',
             width: '10%',
             render: (coin) => {
@@ -149,7 +149,7 @@ function FeedbackBenefit() {
         form.resetFields();
         form.setFieldsValue({
             feedbackBenefitId: '',
-            coin: 1000,
+            coin: 50,
         });
     };
     ///
@@ -183,7 +183,7 @@ function FeedbackBenefit() {
                             </Col>
                         </Row>
                         <Row>
-                            <Col span={2} offset={1}>{"Coin:"}</Col>
+                            <Col span={2} offset={1}>{"Xu:"}</Col>
                             <Col offset={1} span={2}>
                                 <Form.Item name="coin" >
                                     <InputNumber min={0} />

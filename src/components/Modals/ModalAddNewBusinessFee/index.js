@@ -98,7 +98,7 @@ function ModalAddNewBusinessFee({ style, callBack }) {
                     >
                         <Row>
                             <Col offset={1} span={23}>
-                                <p>Bạn đã chắc chắn từ chối yêu cầu rút tiền này không?</p>
+                                <p>Bạn đã chắc chắn tạo phí kinh doanh mới với giá trị này không?</p>
                             </Col>
                         </Row>
 

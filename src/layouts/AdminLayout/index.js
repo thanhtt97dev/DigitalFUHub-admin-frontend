@@ -101,7 +101,7 @@ const menuItems = [
         icon: <FontAwesomeIcon icon={faUsers} />
     },
     {
-        label: <Link to='/admin/slider'>Quản lý slider'</Link>,
+        label: <Link to='/admin/slider'>Quản lý slider</Link>,
         key: '/admin/slider',
         icon: <SoundOutlined />,
     },

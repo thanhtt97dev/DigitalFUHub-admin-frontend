@@ -23,6 +23,7 @@ const tabList = [
     }
 ]
 
+
 function SliderHome() {
 
     const navigate = useNavigate();

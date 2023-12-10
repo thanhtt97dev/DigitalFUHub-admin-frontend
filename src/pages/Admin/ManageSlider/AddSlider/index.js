@@ -11,7 +11,7 @@ import { UPLOAD_FILE_SIZE_LIMIT } from '~/constants';
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
-import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal } from 'antd';
+import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Switch } from 'antd';
 
 ///
 const cx = classNames.bind(styles);
@@ -25,12 +25,11 @@ const AddSlider = () => {
 
     /// states
     const navigate = useNavigate();
-    const [isOpenModalChangeStatus, setIsOpenModalChangeStatus] = useState(false);
-    const [contentModalChangeStatus, setContentModalChangeStatus] = useState('');
+    const [isLoadingButtonAddSlider, setIsLoadingButtonAddSlider] = useState(false);
+    const [isOpenModalAddSlider, setIsOpenModalAddSlider] = useState(false);
     const [isLoadingSpinning, setIsLoadingSpinning] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [sliderFile, setSliderFile] = useState([]);
-    const [isCheckedStatus, setIsCheckedStatus] = React.useState(false);
     const [openNotificationFileExceedLimit, setOpenNotificationFileExceedLimit] = useState(false);
     const [msgNotificationFileExceedLimit, setMsgNotificationFileExceedLimit] = useState([]);
     const [previewImageTitle, setPreviewImageTitle] = useState('');
@@ -49,12 +48,11 @@ const AddSlider = () => {
     ///
 
     /// handles
-    const handleOkChangeStatus = () => {
-        setIsCheckedStatus(!isCheckedStatus);
-        setIsOpenModalChangeStatus(false);
+    const handleOkAddSlider = () => {
+        form.submit();
     }
-    const handleCancelChangeStatus = () => {
-        setIsOpenModalChangeStatus(false);
+    const handleCancelAddSlider = () => {
+        setIsOpenModalAddSlider(false);
     }
     const getBase64 = (file) =>
         new Promise((resolve, reject) => {
@@ -68,7 +66,7 @@ const AddSlider = () => {
 
         if (user === undefined || user === null) return navigate('/login');
 
-        setIsLoadingSpinning(true);
+        setIsLoadingButtonAddSlider(true)
 
         const { name, imageSlider, isActive, link } = values;
 
@@ -86,20 +84,20 @@ const AddSlider = () => {
                     const data = res.data;
                     if (data.status.responseCode === RESPONSE_CODE_SUCCESS) {
                         notification("success", "Thêm mới slider thành công");
-                        setIsLoadingSpinning(false);
+                        setIsLoadingButtonAddSlider(false);
                         navigate('/admin/slider');
                     } else if (
                         data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT
                         ||
                         data.status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
                         notification("error", "Yêu cầu không hợp lệ. Vui lòng thử lại!");
-                        setIsLoadingSpinning(false);
+                        setIsLoadingButtonAddSlider(false);
                     }
                 }
             })
             .catch((error) => {
                 notification("error", "Có lỗi xảy ra. Vui lòng thử lại!");
-                setIsLoadingSpinning(false);
+                setIsLoadingButtonAddSlider(false);
             })
     }
 
@@ -141,16 +139,10 @@ const AddSlider = () => {
         setOpenNotificationFileExceedLimit(false);
     }
 
-    const handleChangeStatus = () => {
-        let contentModal = '';
-        if (isCheckedStatus) {
-            contentModal = "Slider này sẽ không được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
-        } else {
-            contentModal = "Slider này sẽ được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
-        }
+    const handleAdd = () => {
+        if (user === undefined || user === null) return navigate('/login');
 
-        setContentModalChangeStatus(contentModal);
-        setIsOpenModalChangeStatus(true);
+        setIsOpenModalAddSlider(true);
     }
 
     ///
@@ -283,31 +275,29 @@ const AddSlider = () => {
                 <Row gutter={8}>
                     <Col span={17}>
                         <Form.Item name="isActive" label={<lable style={{ fontSize: 14 }}>Trạng thái <Tooltip title="Trạng thái hiển thị slider trên trang chủ"><QuestionCircleOutlined /></Tooltip></lable>} labelAlign="left" valuePropName="checked" style={{ width: '100%' }}>
-                            {
-                                isCheckedStatus ? <Button type="primary" style={{ backgroundColor: 'green' }} onClick={handleChangeStatus}>
-                                    Đang hiển thị
-                                </Button> : <Button type="primary" danger onClick={handleChangeStatus}>
-                                    Đang ẩn
-                                </Button>
-                            }
+                            <Switch
+                                checkedChildren="Hiển thị"
+                                unCheckedChildren="Ẩn"
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
 
                 <Form.Item>
                     <Row className={cx('flex-item-center')}>
-                        <Button type="primary" htmlType="submit">Thêm mới</Button>
+                        <Button type="primary" onClick={handleAdd}>Thêm mới</Button>
                     </Row>
                 </Form.Item>
             </Form>
         </Card >
-        <ModelConfirmation title="Chỉnh sửa trạng thái"
-            isOpen={isOpenModalChangeStatus}
-            onOk={handleOkChangeStatus}
-            onCancel={handleCancelChangeStatus}
-            contentModal={contentModalChangeStatus}
+        <ModelConfirmation title="Thêm mới slider"
+            isOpen={isOpenModalAddSlider}
+            onOk={handleOkAddSlider}
+            onCancel={handleCancelAddSlider}
+            contentModal="Bạn có muốn tạo mới slider với những thông tin này không?"
             contentButtonCancel="Không"
-            contentButtonOk="Đồng ý" />
+            contentButtonOk="Có"
+            isLoading={isLoadingButtonAddSlider} />
     </Spinning>)
 }
 

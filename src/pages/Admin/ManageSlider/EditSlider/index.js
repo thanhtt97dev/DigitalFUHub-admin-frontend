@@ -11,7 +11,7 @@ import { getSlider, updateSlider } from "~/api/slider";
 import { useNavigate, useParams } from 'react-router-dom';
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import { QuestionCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Space } from 'antd';
+import { Col, Row, Form, Input, Button, Upload, Card, Tooltip, Modal, Space, Switch } from 'antd';
 import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_NOT_ACCEPT, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants';
 
 
@@ -27,9 +27,9 @@ const EditSlider = () => {
     /// states
     const { id } = useParams();
     const navigate = useNavigate();
-    const [isOpenModalChangeStatus, setIsOpenModalChangeStatus] = useState(false);
-    const [contentModalChangeStatus, setContentModalChangeStatus] = useState('');
+    const [isOpenModalEditSlider, setIsOpenModalEditSlider] = useState(false);
     const [slider, setSlider] = useState({});
+    const [isLoadingButtonEditSlider, setIsLoadingButtonEditSlider] = useState(false);
     const [isLoadingSpinning, setIsLoadingSpinning] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [sliderSrc, setsliderSrc] = useState([]);
@@ -69,6 +69,7 @@ const EditSlider = () => {
 
                         form.setFieldValue("name", result.name);
                         form.setFieldValue("link", result.link);
+                        form.setFieldValue("isActive", result.isActive);
 
                     } else if (status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
                         notification("error", "Slider không tồn tại");
@@ -87,14 +88,14 @@ const EditSlider = () => {
     ///
 
     /// handles
-    const handleOkChangeStatus = () => {
-        setSlider({ ...slider, isActive: !slider.isActive });
-        setIsOpenModalChangeStatus(false);
+    const handleOkEditSlider = () => {
+        if (user === undefined || user === null) return navigate('/login');
+        form.submit();
     }
 
 
-    const handleCancelChangeStatus = () => {
-        setIsOpenModalChangeStatus(false);
+    const handleCancelEditSlider = () => {
+        setIsOpenModalEditSlider(false);
     }
 
     const handleCancelPage = () => {
@@ -113,9 +114,9 @@ const EditSlider = () => {
         if (user === undefined || user === null) return navigate('/login');
         if (id === 0) return;
 
-        setIsLoadingSpinning(true);
+        setIsLoadingButtonEditSlider(true);
 
-        const { name, link } = values;
+        const { name, link, isActive } = values;
 
         // request dto
         const requestDto = {
@@ -123,7 +124,7 @@ const EditSlider = () => {
             Name: name,
             Image: sliderSrc[0]?.file ? sliderSrc[0]?.file : null,
             link: link,
-            IsActive: slider.isActive
+            IsActive: isActive
         }
 
         updateSlider(requestDto)
@@ -132,20 +133,20 @@ const EditSlider = () => {
                     const data = res.data;
                     if (data.status.responseCode === RESPONSE_CODE_SUCCESS) {
                         notification("success", "Cập nhật slider thành công");
-                        setIsLoadingSpinning(false);
+                        setIsLoadingButtonEditSlider(false);
                         navigate('/admin/slider');
                     } else if (
                         data.status.responseCode === RESPONSE_CODE_NOT_ACCEPT
                         ||
                         data.status.responseCode === RESPONSE_CODE_DATA_NOT_FOUND) {
                         notification("error", "Yêu cầu không hợp lệ. Vui lòng thử lại!");
-                        setIsLoadingSpinning(false);
+                        setIsLoadingButtonEditSlider(false);
                     }
                 }
             })
             .catch((error) => {
-                notification("error", "Có lỗi xảy ra. Vui lòng thử lại!");
-                setIsLoadingSpinning(false);
+                notification("error", "Có lỗi xảy ra từ hệ thống. Vui lòng thử lại sau!");
+                setIsLoadingButtonEditSlider(false);
             })
     }
 
@@ -161,16 +162,10 @@ const EditSlider = () => {
 
     const handleCancel = () => setPreviewOpen(false);
 
-    const handleChangeStatus = () => {
-        let contentModal = '';
-        if (slider?.isActive) {
-            contentModal = "Slider này sẽ không được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
-        } else {
-            contentModal = "Slider này sẽ được hiển thị trên trang chủ, bạn có đồng ý thay đổi không?";
-        }
+    const handleEditSlider = () => {
+        if (user === undefined || user === null) return navigate('/login');
 
-        setContentModalChangeStatus(contentModal);
-        setIsOpenModalChangeStatus(true);
+        setIsOpenModalEditSlider(true);
     }
 
     const handlePreviewImage = async (file) => {
@@ -218,8 +213,6 @@ const EditSlider = () => {
         } else {
             return Promise.resolve();
         }
-
-        // return Promise.resolve();
     }
     ///
 
@@ -308,7 +301,7 @@ const EditSlider = () => {
                                 beforeUpload={false}
                                 listType="picture-card"
                                 fileList={sliderSrc}
-                                // onPreview={handlePreviewImage}
+                                onPreview={handlePreviewImage}
                                 onChange={handleSliderChange}
                                 maxCount={1}
                                 accept=".png, .jpeg, .jpg"
@@ -337,13 +330,10 @@ const EditSlider = () => {
                 <Row gutter={8}>
                     <Col span={17}>
                         <Form.Item name="isActive" label={<lable style={{ fontSize: 14 }}>Trạng thái <Tooltip title="Trạng thái hiển thị slider trên trang chủ"><QuestionCircleOutlined /></Tooltip></lable>} labelAlign="left" valuePropName="checked" style={{ width: '100%' }}>
-                            {
-                                slider?.isActive ? <Button type="primary" style={{ backgroundColor: 'green' }} onClick={handleChangeStatus}>
-                                    Đang hiển thị
-                                </Button> : <Button type="primary" danger onClick={handleChangeStatus}>
-                                    Đang ẩn
-                                </Button>
-                            }
+                            <Switch
+                                checkedChildren="Hiển thị"
+                                unCheckedChildren="Ẩn"
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -351,20 +341,21 @@ const EditSlider = () => {
                 <Form.Item>
                     <Row className={cx('flex-item-center')}>
                         <Space align="center">
-                            <Button type="primary" htmlType="submit" danger ghost onClick={handleCancelPage}>Quay lại danh sách</Button>
-                            <Button type="primary" htmlType="submit" ghost>Cập nhật</Button>
+                            <Button type="primary" danger ghost onClick={handleCancelPage}>Quay lại danh sách</Button>
+                            <Button type="primary" onClick={handleEditSlider} ghost >Cập nhật</Button>
                         </Space>
                     </Row>
                 </Form.Item>
             </Form>
         </Card >
-        <ModelConfirmation title="Chỉnh sửa trạng thái"
-            isOpen={isOpenModalChangeStatus}
-            onOk={handleOkChangeStatus}
-            onCancel={handleCancelChangeStatus}
-            contentModal={contentModalChangeStatus}
+        <ModelConfirmation title="Chỉnh sửa slider"
+            isOpen={isOpenModalEditSlider}
+            onOk={handleOkEditSlider}
+            onCancel={handleCancelEditSlider}
+            contentModal="Bạn có chắc chắn muốn chỉnh sửa thông tin của slider này không?"
             contentButtonCancel="Không"
-            contentButtonOk="Đồng ý" />
+            contentButtonOk="Có"
+            isLoading={isLoadingButtonEditSlider} />
     </Spinning>)
 }
 
