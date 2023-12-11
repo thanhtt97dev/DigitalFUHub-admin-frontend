@@ -8,7 +8,7 @@ const connectionHub = (hubName) => {
         .withUrl(`${baseURL}${hubName}`, {
             skipNegotiation: true,
             transport: signalR.HttpTransportType.WebSockets,
-            accessTokenFactory: async () => { return getTokenInCookies() }
+            accessTokenFactory: () => getTokenInCookies()
         })
         .withAutomaticReconnect()
         .configureLogging(signalR.LogLevel.Information)
