@@ -12,6 +12,7 @@ import { RESPONSE_CODE_SUCCESS, RESPONSE_CODE_DATA_NOT_FOUND } from '~/constants
 
 /// styles
 const styleImageSlider = { width: 270, height: 90, borderRadius: 2 }
+const styleBalancePrice = { whiteSpace: 'nowrap', fontSize: '17px', maxWidth: '130px', overflow: 'hidden', textOverflow: 'ellipsis' }
 ///
 function TableSlider({ data, tableParams, handleTableChange, handleReloadSliders }) {
 
@@ -75,7 +76,7 @@ function TableSlider({ data, tableParams, handleTableChange, handleReloadSliders
             render: (name) => {
                 return (
                     <Row>
-                        <b>{name}</b>
+                        <p title={name} style={{ whiteSpace: 'nowrap', fontSize: '18px', maxWidth: '150px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{name}</p>
                     </Row>
                 )
             },
@@ -101,7 +102,7 @@ function TableSlider({ data, tableParams, handleTableChange, handleReloadSliders
             render: (link) => {
                 return (
                     <Row>
-                        <Link to={link}>{link}</Link>
+                        <Link to={link} target="_blank"><Button type="link"><p title={link} style={styleBalancePrice}>{link}</p></Button></Link>
                     </Row>
                 )
             },

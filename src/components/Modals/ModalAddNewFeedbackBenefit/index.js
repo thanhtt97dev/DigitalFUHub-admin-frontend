@@ -59,7 +59,7 @@ function ModalAddNewFeedbackBenefit({ reloadFeedbackBenefits, notification }) {
     const initFormValues = [
         {
             name: 'coin',
-            value: 1000
+            value: 50
         },
     ];
 
@@ -93,13 +93,13 @@ function ModalAddNewFeedbackBenefit({ reloadFeedbackBenefits, notification }) {
                     >
                         <Row>
                             <Col offset={1} span={23}>
-                                <p>Bạn đã chắc chắn tạo mới với giá trị Coin này không?</p>
+                                <p>Bạn đã chắc chắn tạo mới với giá trị Xu này không?</p>
                             </Col>
                         </Row>
 
                         <Row>
                             <Col offset={1} span={8}>
-                                <Form.Item name="coin" label="Coin">
+                                <Form.Item name="coin" label="Xu">
                                     <InputNumber min={0} />
                                 </Form.Item>
                             </Col>
