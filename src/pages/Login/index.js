@@ -1,24 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, Input, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import { useSignIn } from 'react-auth-kit';
+import { useSignIn, useSignOut } from 'react-auth-kit';
 
 import { login } from '~/api/user';
-import { saveRefreshTokenInCookies, saveTokenInCookies } from '~/utils';
+import { saveDataAuthToCookies, removeDataAuthInCookies } from '~/utils';
 import { TOKEN_EXPIRES_TIME } from '~/constants'
 //import { ADMIN_ROLE, User_ROLE } from "~/constants"
 
 function Login() {
 
     const signIn = useSignIn();
+    const signOut = useSignOut();
     const navigate = useNavigate();
     let [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const loadingIcon = (
         <LoadingOutlined style={{ fontSize: 24, marginRight: 10 }} spin />
     )
+
+    useEffect(() => {
+        signOut();
+        removeDataAuthInCookies();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
 
     const onFinish = (values) => {
@@ -50,8 +57,7 @@ function Login() {
                         refreshToken: res.data.refreshToken,
                         refreshTokenExpireIn: TOKEN_EXPIRES_TIME,
                     });
-                    saveRefreshTokenInCookies(res.data.refreshToken)
-                    saveTokenInCookies(res.data.accessToken)
+                    saveDataAuthToCookies(res.data.userId, res.data.accessToken, res.data.refreshToken, res.data.jwtId);
                     return navigate('/admin/statistic');
                 }, 500)
             })

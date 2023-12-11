@@ -92,8 +92,8 @@ export const saveDataAuthToCookies = (uid, token, refreshToken, jwtId) => {
     Cookies.remove('_token');
     Cookies.set('_token', token, { expires: time_expries });
 
-    Cookies.remove('_auth_refresh');
-    Cookies.set('_auth_refresh', refreshToken, { expires: time_expries });
+    Cookies.remove('_refresh_token');
+    Cookies.set('_refresh_token', refreshToken, { expires: time_expries });
 
     Cookies.remove('_tid');
     Cookies.set('_tid', jwtId, { expires: time_expries });
@@ -106,9 +106,10 @@ export const removeDataAuthInCookies = () => {
 
     Cookies.remove('_token');
 
-    Cookies.remove('_auth_refresh');
+    Cookies.remove('_refresh_token');
 
     Cookies.remove('_tid');
+
 };
 
 export const removeUserInfoInCookie = () => {
@@ -297,6 +298,8 @@ export function readDataFileExcelImportProduct(file) {
             })
         }
     })
+
+
 
 
     // wb.xlsx.readFile(buffer).then(() => {

@@ -19,28 +19,18 @@ import { faCartShopping, faUsers } from '@fortawesome/free-solid-svg-icons';
 import Message from '~/components/Message';
 import Notification from '~/components/Notification';
 import logo from '~/assets/images/DIGITALFUHUB.png';
-import SignalR from '~/context/SignalR/index'
+import Logout from '~/components/Logout';
+import SignalR from '~/context/SignalR';
 
 const cx = classNames.bind(styles);
 const { Content, Sider, Header } = Layout;
 
 
 const items = [
-
-    // {
-    //     key: 'account',
-    //     label: <Link to={"/settings"}>Tài khoản</Link>,
-    //     icon: <UserOutlined />,
-    // },
-    // {
-    //     key: 'history transaction',
-    //     label: <Link to={"/historyTransaction"}>Lịch sử giao dịch</Link>,
-    //     icon: <CreditCardOutlined />,
-    // },
-    // {
-    //     key: 'logout',
-    //     label: <Logout />,
-    // },
+    {
+        key: 'logout',
+        label: <Logout />,
+    },
 ];
 
 const menuItems = [
@@ -122,53 +112,6 @@ const menuItems = [
     },
 ];
 
-// const AdminLayout = () => {
-//     const [collapsed, setCollapsed] = useState(false);
-
-//     const {
-//         token: { colorBgContainer },
-//     } = theme.useToken();
-//     return (
-//         <Layout className={cx('container')}
-//         >
-//             <Sider className={cx('sidebar')}
-//                 collapsible
-//                 collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}
-//                 style={{ background: "#f1f1f1" }}
-//             >
-//                 <div className={cx('header-logo')}>
-//                     <Space>
-//                         <Avatar src={logo} size="large" />
-//                         <Link to={'/admin'} className={cx("link")}>
-//                             <h3>DigitalFUHub</h3>
-//                         </Link>
-//                     </Space>
-//                 </div>
-//                 <Menu
-//                     className={cx("menu")}
-//                     defaultSelectedKeys={['dashboard']}
-//                     mode="inline" items={items} />
-//             </Sider>
-//             <Layout>
-
-//                 <Content className={cx("content")}>
-//                     <div
-//                         style={{
-//                             padding: 5,
-//                             minHeight: 650,
-//                             background: colorBgContainer,
-//                         }}
-//                     >
-//                         <Outlet />
-//                     </div>
-//                 </Content>
-//             </Layout>
-//         </Layout >
-//     );
-// };
-// export default AdminLayout;
-
-
 const AdminLayout = () => {
     const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
@@ -204,49 +147,47 @@ const AdminLayout = () => {
                 />
             </Sider>
             <Layout>
-                <SignalR>
-                    <Header id='header' className={cx('header')}>
-                        <Row align="middle" justify="center">
-                            <Col span={2}>
-                                <Button
-                                    type="text"
-                                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                                    onClick={() => setCollapsed(!collapsed)}
-                                    style={{
-                                        fontSize: '16px',
-                                        width: 64,
-                                        height: 64,
-                                    }}
-                                />
-                            </Col>
+                <Header id='header' className={cx('header')}>
+                    <Row align="middle" justify="center">
+                        <Col span={2}>
+                            <Button
+                                type="text"
+                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                onClick={() => setCollapsed(!collapsed)}
+                                style={{
+                                    fontSize: '16px',
+                                    width: 64,
+                                    height: 64,
+                                }}
+                            />
+                        </Col>
 
-                            <Col span={22}>
-                                <Row gutter={[16, 0]} justify="end" align="middle">
-                                    <Col >
-                                        <Notification />
-                                    </Col>
-                                    <Col>
-                                        <Message />
-                                    </Col>
-                                    <Col align="center" style={{
-                                        marginTop: '-0.5rem'
-                                    }}>
-                                        <Dropdown
-                                            menu={{ items }}
-                                            placement="bottomRight"
-                                            arrow={{
-                                                pointAtCenter: true,
-                                            }}
-                                        >
-                                            <Avatar src={logoFPT} size="large" />
-                                        </Dropdown>
-                                    </Col>
-                                </Row>
+                        <Col span={22}>
+                            <Row gutter={[16, 0]} justify="end" align="middle">
+                                <Col >
+                                    <Notification />
+                                </Col>
+                                <Col>
+                                    <Message />
+                                </Col>
+                                <Col align="center" style={{
+                                    marginTop: '-0.5rem'
+                                }}>
+                                    <Dropdown
+                                        menu={{ items }}
+                                        placement="bottomRight"
+                                        arrow={{
+                                            pointAtCenter: true,
+                                        }}
+                                    >
+                                        <Avatar src={logoFPT} size="large" />
+                                    </Dropdown>
+                                </Col>
+                            </Row>
 
-                            </Col>
-                        </Row>
-                    </Header>
-                </SignalR>
+                        </Col>
+                    </Row>
+                </Header>
                 <Content className={cx('content')}>
                     <Outlet />
                 </Content>

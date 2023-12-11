@@ -1,9 +1,13 @@
 import Notification from '~/context/UI/NotificationContext';
+import SignalR from '../SignalR';
+
 function ContextContainer({ children }) {
     return (
         <>
             <Notification>
-                {children}
+                <SignalR>
+                    {children}
+                </SignalR>
             </Notification>
         </>
     );

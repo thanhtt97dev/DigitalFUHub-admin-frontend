@@ -1,14 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 
 import connectionHub from '~/api/signalr/connectionHub';
-import { SIGNAL_R_CHAT_HUB_RECEIVE_MESSAGE, ADMIN_USER_ID } from '~/constants';
+import { SIGNAL_R_CHAT_HUB_RECEIVE_MESSAGE } from '~/constants';
+import { getUserId } from '~/utils';
 
 export const ChatContext = createContext();
 
 export function Chat({ children }) {
     const [message, setMessage] = useState("");
     useEffect(() => {
-        var userId = ADMIN_USER_ID;
+        var userId = getUserId();
         if (userId === undefined || userId === null) return;
         // Create a new SignalR connection with the token
         const connection = connectionHub(`hubs/chat?userId=${userId}`);

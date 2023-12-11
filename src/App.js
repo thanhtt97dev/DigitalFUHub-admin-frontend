@@ -8,26 +8,23 @@ import viVN from 'antd/locale/vi_VN';
 import ContextContainer from './context/ContextContainer';
 import Routing from './routes/Routing';
 import refreshToken from '~/api/refreshToken';
-import SignalR from './context/SignalR';
 
 function App() {
     return (
         <ContextContainer>
-            <SignalR>
-                <AuthProvider
-                    authType={'cookie'}
-                    authName={'_auth'}
-                    refresh={refreshToken}
-                    cookieDomain={window.location.hostname}
-                    cookieSecure
-                >
-                    <ConfigProvider locale={viVN}>
-                        <Router>
-                            <Routing />
-                        </Router>
-                    </ConfigProvider>
-                </AuthProvider>
-            </SignalR>
+            <AuthProvider
+                authType={'cookie'}
+                authName={'_auth'}
+                refresh={refreshToken}
+                cookieDomain={window.location.hostname}
+                cookieSecure
+            >
+                <ConfigProvider locale={viVN}>
+                    <Router>
+                        <Routing />
+                    </Router>
+                </ConfigProvider>
+            </AuthProvider>
         </ContextContainer>
     );
 }

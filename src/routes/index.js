@@ -26,6 +26,7 @@ import Statistics from '~/pages/Admin/Statistics';
 import NotFound from '~/pages/NotFound';
 import ReportProducts from '~/pages/Admin/ManageReport/ReportProducts';
 import FeedbackBenefit from '~/pages/Admin/ManageFinance/FeedbackBenefit';
+import SignalR from '~/context/SignalR';
 
 const routesConfig = [
     {
