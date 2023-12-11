@@ -20,7 +20,6 @@ import Message from '~/components/Message';
 import Notification from '~/components/Notification';
 import logo from '~/assets/images/DIGITALFUHUB.png';
 import Logout from '~/components/Logout';
-import SignalR from '~/context/SignalR';
 
 const cx = classNames.bind(styles);
 const { Content, Sider, Header } = Layout;
