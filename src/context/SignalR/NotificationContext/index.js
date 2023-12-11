@@ -1,7 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 
 import connectionHub from '~/api/signalr/connectionHub';
-import { SIGNAL_R_NOTIFICATION_HUB_RECEIVE_NOTIFICATION, ADMIN_USER_ID } from '~/constants';
+import { SIGNAL_R_NOTIFICATION_HUB_RECEIVE_NOTIFICATION } from '~/constants';
+import { getUserId } from '~/utils';
 
 export const NotificationContext = createContext();
 
@@ -9,7 +10,7 @@ export function Notification({ children }) {
 
     const [notification, setNotification] = useState("");
     useEffect(() => {
-        var userId = ADMIN_USER_ID;
+        var userId = getUserId();
         if (userId === null || userId === undefined) return;
 
         const connection = connectionHub(`hubs/notification?userId=${userId}`);
