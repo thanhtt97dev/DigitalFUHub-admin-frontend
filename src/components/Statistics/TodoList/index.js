@@ -2,7 +2,7 @@ import { Card, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getTodoList } from "~/api/statistic";
-import { ORDER_DISPUTE, RESPONSE_CODE_SUCCESS, WITHDRAW_TRANSACTION_IN_PROCESSING } from "~/constants";
+import { ORDER_DISPUTE, REPORT_PRODUCT_STATUS_VERIFYING, RESPONSE_CODE_SUCCESS, WITHDRAW_TRANSACTION_IN_PROCESSING } from "~/constants";
 
 function TodoList() {
     const [data, setData] = useState();
@@ -46,17 +46,17 @@ function TodoList() {
                     </Link>
                 </Col >
                 <Col span={8}>
-                    {/* <Link to={"/admin/report"}> */}
-                    <Card
-                        bodyStyle={{
-                            textAlign: 'center'
-                        }}
-                        hoverable
-                    >
-                        <div style={{ fontSize: '24px', color: 'rgb(63, 134, 0)', height: '100%' }}>{data?.numberUnprocessedReportProducts ? data?.numberUnprocessedReportProducts : 0}</div>
-                        <div>Báo cáo sản phẩm chưa xử lý</div>
-                    </Card>
-                    {/* </Link> */}
+                    <Link to={"/admin/report/product"} state={{ status: REPORT_PRODUCT_STATUS_VERIFYING }}>
+                        <Card
+                            bodyStyle={{
+                                textAlign: 'center'
+                            }}
+                            hoverable
+                        >
+                            <div style={{ fontSize: '24px', color: 'rgb(63, 134, 0)', height: '100%' }}>{data?.numberUnprocessedReportProducts ? data?.numberUnprocessedReportProducts : 0}</div>
+                            <div>Báo cáo sản phẩm chưa xử lý</div>
+                        </Card>
+                    </Link>
                 </Col >
             </Row>
         </Card >
