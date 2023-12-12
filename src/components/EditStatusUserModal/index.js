@@ -15,10 +15,10 @@ function EditStatusUserModal({ buttonLoading = false, open = false, currentStatu
                         name: 'status',
                         value: !currentStatus
                     },
-                    {
-                        name: 'note',
-                        value: ''
-                    }
+                    // {
+                    //     name: 'note',
+                    //     value: ''
+                    // }
                 ]}
             >
                 <Form.Item name="status" labelAlign="left" labelCol={{ span: 5 }} label="Trạng thái" required
