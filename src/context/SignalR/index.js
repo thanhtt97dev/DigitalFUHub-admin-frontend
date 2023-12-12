@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Chat } from "~/context/SignalR/ChatContext";
 import { UserOnlineStatus } from "~/context/SignalR/UserOnlineStatusContext";
@@ -11,9 +11,14 @@ function SignalR({ children }) {
 
     const [url, setUrl] = useState("");
 
-    setInterval(() => {
-        setUrl(window.location.pathname)
-    }, 10000)
+    useEffect(() => {
+        setInterval(() => {
+            var newUrl = window.location.pathname
+            if (url !== newUrl) {
+                setUrl(newUrl)
+            }
+        }, 1000)
+    }, [url])
 
     return (
         <>
