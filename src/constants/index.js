@@ -207,3 +207,5 @@ export const UPLOAD_FILE_SIZE_LIMIT = 2 * 1024 * 1024;
 export const STATUS_USER_ACTIVE = true;
 export const STATUS_USER_BAN = false;
 
+export const URL_LOGIN_PAGE = "/login";
+

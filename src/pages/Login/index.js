@@ -58,7 +58,8 @@ function Login() {
                         refreshTokenExpireIn: TOKEN_EXPIRES_TIME,
                     });
                     saveDataAuthToCookies(res.data.userId, res.data.accessToken, res.data.refreshToken, res.data.jwtId);
-                    return navigate('/admin/statistic');
+
+                    window.location.href = "/admin/statistic"
                 }, 500)
             })
             .catch((err) => {
