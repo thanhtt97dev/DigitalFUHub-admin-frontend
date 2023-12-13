@@ -227,7 +227,7 @@ function HistoryTransactionCoin() {
                                 cellDate.value = searchData.fromDate + " - " + searchData.toDate;
 
                                 const cellStatus = worksheet.getCell('E5');
-                                cellStatus.value = getTransactionCoinStatus(searchData.status);
+                                cellStatus.value = getTransactionCoinStatus(searchData.transactionCoinTypeId);
 
                                 // data table
                                 dataOrders.forEach((data) => {
