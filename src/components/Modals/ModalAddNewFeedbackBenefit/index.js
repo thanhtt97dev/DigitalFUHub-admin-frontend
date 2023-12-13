@@ -71,7 +71,7 @@ function ModalAddNewFeedbackBenefit({ reloadFeedbackBenefits, notification }) {
                 loading={btnLoading}
             >
                 <PlusOutlined />
-                Tạo lợi ích phản hồi mới
+                Tạo lợi ích đánh giá mới
             </Button>
 
             <Modal

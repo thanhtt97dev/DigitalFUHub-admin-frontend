@@ -30,6 +30,9 @@ import {
     TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT
 } from "~/constants";
+import {
+    getTransactionInternalStatus
+} from '~/utils'
 
 
 import classNames from 'classnames/bind';
@@ -237,7 +240,7 @@ function HistoryTransactionInternal() {
                                 cellDate.value = searchData.fromDate + " - " + searchData.toDate;
 
                                 const cellStatus = worksheet.getCell('E5');
-                                cellStatus.value = searchData.status;
+                                cellStatus.value = getTransactionInternalStatus(searchData.transactionInternalTypeId);
 
                                 // data table
                                 dataOrders.forEach((data) => {
@@ -248,7 +251,7 @@ function HistoryTransactionInternal() {
                                             (data.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT ? "Admin" : data.email),
                                             data.paymentAmount,
                                             ParseDateTime(data.dateCreate),
-                                            data.transactionInternalTypeId
+                                            getTransactionInternalStatus(data.transactionInternalTypeId)
                                         ]);
                                 })
                                 const bufferhe = await workbook.xlsx.writeBuffer();

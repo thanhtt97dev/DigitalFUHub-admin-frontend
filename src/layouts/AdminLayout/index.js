@@ -57,7 +57,7 @@ const menuItems = [
             },
             {
                 key: '/admin/finance/feedbackBenefit',
-                label: <Link to={"/admin/finance/feedbackBenefit"}>Lợi ích phản hồi</Link>,
+                label: <Link to={"/admin/finance/feedbackBenefit"}>Lợi ích đánh giá</Link>,
             },
             {
                 key: '/admin/finance/transactionInternal',
