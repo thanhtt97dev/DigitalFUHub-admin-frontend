@@ -73,18 +73,18 @@ function UserInfo() {
                 handleCloseEditStatusUserModal();
             })
     }
-    // const handleChatUser = () => {
-    //     var data = { shop: id, userId: getUserId() }
-    //     getConversation(data)
-    //         .then((res) => {
-    //             if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-    //                 navigate('/chatBox', { state: { data: res.data.result } })
-    //             }
-    //         })
-    //         .catch(() => {
+    const handleOpenChatSeller = () => {
+        var data = { shopId: id, userId: getUserId() }
+        getConversation(data)
+            .then((res) => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    navigate('/chatBox', { state: { data: res.data.result } })
+                }
+            })
+            .catch(() => {
 
-    //         })
-    // }
+            })
+    }
     return (
         <Card title={<div><Link to={"/admin/user"}> <LeftOutlined /> Trở lại</Link> Thông tin người dùng</div>} style={{ minHeight: '100vh' }}>
 
@@ -98,10 +98,7 @@ function UserInfo() {
                             }
                             <Descriptions bordered >
                                 <Descriptions.Item label="Ảnh đại diện" span={3}>
-                                    <Space size={16}>
-                                        <Avatar size={60} src={userData?.avatar ? userData?.avatar : avatarFPT} />
-                                        {/* <Button icon={<MessageOutlined />} onClick={handleChatUser}>Nhắn tin</Button> */}
-                                    </Space>
+                                    <Avatar size={60} src={userData?.avatar ? userData?.avatar : avatarFPT} />
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Tên tài khoản" span={3}>{userData?.username}</Descriptions.Item>
                                 <Descriptions.Item label="Email" span={3}>{userData?.email}</Descriptions.Item>
@@ -146,6 +143,15 @@ function UserInfo() {
                                 {
                                     userData?.role === SELLER_ROLE &&
                                     <>
+                                        <Descriptions.Item label="Tên cửa hàng" span={3}>
+                                            <Space size={16}>
+                                                <span>{userData?.shopName} </span>
+                                                <Button icon={<MessageOutlined />} onClick={handleOpenChatSeller}>Nhắn tin với cửa hàng</Button>
+                                            </Space>
+                                        </Descriptions.Item>
+                                        <Descriptions.Item label="Trạng thái cửa hàng" span={3}>
+                                            <Tag color={userData?.isActive ? 'green' : 'volcano'}>{userData?.isActive ? 'Hoạt động' : 'Bị khóa'}</Tag>
+                                        </Descriptions.Item>
                                         <Descriptions.Item label={<div>Số đơn hàng đã bán <Tooltip title="Tổng số tất cả các đơn hàng đã bán"><QuestionCircleOutlined /></Tooltip></div>} span={3}>
                                             {userData?.numberOrderSold ? userData?.numberOrderSold : 0} đơn hàng
                                         </Descriptions.Item>
