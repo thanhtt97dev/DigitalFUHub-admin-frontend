@@ -6,7 +6,7 @@ import { RESPONSE_CODE_SUCCESS } from "~/constants";
 import { formatPrice } from "~/utils";
 
 
-const stylesCard = { width: '100%' };
+const stylesCard = { width: '100%', height: '100%' };
 function SalesSummaryCurrentMonth() {
     const [data, setData] = useState();
     useEffect(() => {
@@ -60,6 +60,34 @@ function SalesSummaryCurrentMonth() {
                     <Statistic
                         title={<div><span>Người dùng mới</span> <Tooltip title="Tổng số người dùng đăng ký trong tháng hiện tại"><QuestionCircleOutlined /></Tooltip></div>}
                         value={data?.numberNewUserInCurrentMonth ? data?.numberNewUserInCurrentMonth : 0}
+                        valueStyle={{
+                            color: '#3f8600',
+                        }}
+                    />
+                </Card>
+            </Col>
+            <Col span={6}>
+                <Card style={stylesCard}>
+                    <Statistic
+                        title={<div><span>Tổng số xu sử dụng</span> <Tooltip title="Tổng số xu sử dụng trong tháng hiện tại"><QuestionCircleOutlined /></Tooltip></div>}
+                        value={(() => {
+                            var coinString = formatPrice(data?.totalCoinUsedOrders ? data?.totalCoinUsedOrders : 0);
+                            return coinString.slice(0, coinString.length - 1) + ' xu';
+                        })()}
+                        valueStyle={{
+                            color: '#3f8600',
+                        }}
+                    />
+                </Card>
+            </Col>
+            <Col span={6}>
+                <Card style={stylesCard}>
+                    <Statistic
+                        title={<div><span>Tổng số xu tặng khách hàng</span> <Tooltip title="Tổng số xu đã tặng cho khách hàng trong tháng hiện tại"><QuestionCircleOutlined /></Tooltip></div>}
+                        value={(() => {
+                            var coinString = formatPrice(data?.totalCoinReceive ? data?.totalCoinReceive : 0);
+                            return coinString.slice(0, coinString.length - 1) + ' xu';
+                        })()}
                         valueStyle={{
                             color: '#3f8600',
                         }}
