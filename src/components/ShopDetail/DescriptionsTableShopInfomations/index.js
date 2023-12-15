@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ModalUpdateShopStatus from '~/components/Modals/ModalUpdateShopStatus';
 import { Link } from 'react-router-dom';
-import { LeftOutlined } from "@ant-design/icons";
+import { LeftOutlined, MessageOutlined } from "@ant-design/icons";
 import { formatPrice, formatLargeNumber } from "~/utils";
 import { formatNumber, ParseDateTime } from '~/utils/index';
 import { Descriptions, Space, Typography, Rate, Avatar, Tag, Card, Button } from 'antd';
@@ -25,7 +25,7 @@ const styleRevenue = {
 ///
 
 
-function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct, reloadShopInformations, notification, }) {
+function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct, reloadShopInformations, notification, handleOpenChatSeller }) {
     /// states
     const [openModal, setOpenModal] = useState(false);
     ///
@@ -58,7 +58,10 @@ function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct, r
             label: 'Tên cửa hàng',
             labelStyle: { 'text-align': 'left', 'width': "40%" },
             children: (
-                <span> {shop.shopName}</span>
+                <Space >
+                    <p>{shop.shopName}</p>
+                    <Button icon={<MessageOutlined />} onClick={handleOpenChatSeller}>Nhắn tin với cửa hàng</Button>
+                </Space>
             ),
             span: 3
         },
@@ -187,7 +190,7 @@ function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct, r
 
 
 
-    return (<Card title={<Space align='center' size={20}><Link to={"/admin/shop"}> <LeftOutlined /> Trở lại</Link><p style={{ fontSize: '0.985rem' }}>Thông tin chi tiết cửa hàng</p></Space>}>
+    return (<Card title={<Space align='center' size={20}><Link to={"/admin/shop"}> <LeftOutlined /> Danh sách cửa hàng</Link><p style={{ fontSize: '0.985rem' }}>Thông tin chi tiết cửa hàng</p></Space>}>
         <Descriptions size='small' layout="horizontal" bordered items={items} />
     </Card>
     );

@@ -1,19 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Avatar, Button, Card, Descriptions, Space, Tag, Tooltip } from "antd";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { editStatusUser, getUserInfoById } from "~/api/user";
 import Spinning from "~/components/Spinning";
 import { RESPONSE_CODE_SUCCESS, SELLER_ROLE } from "~/constants";
 import { NotificationContext } from "~/context/UI/NotificationContext";
 import avatarFPT from "~/assets/images/fpt-logo.jpg"
 import moment from "moment";
-import { ParseDateTime, formatPrice, getUserId } from "~/utils";
-import { LeftOutlined, MessageOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { ParseDateTime, formatPrice } from "~/utils";
+import { LeftOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import EditStatusUserModal from "~/components/EditStatusUserModal";
-import { getConversation } from "~/api/chat";
 function UserInfo() {
-    const navigate = useNavigate();
     const notification = useContext(NotificationContext)
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
@@ -73,18 +71,7 @@ function UserInfo() {
                 handleCloseEditStatusUserModal();
             })
     }
-    const handleOpenChatSeller = () => {
-        var data = { shopId: id, userId: getUserId() }
-        getConversation(data)
-            .then((res) => {
-                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    navigate('/chatBox', { state: { data: res.data.result } })
-                }
-            })
-            .catch(() => {
 
-            })
-    }
     return (
         <Card title={<div><Link to={"/admin/user"}> <LeftOutlined /> Trở lại</Link> Thông tin người dùng</div>} style={{ minHeight: '100vh' }}>
 
@@ -145,8 +132,7 @@ function UserInfo() {
                                     <>
                                         <Descriptions.Item label="Tên cửa hàng" span={3}>
                                             <Space size={16}>
-                                                <span>{userData?.shopName} </span>
-                                                <Button icon={<MessageOutlined />} onClick={handleOpenChatSeller}>Nhắn tin với cửa hàng</Button>
+                                                <Link to={`/admin/shop/${id}`}><span>{userData?.shopName}</span></Link>
                                             </Space>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="Trạng thái cửa hàng" span={3}>

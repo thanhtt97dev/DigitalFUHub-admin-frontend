@@ -30,6 +30,9 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
     const handleSubmit = () => {
 
         if (user === undefined || user === null) return navigate('/login');
+
+        setIsLoadingButtonUpdate(true);
+
         var { status, note } = form.getFieldsValue();
         // request dto
         const dataRequest = {
@@ -85,6 +88,7 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
         okText={"Xác nhận"}
         cancelText={"Hủy"}
         width={"35%"}
+        maskClosable={!isLoadingButtonUpdate}
         confirmLoading={isLoadingButtonUpdate}
     >
         <>
