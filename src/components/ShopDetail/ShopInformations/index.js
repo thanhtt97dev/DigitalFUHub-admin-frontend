@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import Spinning from "~/components/Spinning";
+import { getConversation } from "~/api/chat";
 import DescriptionsTableShopInfomations from "../DescriptionsTableShopInfomations";
 import { getShopDetail } from '~/api/shop';
 import { useAuthUser } from 'react-auth-kit';
@@ -35,6 +36,21 @@ const ShopInformations = ({ shopId }) => {
 
     const reloadShopInformations = () => {
         setLoadingShopInfoFlag(!loadingShopInfoFlag);
+    }
+
+    const handleOpenChatSeller = () => {
+        if (user === undefined || user === null) return navigate('/login');
+
+        var data = { shopId: shopId, userId: user.id }
+        getConversation(data)
+            .then((res) => {
+                if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
+                    navigate('/chatBox', { state: { data: res.data.result } })
+                }
+            })
+            .catch(() => {
+
+            })
     }
     ///
 
@@ -79,7 +95,8 @@ const ShopInformations = ({ shopId }) => {
         <DescriptionsTableShopInfomations shop={shopInfomation}
             calculatorRatingStarProduct={calculatorRatingStarProduct}
             reloadShopInformations={reloadShopInformations}
-            notification={notification} />
+            notification={notification}
+            handleOpenChatSeller={handleOpenChatSeller} />
     </Spinning>);
 }
 

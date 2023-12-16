@@ -28,7 +28,8 @@ import {
     TRANSACTION_TYPE_INTERNAL_PAYMENT,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_PAYMENT,
     TRANSACTION_TYPE_INTERNAL_RECEIVE_REFUND,
-    TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT
+    TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT,
+    TRANSACTION_INTERNAL_TYPE_SELLER_REGISTRATION_FEE
 } from "~/constants";
 import {
     getTransactionInternalStatus
@@ -80,6 +81,8 @@ const columns = [
                 return <span style={{ color: "#8c66c8" }}>- {formatPrice(paymentAmount)}</span>
             } else if (record.transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                 return <span style={{ color: "#4ea927" }}> <FontAwesomeIcon icon={faWallet} /> {formatPrice(paymentAmount)}</span>
+            } else if (record.transactionInternalTypeId === TRANSACTION_INTERNAL_TYPE_SELLER_REGISTRATION_FEE) {
+                return <span style={{ color: "orange" }}> + {formatPrice(paymentAmount)}</span>
             }
         }
     },
@@ -94,7 +97,7 @@ const columns = [
         }
     },
     {
-        title: 'Trạng thái',
+        title: 'Loại',
         dataIndex: 'transactionInternalTypeId',
         width: '15%',
         render: (transactionInternalTypeId) => {
@@ -106,6 +109,8 @@ const columns = [
                 return <Tag color="#8c66c8">Nhận tiền hoàn khiếu nại</Tag>
             } else if (transactionInternalTypeId === TRANSACTION_TYPE_INTERNAL_RECEIVE_PROFIT) {
                 return <Tag color="#4ea927">Lợi nhuận</Tag>
+            } else if (transactionInternalTypeId === TRANSACTION_INTERNAL_TYPE_SELLER_REGISTRATION_FEE) {
+                return <Tag color="orange">Phí đăng kí bán hàng</Tag>
             }
         }
     },
@@ -322,7 +327,7 @@ function HistoryTransactionInternal() {
                                 </Row>
 
                                 <Row >
-                                    <Col span={6} offset={2}>Trạng thái: </Col>
+                                    <Col span={6} offset={2}>Loại: </Col>
                                     <Col span={12}>
                                         <Form.Item name="transactionInternalTypeId" >
                                             <Select >
@@ -331,6 +336,7 @@ function HistoryTransactionInternal() {
                                                 <Select.Option value={2}>Nhận tiền hàng</Select.Option>
                                                 <Select.Option value={3}>Nhận tiền hoàn khiếu nại</Select.Option>
                                                 <Select.Option value={4}>Lợi nhuận</Select.Option>
+                                                <Select.Option value={TRANSACTION_INTERNAL_TYPE_SELLER_REGISTRATION_FEE}>Phí đăng kí bán hàng</Select.Option>
                                             </Select>
                                         </Form.Item>
                                     </Col>

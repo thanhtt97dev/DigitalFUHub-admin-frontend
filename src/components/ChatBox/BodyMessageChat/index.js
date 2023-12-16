@@ -24,7 +24,7 @@ const BodyMessageChat = ({ messages, conversationSelected }) => {
     ///
 
     /// styles
-    const styleBodyMessage = { overflowY: 'auto', maxHeight: '50vh' }
+    const styleBodyMessage = { overflowY: 'auto', maxHeight: '60vh' }
     const styleTitleMessage = { paddingLeft: 10 }
     const styleBodyCardMessage = { padding: 10 }
     const styleMessageImage = { borderRadius: 5 }

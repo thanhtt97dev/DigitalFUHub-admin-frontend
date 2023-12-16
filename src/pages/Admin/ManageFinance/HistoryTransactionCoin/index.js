@@ -79,7 +79,7 @@ const columns = [
         }
     },
     {
-        title: 'Trạng thái',
+        title: 'Loại',
         dataIndex: 'transactionCoinTypeId',
         width: '15%',
         render: (transactionCoinTypeId) => {
@@ -310,7 +310,7 @@ function HistoryTransactionCoin() {
                                 </Row>
 
                                 <Row>
-                                    <Col span={6} offset={2}>Trạng thái:</Col>
+                                    <Col span={6} offset={2}>Loại:</Col>
                                     <Col span={12}>
                                         <Form.Item name="transactionCoinTypeId" >
                                             <Select >

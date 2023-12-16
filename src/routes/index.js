@@ -170,6 +170,8 @@ const routesConfig = [
     },
     {
         title: 'chatbox',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
         path: '/chatBox',
         component: <ChatBox />,
     },
