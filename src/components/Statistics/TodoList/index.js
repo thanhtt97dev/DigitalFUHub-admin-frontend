@@ -27,7 +27,7 @@ function TodoList() {
                             }}
                             hoverable
                         >
-                            <div style={{ fontSize: '24px', color: 'rgb(63, 134, 0)', height: '100%' }}>{data?.numberOrdersDispute ? data?.numberOrdersDispute : 0}</div>
+                            <div style={{ fontSize: '24px', color: 'red', height: '100%' }}>{data?.numberOrdersDispute ? data?.numberOrdersDispute : 0}</div>
                             <div>Đơn hàng đang tranh chấp</div>
                         </Card>
                     </Link>
@@ -40,7 +40,7 @@ function TodoList() {
                             }}
                             hoverable
                         >
-                            <div style={{ fontSize: '24px', color: 'rgb(63, 134, 0)', height: '100%' }}>{data?.numberRequestWithdrawnMoney ? data?.numberRequestWithdrawnMoney : 0}</div>
+                            <div style={{ fontSize: '24px', color: 'red', height: '100%' }}>{data?.numberRequestWithdrawnMoney ? data?.numberRequestWithdrawnMoney : 0}</div>
                             <div>Yêu cầu rút tiền</div>
                         </Card>
                     </Link>
@@ -53,7 +53,7 @@ function TodoList() {
                             }}
                             hoverable
                         >
-                            <div style={{ fontSize: '24px', color: 'rgb(63, 134, 0)', height: '100%' }}>{data?.numberUnprocessedReportProducts ? data?.numberUnprocessedReportProducts : 0}</div>
+                            <div style={{ fontSize: '24px', color: 'red', height: '100%' }}>{data?.numberUnprocessedReportProducts ? data?.numberUnprocessedReportProducts : 0}</div>
                             <div>Báo cáo sản phẩm chưa xử lý</div>
                         </Card>
                     </Link>
