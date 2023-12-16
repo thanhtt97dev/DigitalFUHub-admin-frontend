@@ -53,6 +53,10 @@ const menuItems = [
             },
             {
                 key: '/admin/finance/businessFee',
+                label: <Link to={"/admin/finance/shopRegisterFee"}>Phí đăng ký bán hàng</Link>,
+            },
+            {
+                key: '/admin/finance/businessFee',
                 label: <Link to={"/admin/finance/businessFee"}>Phí kinh doanh</Link>,
             },
             {
