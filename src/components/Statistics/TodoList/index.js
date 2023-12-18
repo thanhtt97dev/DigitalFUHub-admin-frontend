@@ -28,7 +28,7 @@ function TodoList() {
                             hoverable
                         >
                             <div style={{ fontSize: '24px', color: 'red', height: '100%' }}>{data?.numberOrdersDispute ? data?.numberOrdersDispute : 0}</div>
-                            <div>Đơn hàng đang tranh chấp</div>
+                            <div>Đơn hàng tranh chấp</div>
                         </Card>
                     </Link>
                 </Col>
