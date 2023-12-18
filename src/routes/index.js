@@ -26,6 +26,7 @@ import Statistics from '~/pages/Admin/Statistics';
 import NotFound from '~/pages/NotFound';
 import ReportProducts from '~/pages/Admin/ManageReport/ReportProducts';
 import FeedbackBenefit from '~/pages/Admin/ManageFinance/FeedbackBenefit';
+import ShopRegisterFee from '~/pages/Admin/ManageFinance/ShopRegisterFee';
 
 const routesConfig = [
     {
@@ -96,6 +97,12 @@ const routesConfig = [
         layout: <AdminLayout />,
         role: [ADMIN_ROLE],
         component: <BusinessFee />
+    },
+    {
+        path: '/admin/finance/shopRegisterFee',
+        layout: <AdminLayout />,
+        role: [ADMIN_ROLE],
+        component: <ShopRegisterFee />
     },
     {
         path: '/admin/finance/transactionInternal',
