@@ -25,7 +25,7 @@ function SalesSummaryCurrentMonth() {
             <Col span={6}>
                 <Card style={stylesCard}>
                     <Statistic
-                        title={<div><span>Doanh thu toàn cửa hàng</span> <Tooltip title="Tổng giá trị các đơn hàng trong tháng hiện tại (bao gồm tất cả các trạng thái đơn hàng)"><QuestionCircleOutlined /></Tooltip></div>}
+                        title={<div><span>Doanh thu toàn cửa hàng</span> <Tooltip title="Tổng giá trị các đơn hàng trong tháng hiện tại (bao gồm trạng thái đơn hàng hoàn thành và từ chối khiếu nại)"><QuestionCircleOutlined /></Tooltip></div>}
                         value={formatPrice(data?.revenueAllShop ? data?.revenueAllShop : 0)}
                         valueStyle={{
                             color: '#3f8600',
@@ -36,7 +36,7 @@ function SalesSummaryCurrentMonth() {
             <Col span={6}>
                 <Card style={stylesCard}>
                     <Statistic
-                        title={<div><span>Lợi nhuận quản trị viên</span> <Tooltip title="Tổng lợi nhuận của quản trị viên từ các đơn hàng trong tháng hiện tại (bao gồm tất cả các trạng thái đơn hàng) và đã trừ phí dịch vụ"><QuestionCircleOutlined /></Tooltip></div>}
+                        title={<div><span>Lợi nhuận quản trị viên</span> <Tooltip title="Tổng lợi nhuận của quản trị viên từ các đơn hàng trong tháng hiện tại (bao gồm trạng thái đơn hàng hoàn thành và từ chối khiếu nại)"><QuestionCircleOutlined /></Tooltip></div>}
                         value={formatPrice(data?.profitAdmin ? data?.profitAdmin : 0)}
                         valueStyle={{
                             color: '#3f8600',
@@ -47,7 +47,7 @@ function SalesSummaryCurrentMonth() {
             <Col span={6}>
                 <Card style={stylesCard}>
                     <Statistic
-                        title={<div><span>Lợi nhuận toàn cửa hàng</span> <Tooltip title="Tổng lợi nhuận các đơn hàng trong tháng hiện tại (bao gồm tất cả các trạng thái đơn hàng) và đã trừ phí dịch vụ"><QuestionCircleOutlined /></Tooltip></div>}
+                        title={<div><span>Lợi nhuận toàn cửa hàng</span> <Tooltip title="Tổng lợi nhuận các đơn hàng trong tháng hiện tại (bao gồm trạng thái đơn hàng hoàn thành và từ chối khiếu nại) và đã trừ phí dịch vụ"><QuestionCircleOutlined /></Tooltip></div>}
                         value={formatPrice(data?.profitAllShop ? data?.profitAllShop : 0)}
                         valueStyle={{
                             color: '#3f8600',
@@ -58,7 +58,7 @@ function SalesSummaryCurrentMonth() {
             <Col span={6}>
                 <Card style={stylesCard}>
                     <Statistic
-                        title={<div><span>Tổng số đơn hàng</span> <Tooltip title="Tổng số đơn hàng trong tháng hiện tại"><QuestionCircleOutlined /></Tooltip></div>}
+                        title={<div><span>Tổng số đơn hàng</span> <Tooltip title="Tổng số đơn hàng trong tháng hiện tại (bao gồm tất cả các trạng thái đơn hàng)"><QuestionCircleOutlined /></Tooltip></div>}
                         value={data?.totalOrders ? data?.totalOrders : 0}
                         valueStyle={{
                             color: '#3f8600',

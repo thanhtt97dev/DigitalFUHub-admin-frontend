@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Form, Input, Spin } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useSignIn, useSignOut } from 'react-auth-kit';
+import bannerLogin from '~/assets/images/banner_login.jpg'
 
 import { login } from '~/api/user';
 import { saveDataAuthToCookies, removeDataAuthInCookies } from '~/utils';
@@ -63,7 +64,10 @@ function Login() {
                 }, 500)
             })
             .catch((err) => {
-                setMessage(err.response.data);
+                setMessage(err.response.data === "Username or Password not correct!"
+                    ? "Tài khoản hoặc mật khẩu không chính xác!"
+                    :
+                    err.response.data);
                 if (err.response.status === 416) { //handle 2FA
                     return navigate(`/verification2FA/${err.response.data}`);
                 }
@@ -80,75 +84,103 @@ function Login() {
 
     return (
         <>
-            <Form
-                name="basic"
-                labelCol={{
-                    span: 8,
-                }}
-                wrapperCol={{
-                    span: 16,
-                }}
-                style={{
-                    maxWidth: 600,
-                }}
-                initialValues={{
-                    remember: true,
-                }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
+
+            <div style={{
+                width: '100vw',
+                height: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
             >
-                <Form.Item
-                    label="Username"
-                    name="username"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
+                <Row style={{
+                    boxShadow: '0px 0px 6px -2px #2673dd',
+                    borderRadius: '10px',
+                    overflow: 'hidden'
+                }}>
+                    <Col>
+                        <img style={{ height: '100%' }} alt="" src={bannerLogin} />
+                    </Col>
+                    <Col>
+                        {/* form */}
+                        <h4 style={{ textAlign: 'center', fontSize: '25px' }}>Đăng Nhập Quản Trị Viên</h4>
 
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
+                        <Form
+                            name="basic"
+                            labelCol={{
+                                span: 8,
+                            }}
+                            layout='vertical'
+                            wrapperCol={{
+                                span: 24,
+                            }}
+                            style={{
+                                maxWidth: 900,
+                                width: '400px',
+                                paddingLeft: 20,
+                                paddingRight: 20
+                            }}
+                            initialValues={{
+                                remember: true,
+                            }}
+                            onFinish={onFinish}
+                            onFinishFailed={onFinishFailed}
+                            autoComplete="off"
+                        >
+                            <Form.Item
+                                label="Tài khoản"
+                                name="username"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Tài khoản không được trống',
+                                    },
+                                ]}
+                            >
+                                <Input />
+                            </Form.Item>
 
-                {message !== '' ? (
-                    <Form.Item
-                        wrapperCol={{
-                            offset: 8,
-                            span: 0,
-                        }}
-                    >
-                        <span style={{ color: 'red' }}>{message}</span>
-                    </Form.Item>
-                ) : (
-                    ''
-                )}
+                            <Form.Item
+                                label="Mật khẩu"
+                                name="password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Mật khẩu không được trống',
+                                    },
+                                ]}
+                            >
+                                <Input.Password />
+                            </Form.Item>
 
-                <Form.Item
-                    wrapperCol={{
-                        offset: 8,
-                        span: 16,
-                    }}
-                >
-                    <Spin spinning={loading} indicator={loadingIcon} />
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
-            </Form>
+                            {message !== '' ? (
+                                // <Form.Item
+                                //     wrapperCol={{
+                                //         offset: 8,
+                                //         span: 0,
+                                //     }}
+                                // >
+                                <span style={{ color: 'red' }}>{message}</span>
+                                // {/* </Form.Item> */}
+                            ) : (
+                                ''
+                            )}
+
+                            <Form.Item
+                                wrapperCol={{
+                                    offset: 9,
+                                    span: 16,
+                                }}
+                            >
+                                {/* <Spin spinning={loading} indicator={loadingIcon} /> */}
+                                <Button loading={loading} type="primary" htmlType="submit">
+                                    Đăng nhập
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                </Row>
+            </div>
         </>
     );
 }

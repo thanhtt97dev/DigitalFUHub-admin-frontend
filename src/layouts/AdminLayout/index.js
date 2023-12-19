@@ -11,7 +11,8 @@ import {
     ShoppingOutlined,
     ShopOutlined,
     SoundOutlined,
-    WarningOutlined
+    WarningOutlined,
+    ShoppingCartOutlined
 } from '@ant-design/icons';
 import { Layout, Menu, Space, Avatar, Button, Row, Col, Dropdown } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -76,7 +77,8 @@ const menuItems = [
     {
         label: <Link to='/admin/order'>Quản lý đơn hàng</Link>,
         key: '/admin/order',
-        icon: <FontAwesomeIcon icon={faCartShopping} />,
+        icon: <ShoppingCartOutlined />,
+        // icon: <FontAwesomeIcon icon={faCartShopping} />,
     },
     {
         label: <Link to='/admin/product'>Quản lý sản phẩm</Link>,
@@ -107,10 +109,10 @@ const menuItems = [
                 key: '/admin/report/product',
                 label: <Link to={"/admin/report/product"}>Tố cáo sản phẩm</Link>,
             },
-            {
-                key: '/admin/report/shop',
-                label: <Link to={"/admin/report/shop"}>Tố cáo cửa hàng</Link>,
-            }
+            // {
+            //     key: '/admin/report/shop',
+            //     label: <Link to={"/admin/report/shop"}>Tố cáo cửa hàng</Link>,
+            // }
         ],
     },
 ];
@@ -135,7 +137,7 @@ const AdminLayout = () => {
             >
                 <div className={cx('header-logo')}>
                     <Space>
-                        <Link to={'/admin'} className={cx("link")}>
+                        <Link to={'/admin/statistic'} className={cx("link")}>
                             <img src={logo} style={{ width: '180px', 'marginTop': '1em' }} alt='logo' />
                         </Link>
                     </Space>
@@ -143,7 +145,7 @@ const AdminLayout = () => {
                 <Menu
                     className={cx("menu")}
                     //defaultOpenKeys={['/admin/finance', '/admin/slider']}
-                    defaultSelectedKeys={['admin/dashboard']}
+                    defaultSelectedKeys={['/admin/statistic']}
                     selectedKeys={getSelectedKey()}
                     mode="inline"
                     items={menuItems}
