@@ -100,10 +100,10 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
                 fields={initFormValues}
             >
                 <Row>
-                    <Col offset={1} span={8}>
-                        Trạng thái cửa hàng:
+                    <Col offset={1} span={4}>
+                        Trạng thái:
                     </Col>
-                    <Col offset={1} span={12}>
+                    <Col offset={1} span={18}>
                         <Form.Item name="status" >
                             <Select >
                                 <Select.Option value={true}>Hoạt động</Select.Option>
@@ -114,18 +114,16 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
                 </Row>
 
                 <Row>
-                    <Col offset={1} span={23}>
-                        Thông tin:
+                    <Col offset={1} span={4}>
+                        Lý do:
                     </Col>
-
-                </Row>
-                <Row>
-                    <Col offset={1} span={23}>
+                    <Col offset={1} span={18}>
                         <Form.Item name="note" >
-                            <TextArea rows={4} placeholder="Nhập thông tin lý do chỉnh sửa trạng thái cửa hàng" maxLength={200} />
+                            <TextArea rows={4} placeholder="Nhập lý do chỉnh sửa trạng thái cửa hàng" maxLength={200} />
                         </Form.Item>
                     </Col>
                 </Row>
+
             </Form>
         </>
 
