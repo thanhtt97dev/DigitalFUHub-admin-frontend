@@ -48,6 +48,15 @@ const BodyMessageChat = ({ messages, conversationSelected }) => {
         return userFind.fullname;
     }
 
+    const getAvatarUserFromConversationSelected = (userId) => {
+        if (!conversationSelected) return;
+        const users = conversationSelected.users;
+        if (!users) return;
+        const userFind = users.find(x => x.userId === userId);
+        if (!userFind) return;
+        return userFind.avatar;
+    }
+
     const scrollToBottom = () => {
         if (bodyMessageRef.current && messagesEndRef.current) {
             const bodyMessageElement = bodyMessageRef.current;
@@ -67,18 +76,18 @@ const BodyMessageChat = ({ messages, conversationSelected }) => {
                             item.userId !== user?.id ?
                                 (<div style={{ marginBottom: 25 }} key={index}>
                                     <Space align="center">
-                                        <Avatar src={item.avatar} />
-                                        <Space.Compact direction="vertical">
-                                            <div style={styleTitleMessage}>
+                                        <Avatar src={getAvatarUserFromConversationSelected(item.userId)} />
+                                        <Space direction="vertical">
+                                            <div>
                                                 {conversationSelected.isGroup ? <Text type="secondary" style={{ marginBottom: 5 }}>{getFullNameUserFromConversationSelected(item.userId)}</Text> : <></>}
                                             </div>
                                             <Card className={cx('card-message')} bodyStyle={styleBodyCardMessage}>
                                                 {item.messageType === MESSAGE_TYPE_CONVERSATION_TEXT ? <p>{item.content}</p> : <Image style={styleMessageImage} width={150} src={item.content} />}
                                             </Card>
-                                            <div style={styleTitleMessage}>
+                                            <div>
                                                 <Text type="secondary">{moment(item.dateCreate).format('HH:mm - DD/MM')}</Text>
                                             </div>
-                                        </Space.Compact>
+                                        </Space>
                                     </Space>
                                 </div>)
                                 :

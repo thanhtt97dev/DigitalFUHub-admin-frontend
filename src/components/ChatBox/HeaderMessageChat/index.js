@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BigUserAvatar from '../BigUserAvatar';
-import fptImage from '~/assets/images/fpt-logo.jpg';
+import groupDefaultImage from '~/assets/images/groupDefaultImage.jpg';
 import { Card } from 'antd';
 
 ///
@@ -47,8 +47,8 @@ const HeaderMessageChat = ({ conversationSelected }) => {
                     />
                 ) : (
                     <Meta
-                        avatar={<BigUserAvatar srcAvatar={fptImage} isActive={conversationSelected.isOnline} />}
-                        title={conversationSelected.conversationName}
+                        avatar={<BigUserAvatar srcAvatar={groupDefaultImage} isActive={conversationSelected.isOnline} />}
+                        title={<p style={{ marginTop: 10 }}>{conversationSelected.conversationName}</p>}
                     />
                 )
             }

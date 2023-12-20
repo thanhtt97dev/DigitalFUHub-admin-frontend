@@ -3,13 +3,14 @@ import classNames from 'classnames/bind';
 import styles from './Chatbox.module.scss';
 import fptImage from '~/assets/images/fpt-logo.jpg';
 import LayoutUserChat from '~/components/ChatBox/LayoutUserChat';
+import userDefaultImage from '~/assets/images/userDefaultImage.png';
 import LayoutMessageChat from '~/components/ChatBox/LayoutMessageChat';
 import { useAuthUser } from 'react-auth-kit';
 import { useLocation } from 'react-router-dom';
 import { ChatContext } from "~/context/SignalR/ChatContext";
 import { UserOnlineStatusContext } from "~/context/SignalR/UserOnlineStatusContext";
 import { GetConversations, GetMessages, updateUserConversation } from '~/api/chat';
-import { USER_CONVERSATION_TYPE_UN_READ, USER_CONVERSATION_TYPE_IS_READ, RESPONSE_CODE_SUCCESS } from '~/constants';
+import { USER_CONVERSATION_TYPE_UN_READ, USER_CONVERSATION_TYPE_IS_READ, RESPONSE_CODE_SUCCESS, CUSTOMER_ROLE_ID } from '~/constants';
 
 ///
 const cx = classNames.bind(styles);
@@ -98,16 +99,7 @@ const ChatBox = () => {
                     const status = data.status;
                     if (status.responseCode === RESPONSE_CODE_SUCCESS) {
                         const messages = data.result;
-
-                        // set avt default for empty avt
-                        const newMessages = messages.map((message) => {
-                            if (message.avatar.length === 0) {
-                                return { ...message, avatar: fptImage }
-                            }
-                            return message;
-                        })
-
-                        setMessages(newMessages);
+                        setMessages(messages);
                     }
                 }
             })
@@ -130,11 +122,12 @@ const ChatBox = () => {
                         const status = data.status;
                         if (status.responseCode === RESPONSE_CODE_SUCCESS) {
                             const conversations = data.result;
-                            // Set avt default for empty avt
+
+                            // map users in conversation
                             const newConversation = conversations.map((conversation) => {
                                 const newUsers = conversation.users.map((user) => {
-                                    if (user.avatar.length === 0) {
-                                        return { ...user, avatar: fptImage }
+                                    if (user.roleId === CUSTOMER_ROLE_ID) {
+                                        return { ...user, avatar: user.avatar === "" ? userDefaultImage : user.avatar }
                                     }
                                     return user;
                                 })
@@ -179,11 +172,6 @@ const ChatBox = () => {
                     if (user === null || user === undefined) return;
 
                     const userId = user.id;
-
-                    //set default avatar
-                    if (message.avatar === null) {
-                        message.avatar = fptImage;
-                    }
 
                     // data update message chat
                     if (conversationSelected?.conversationId === message.conversationId) {

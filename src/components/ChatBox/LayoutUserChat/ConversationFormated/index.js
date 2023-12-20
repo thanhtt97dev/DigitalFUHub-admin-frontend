@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import SmallUserAvatar from '../../SmallUserAvatar';
-import fptImage from '~/assets/images/fpt-logo.jpg';
+import groupDefaultImage from '~/assets/images/groupDefaultImage.jpg';
 import styles from '~/pages/ChatBox/Chatbox.module.scss';
 import { List, Card, Space } from 'antd';
 import { USER_CONVERSATION_TYPE_UN_READ } from '~/constants';
@@ -15,7 +15,7 @@ const moment = require('moment');
 const ConversationFormated = ({ conversation, handleClickUser, conversationSelected, isYourLatestMessage, isLatestMessageTypeText, isLatestMessageTypeImage, getFullNameUser }) => {
 
     const AvatarFormated = ({ isGroup }) => (
-        <SmallUserAvatar srcAvatar={isGroup ? fptImage : conversation.users[0].avatar} isActive={conversation.isOnline} />
+        <SmallUserAvatar srcAvatar={isGroup ? groupDefaultImage : conversation.users[0].avatar} isActive={conversation.isOnline} />
     );
 
     const TitleFormated = ({ isGroup }) => (<>
