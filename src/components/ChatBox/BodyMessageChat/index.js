@@ -24,8 +24,7 @@ const BodyMessageChat = ({ messages, conversationSelected }) => {
     ///
 
     /// styles
-    const styleBodyMessage = { overflowY: 'auto', maxHeight: '60vh' }
-    const styleTitleMessage = { paddingLeft: 10 }
+    const styleBodyMessage = { overflowY: 'auto', maxHeight: '60vh', padding: '0 20px 0 20px' }
     const styleBodyCardMessage = { padding: 10 }
     const styleMessageImage = { borderRadius: 5 }
     ///
@@ -82,7 +81,7 @@ const BodyMessageChat = ({ messages, conversationSelected }) => {
                                                 {conversationSelected.isGroup ? <Text type="secondary" style={{ marginBottom: 5 }}>{getFullNameUserFromConversationSelected(item.userId)}</Text> : <></>}
                                             </div>
                                             <Card className={cx('card-message')} bodyStyle={styleBodyCardMessage}>
-                                                {item.messageType === MESSAGE_TYPE_CONVERSATION_TEXT ? <p>{item.content}</p> : <Image style={styleMessageImage} width={150} src={item.content} />}
+                                                {item.messageType === MESSAGE_TYPE_CONVERSATION_TEXT ? <Text>{item.content}</Text> : <Image style={styleMessageImage} width={150} src={item.content} />}
                                             </Card>
                                             <div>
                                                 <Text type="secondary">{moment(item.dateCreate).format('HH:mm - DD/MM')}</Text>
@@ -95,7 +94,7 @@ const BodyMessageChat = ({ messages, conversationSelected }) => {
                                     <div className={cx('style-message-sender-1')}>
                                         <Card className={cx('card-message-sender')} bodyStyle={styleBodyCardMessage}>
                                             <Space align="center">
-                                                {item.messageType === MESSAGE_TYPE_CONVERSATION_TEXT ? <p className={cx('text-color-message')}>{item.content}</p> : <Image style={styleMessageImage} width={150} src={item.content} />}
+                                                {item.messageType === MESSAGE_TYPE_CONVERSATION_TEXT ? <Text className={cx('text-color-message')}>{item.content}</Text> : <Image style={styleMessageImage} width={150} src={item.content} />}
                                             </Space>
                                         </Card>
                                         <Text type="secondary">{moment(item.dateCreate).format('HH:mm - DD/MM')}</Text>
