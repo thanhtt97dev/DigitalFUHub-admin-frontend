@@ -134,7 +134,7 @@ function BusinessFee() {
         }
 
         setSearchData({
-            businessFeeId: values.businessFeeId,
+            businessFeeId: values.businessFeeId + "",
             maxFee: values.maxFee,
             fromDate: (values.date === undefined) ? '' : values.date[0].$d.toLocaleDateString(),
             toDate: (values.date === undefined) ? '' : values.date[1].$d.toLocaleDateString(),

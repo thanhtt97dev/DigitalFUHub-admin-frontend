@@ -23,7 +23,10 @@ import { formatPrice, ParseDateTime } from '~/utils/index'
 //import dayjs from 'dayjs';
 import {
     RESPONSE_CODE_SUCCESS,
-    PAGE_SIZE
+    PAGE_SIZE,
+    DEPOSIT_TRANSACTION_STATUS_UNPAY,
+    DEPOSIT_TRANSACTION_STATUS_PAIDED,
+    DEPOSIT_TRANSACTION_STATUS_EXPIRED
 } from "~/constants";
 
 import classNames from 'classnames/bind';
@@ -89,14 +92,23 @@ const columns = [
     },
     {
         title: 'Trạng thái',
-        dataIndex: 'isPay',
+        dataIndex: 'depositTransactionStatusId',
         width: '15%',
-        render: (paidDate, record) => {
+        render: (depositTransactionStatusId, record) => {
             return (
-                record.isPay ?
-                    <Tag color="#52c41a">Thành công</Tag>
-                    :
-                    <Tag color="#ec0b0b">Đang chờ chuyển khoản</Tag>
+                <>
+                    {(() => {
+                        if (depositTransactionStatusId === DEPOSIT_TRANSACTION_STATUS_UNPAY) {
+                            return <Tag color="#eeda49">Đang xử lý</Tag>
+                        } else if (depositTransactionStatusId === DEPOSIT_TRANSACTION_STATUS_PAIDED) {
+                            return <Tag color="#52c41a">Thành công</Tag>
+                        } else if (depositTransactionStatusId === DEPOSIT_TRANSACTION_STATUS_EXPIRED) {
+                            return <Tag color="gray">Đã hết hạn</Tag>
+                        } else {
+                            return ""
+                        }
+                    })()}
+                </>
             )
         }
     },

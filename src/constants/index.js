@@ -210,3 +210,7 @@ export const STATUS_USER_BAN = false;
 
 export const URL_LOGIN_PAGE = "/login";
 
+
+export const DEPOSIT_TRANSACTION_STATUS_UNPAY = 1;
+export const DEPOSIT_TRANSACTION_STATUS_PAIDED = 2;
+export const DEPOSIT_TRANSACTION_STATUS_EXPIRED = 3;
