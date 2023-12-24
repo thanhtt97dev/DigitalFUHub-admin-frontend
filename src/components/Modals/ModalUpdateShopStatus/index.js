@@ -15,6 +15,8 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
     /// states
     const [form] = Form.useForm();
     const [isLoadingButtonUpdate, setIsLoadingButtonUpdate] = useState(false);
+    const [isActive, setIsActivate] = useState(true)
+    const [note, setNote] = useState('')
     ///
 
     /// variables
@@ -30,8 +32,11 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
     const handleSubmit = () => {
 
         if (user === undefined || user === null) return navigate('/login');
+        setIsLoadingButtonUpdate(true)
 
         var { status, note } = form.getFieldsValue();
+        setIsActivate(status)
+        setNote(note)
         // request dto
         const dataRequest = {
             ShopId: shopId,
@@ -68,11 +73,11 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
     const initFormValues = [
         {
             name: 'status',
-            value: true
+            value: isActive
         },
         {
             name: 'note',
-            value: ''
+            value: note
         },
     ];
     ///

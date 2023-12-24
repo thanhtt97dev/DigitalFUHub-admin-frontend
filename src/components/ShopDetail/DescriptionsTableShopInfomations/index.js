@@ -176,9 +176,12 @@ function DescriptionsTableShopInfomations({ shop, calculatorRatingStarProduct, r
                         Chỉnh sửa
                     </Button>
                     {
-                        !shop.isActive ? (<Card bodyStyle={{ padding: 6, backgroundColor: 'lightblue' }}>
-                            <span>Chú thích: {shop.note}</span>
-                        </Card>) : (<></>)
+                        shop.note !== '' ?
+                            <Card bodyStyle={{ padding: 6, backgroundColor: 'lightblue' }}>
+                                <span>Chú thích: {shop.note}</span>
+                            </Card>
+                            :
+                            <></>
                     }
 
                     <ModalUpdateShopStatus shopId={shop.userId} reloadShopInformations={reloadShopInformations} notification={notification} openModal={openModal} setOpenModal={setOpenModal} />

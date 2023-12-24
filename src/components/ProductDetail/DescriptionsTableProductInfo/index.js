@@ -178,34 +178,41 @@ function DescriptionsTableProductInfo({ product, callBack }) {
             label: 'Trạng thái',
             labelStyle: { 'text-align': 'left', 'width': "40%" },
             children: (
-                <>
-                    {(() => {
-                        if (product.productStatusId === PRODUCT_STATUS_ACTIVE) {
-                            return (
-                                <Tag color='#87d068'>Đang hoạt động</Tag>
-                            )
-                        } else if (product.productStatusId === PRODUCT_STATUS_HIDE) {
-                            return (
-                                <Tag color='gray'>Đã ẩn</Tag>
-                            )
-                        } else if (product.productStatusId === PRODUCT_STATUS_BAN) {
-                            return (
-                                <Space direction='vertical'>
-                                    <Tag color='#f50'>Vi phạm</Tag>
+                <Space direction='vertical'>
+                    <div>
+                        {(() => {
+                            if (product.productStatusId === PRODUCT_STATUS_ACTIVE) {
+                                return (
+                                    <Tag color='#87d068'>Đang hoạt động</Tag>
+                                )
+                            } else if (product.productStatusId === PRODUCT_STATUS_HIDE) {
+                                return (
+                                    <Tag color='gray'>Đã ẩn</Tag>
+                                )
+                            } else if (product.productStatusId === PRODUCT_STATUS_BAN) {
+                                return (
                                     <Space direction='vertical'>
-                                        <span>Chú thích:</span>
-                                        <span>{product.note}</span>
+                                        <Tag color='#f50'>Vi phạm</Tag>
+
+
                                     </Space>
 
-                                </Space>
-
-                            )
-                        } else {
-                            return <></>
-                        }
-                    })()}
-                    <ModalUpdateProductStatus productId={product.productId} callBack={callBack} />
-                </>
+                                )
+                            } else {
+                                return <></>
+                            }
+                        })()}
+                        <ModalUpdateProductStatus productId={product.productId} callBack={callBack} />
+                    </div>
+                    {product.note !== '' ?
+                        <Space direction='vertical'>
+                            <b style={{ color: "red" }}>Chú thích:</b>
+                            <span>{product.note}</span>
+                        </Space>
+                        :
+                        <></>
+                    }
+                </Space>
             ),
             span: 3
         },

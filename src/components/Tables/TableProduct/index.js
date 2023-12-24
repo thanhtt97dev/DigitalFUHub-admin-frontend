@@ -59,7 +59,7 @@ const columns = [
                 </Row>
             )
         },
-        width: '30%',
+        width: '35%',
         fixed: 'left',
     },
     {
@@ -72,7 +72,7 @@ const columns = [
                 })
             )
         },
-        width: '25%',
+        width: '30%',
     },
     {
         title: 'Giá',
@@ -84,7 +84,7 @@ const columns = [
                 })
             )
         },
-        width: '20%',
+        width: '10%',
     },
     {
         title: 'Doanh số',

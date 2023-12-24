@@ -24,6 +24,9 @@ function ModalUpdateProductStatus({ productId, style, callBack }) {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [btnLoading, setBtnLoading] = useState(false)
 
+    const [status, setStatus] = useState(PRODUCT_STATUS_ACTIVE)
+    const [note, setNote] = useState('')
+
 
     useLayoutEffect(() => {
 
@@ -33,6 +36,11 @@ function ModalUpdateProductStatus({ productId, style, callBack }) {
     const handleSubmit = () => {
         var data = form.getFieldsValue()
         data = { ...data, productId }
+
+        setStatus(data.status)
+        setNote(data.note)
+
+        setConfirmLoading(true)
         updateProductStatus(data)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
@@ -65,11 +73,11 @@ function ModalUpdateProductStatus({ productId, style, callBack }) {
     const initFormValues = [
         {
             name: 'status',
-            value: PRODUCT_STATUS_ACTIVE
+            value: status
         },
         {
             name: 'note',
-            value: ''
+            value: note
         },
     ];
 
