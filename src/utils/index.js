@@ -25,6 +25,7 @@ import {
     TRANSACTION_COIN_TYPE_USE,
     TRANSACTION_COIN_TYPE_REFUND
 } from "~/constants"
+import { Tooltip } from 'antd';
 
 //API
 
@@ -465,4 +466,12 @@ export const getTransactionCoinStatus = (status) => {
         default:
             return ""
     }
+}
+
+export const sliceText = (text, to) => {
+    var length = text.length;
+    if (length - 3 <= to) {
+        return text
+    }
+    return <Tooltip title={text}>{text.slice(0, to) + "..."}</Tooltip>
 }

@@ -28,6 +28,7 @@ import {
     DEPOSIT_TRANSACTION_STATUS_PAIDED,
     DEPOSIT_TRANSACTION_STATUS_EXPIRED
 } from "~/constants";
+import { sliceText } from '~/utils/index'
 
 import classNames from 'classnames/bind';
 import styles from './HistoryDeposit.module.scss';
@@ -48,7 +49,7 @@ const columns = [
         width: '20%',
         render: (email, record) => {
             return (
-                <Link to={`/admin/user/${record.userId}`}>{email}</Link>
+                <Link to={`/admin/user/${record.userId}`}>{sliceText(email, 25)}</Link>
             )
         }
     },
@@ -78,7 +79,7 @@ const columns = [
         width: '15%',
         render: (paidDate, record) => {
             return (
-                record.isPay ?
+                (record.depositTransactionStatusId === DEPOSIT_TRANSACTION_STATUS_PAIDED) ?
                     <span>{ParseDateTime(paidDate)}</span>
                     :
                     <span>TBD</span>

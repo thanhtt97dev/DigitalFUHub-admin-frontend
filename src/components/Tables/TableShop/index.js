@@ -2,7 +2,10 @@ import React from "react";
 import { Table, Image, Row, Col, Tooltip } from 'antd';
 
 import { Link } from "react-router-dom";
-import { formatPrice } from "~/utils";
+import {
+    formatPrice,
+    sliceText
+} from "~/utils";
 
 
 const columns = [
@@ -22,7 +25,7 @@ const columns = [
                     </Col>
                     <Col style={{ paddingLeft: "10px" }}>
                         <Row>
-                            <b>{record.shopName}</b>
+                            <b>{sliceText(record.shopName, 35)}</b>
                         </Row>
                     </Col>
                 </Row>
@@ -36,7 +39,7 @@ const columns = [
         width: '20%',
         render: (shopEmail, record) => {
             return (
-                <Link to={`/admin/user/${record.shopId}`}>{shopEmail}</Link>
+                <Link to={`/admin/user/${record.shopId}`}>{sliceText(shopEmail, 25)}</Link>
             )
         },
     },

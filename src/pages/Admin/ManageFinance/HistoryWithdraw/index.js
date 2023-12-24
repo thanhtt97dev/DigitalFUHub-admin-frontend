@@ -24,7 +24,8 @@ import {
     ParseDateTime,
     getVietQrImgSrc,
     getBankName,
-    getWithdrawTransactionStatus
+    getWithdrawTransactionStatus,
+    sliceText
 } from '~/utils/index'
 import {
     RESPONSE_CODE_BANK_WITHDRAW_PAID,
@@ -69,7 +70,7 @@ function HistoryWithdraw() {
             width: '15%',
             render: (email, record) => {
                 return (
-                    <Link to={`/admin/user/${record.userId}`}>{email}</Link>
+                    <Link to={`/admin/user/${record.userId}`}>{sliceText(email, 25)}</Link>
                 )
             }
         },
@@ -111,7 +112,7 @@ function HistoryWithdraw() {
             width: '10%',
             render: (creditAccountName) => {
                 return (
-                    <span>{creditAccountName}</span>
+                    <span>{sliceText(creditAccountName, 15)}</span>
                 )
             }
         },
@@ -131,7 +132,7 @@ function HistoryWithdraw() {
             width: '14%',
             render: (bankName) => {
                 return (
-                    <span>{bankName}</span>
+                    <span>{sliceText(bankName, 20)}</span>
                 )
             }
 

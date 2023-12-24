@@ -4,7 +4,10 @@ import classNames from 'classnames/bind';
 
 import styles from './TableProduct.module.scss';
 import { Link } from "react-router-dom";
-import { formatPrice } from "~/utils";
+import {
+    formatPrice,
+    sliceText
+} from "~/utils";
 
 const cx = classNames.bind(styles);
 
@@ -25,10 +28,10 @@ const columns = [
                     </Col>
                     <Col style={{ paddingLeft: "10px" }}>
                         <Row>
-                            <b>{record.productName}</b>
+                            <b>{sliceText(record.productName, 29)}</b>
                         </Row>
                         <Row>
-                            <span><Link to={`/admin/shop/${record.shopId}`}>{record.shopName}</Link></span>
+                            <span><Link to={`/admin/shop/${record.shopId}`}>{sliceText(record.shopName, 33)}</Link></span>
                         </Row>
                         <Row>
                             <Col offset={1} span={10}>
@@ -65,11 +68,11 @@ const columns = [
         render: (productVariants, record) => {
             return (
                 productVariants.map(element => {
-                    return <Row>{element.productVariantName}</Row>
+                    return <Row>{sliceText(element.productVariantName, 33)}</Row>
                 })
             )
         },
-        width: '20%',
+        width: '25%',
     },
     {
         title: 'Giá',

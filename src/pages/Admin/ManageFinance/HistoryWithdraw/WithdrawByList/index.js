@@ -14,6 +14,7 @@ import Spinning from "~/components/Spinning";
 import {
     formatPrice,
     ParseDateTime,
+    sliceText
 } from '~/utils/index'
 import BackPreviousPage from "~/components/BackPreviousPage";
 import * as ExcelJS from "exceljs"
@@ -66,7 +67,7 @@ function WithdrawByList() {
             with: "12%",
             render: (email, record) => {
                 return (
-                    <Link to={`/admin/user/${record.userId}`}>{email}</Link>
+                    <Link to={`/admin/user/${record.userId}`}>{sliceText(email, 25)}</Link>
                 )
             }
         },
@@ -102,14 +103,9 @@ function WithdrawByList() {
         },
         {
             title: 'Trạng thái',
-            dataIndex: 'isPay',
-            render: (paidDate, record) => {
-                return (
-                    record.isPay ?
-                        <Tag color="#52c41a">Thành công</Tag>
-                        :
-                        <Tag color="#ecc30b">Chưa xử lý</Tag>
-                )
+            dataIndex: 'withdrawTransactionStatusId',
+            render: (withdrawTransactionStatusId, record) => {
+                return <Tag color="#ecc30b">Chưa xử lý</Tag>
             }
         },
         {

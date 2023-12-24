@@ -19,7 +19,8 @@ import Spinning from "~/components/Spinning";
 import {
     formatPrice,
     ParseDateTime,
-    getOrderStatus
+    getOrderStatus,
+    sliceText
 } from '~/utils/index'
 import {
     RESPONSE_CODE_SUCCESS,
@@ -57,20 +58,20 @@ const columns = [
     {
         title: 'Email khách hàng',
         dataIndex: 'customerEmail',
-        width: '15%',
+        width: '16%',
         render: (customerEmail, record) => {
             return (
-                <Link to={`/admin/user/${record.customerId}`}>{customerEmail}</Link>
+                <Link to={`/admin/user/${record.customerId}`}>{sliceText(customerEmail, 25)}</Link>
             )
         }
     },
     {
         title: 'Tên shop',
         dataIndex: 'shopName',
-        width: '15%',
+        width: '14%',
         render: (shopName, record) => {
             return (
-                <Link to={`/admin/seller/${record.sellerId}`}>{shopName}</Link>
+                <Link to={`/admin/seller/${record.sellerId}`}>{sliceText(shopName, 20)}</Link>
             )
         }
     },
@@ -87,10 +88,10 @@ const columns = [
     {
         title: 'Giá trị đơn hàng',
         dataIndex: 'totalAmount',
-        width: '10%',
+        width: '12%',
         render: (totalAmount) => {
             return (
-                <span>{formatPrice(totalAmount)}</span>
+                <span>{sliceText(formatPrice(totalAmount), 16)}</span>
             )
         }
     },
@@ -100,7 +101,7 @@ const columns = [
         width: '12%',
         render: (totalCouponDiscount) => {
             return (
-                <span>{formatPrice(totalCouponDiscount)}</span>
+                <span>{sliceText(formatPrice(totalCouponDiscount), 16)}</span>
             )
         }
     },
@@ -120,7 +121,7 @@ const columns = [
         width: '14%',
         render: (totalPayment) => {
             return (
-                <span>{formatPrice(totalPayment)}</span>
+                <span>{sliceText(formatPrice(totalPayment), 20)}</span>
             )
         }
     },
@@ -130,7 +131,7 @@ const columns = [
         width: '14%',
         render: (totalRefundSeller) => {
             return (
-                <span>{formatPrice(totalRefundSeller)}</span>
+                <span>{sliceText(formatPrice(totalRefundSeller), 20)}</span>
             )
         }
     },
