@@ -31,8 +31,6 @@ const ModalUpdateShopStatus = ({ shopId, reloadShopInformations, notification, o
 
         if (user === undefined || user === null) return navigate('/login');
 
-        setIsLoadingButtonUpdate(true);
-
         var { status, note } = form.getFieldsValue();
         // request dto
         const dataRequest = {

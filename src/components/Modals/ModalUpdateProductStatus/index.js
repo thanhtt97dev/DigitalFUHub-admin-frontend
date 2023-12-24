@@ -33,16 +33,14 @@ function ModalUpdateProductStatus({ productId, style, callBack }) {
     const handleSubmit = () => {
         var data = form.getFieldsValue()
         data = { ...data, productId }
-        setConfirmLoading(true)
         updateProductStatus(data)
             .then((res) => {
                 if (res.data.status.responseCode === RESPONSE_CODE_SUCCESS) {
-                    setConfirmLoading(false)
-                    callBack()
                     setTimeout(() => {
                         setOpenModal(false)
                         notification("success", "Cập nhật trạng thái sản phẩm thành công")
                     }, 200)
+                    callBack()
                 } else {
                     notification("error", "Đã có lỗi xảy ra.")
                 }
