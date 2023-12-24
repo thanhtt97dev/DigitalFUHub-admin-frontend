@@ -93,7 +93,7 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         {
             key: '5',
             label: 'Tổng giá trị đơn hàng',
-            children: <>{formatPrice(order.totalAmount)} đ</>,
+            children: <>{formatPrice(order.totalAmount)}</>,
             span: 3
         },
         {
@@ -118,19 +118,19 @@ function DescriptionsTableOrderInfo({ order, callBack }) {
         {
             key: '8',
             label: <b>Phí dịch vụ</b>,
-            children: <>{formatPrice(order.businessFeeValue * order.totalAmount / 100)} đ</>,
+            children: <>{formatPrice(parseInt(order.businessFeeValue * order.totalAmount / 100))}</>,
             span: 3
         },
         {
             key: '9',
             label: <b>Số tiền người mua thanh toán</b>,
-            children: <>{formatPrice(order.totalPayment)} đ</>,
+            children: <>{formatPrice(order.totalPayment)}</>,
             span: 3
         },
         {
             key: '10',
             label: <b>Số tiền người bán nhận</b>,
-            children: <>{formatPrice(order.totalAmount - order.totalCouponDiscount - (order.businessFeeValue * order.totalAmount / 100))} đ</>,
+            children: <>{formatPrice(order.totalAmount - order.totalCouponDiscount - parseInt(order.businessFeeValue * order.totalAmount / 100))}</>,
             span: 3
         },
         {

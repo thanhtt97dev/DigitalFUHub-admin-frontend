@@ -18,11 +18,11 @@ function DescriptionsTableOrderItemInfo({ orderDeatail }) {
             children: <>
                 {
                     orderDeatail.discount === 0 ?
-                        <Text>{formatPrice(orderDeatail.price)}</Text>
+                        <Text>{formatPrice(parseInt(orderDeatail.price))}</Text>
                         :
                         <Space size={[8, 0]}>
-                            <Text delete>{formatPrice(orderDeatail.price)}</Text>
-                            <Text>{formatPrice(orderDeatail.price - (orderDeatail.price * orderDeatail.discount / 100))}</Text>
+                            <Text delete>{formatPrice(parseInt(orderDeatail.price))}</Text>
+                            <Text>{formatPrice(parseInt(orderDeatail.price - (orderDeatail.price * orderDeatail.discount / 100)))}</Text>
                         </Space>
                 }
             </>
@@ -38,7 +38,7 @@ function DescriptionsTableOrderItemInfo({ orderDeatail }) {
         {
             key: '3',
             label: 'Thành tiền',
-            children: `${formatPrice(orderDeatail.totalAmount)}đ`,
+            children: `${formatPrice(orderDeatail.totalAmount)}`,
             span: 3
         },
         {
