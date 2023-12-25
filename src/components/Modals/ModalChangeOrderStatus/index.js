@@ -108,10 +108,10 @@ function ModalChangeOrderStatus({ orderId, style, callBack }) {
                         fields={initFormValues}
                     >
                         <Row>
-                            <Col offset={1} span={8}>
+                            <Col span={7}>
                                 Trạng thái đơn hàng:
                             </Col>
-                            <Col offset={1} span={12}>
+                            <Col offset={1} span={16}>
                                 <Form.Item name="status" >
                                     <Select >
                                         <Select.Option value={ORDER_REJECT_COMPLAINT}>Từ chối khiếu nại</Select.Option>
@@ -120,15 +120,11 @@ function ModalChangeOrderStatus({ orderId, style, callBack }) {
                                 </Form.Item>
                             </Col>
                         </Row>
-
                         <Row>
-                            <Col offset={1} span={23}>
+                            <Col span={7}>
                                 Thông tin:
                             </Col>
-
-                        </Row>
-                        <Row>
-                            <Col offset={1} span={23}>
+                            <Col offset={1} span={16}>
                                 <Form.Item name="note" >
                                     <TextArea rows={4} placeholder="Nhập thông tin lý do chỉnh sửa trạng thái đơn hàng" maxLength={200} />
                                 </Form.Item>
